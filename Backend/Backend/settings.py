@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from . import Classification
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +27,8 @@ SECRET_KEY = 'django-insecure-@85w3mvv=dkogfm*3+0xad!v9$5z^_fq5y!5rv_0q7gbp2v9j7
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+MODEL = Classification.ModelClasses.ResNet9(3, 38)
 
 
 # Application definition
