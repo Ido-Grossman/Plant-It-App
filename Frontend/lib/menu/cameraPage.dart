@@ -1,11 +1,10 @@
-
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-import 'menu/cardPicture.dart';
-import 'menu/takePhoto.dart';
-import './service/httpService.dart';
+
+import 'package:frontend/service/httpService.dart';
+import 'package:frontend/menu/cardPicture.dart';
+import 'package:frontend/menu/takePhoto.dart';
 
 void main() {
   runApp(MyApp());
@@ -269,8 +268,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             onPressed: () async {
                               // show loader
                               presentLoader(context, text: 'Wait...');
+
+                              // calling with dio
+
+
+
                               // hide loader
                               Navigator.of(context).pop();
+
                               // showing alert dialogs
                               
                             },
