@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'PlantItApp.apps.PlantitappConfig'
+    'PlantItApp.apps.PlantitappConfig',
+    
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
