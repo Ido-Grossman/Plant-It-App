@@ -25,7 +25,9 @@ class _IntroScreenState extends State<IntroScreen> {
           Padding(
               padding: const EdgeInsets.only(right: 20, top: 20),
             child: InkWell(
-              onTap: () => null, // to login screen
+              onTap: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomePage()));
+              }, // to login screen
               child: const Text('Skip', style: TextStyle(
                 color: Colors.grey,
                 fontSize: 16.0,
@@ -59,6 +61,7 @@ class _IntroScreenState extends State<IntroScreen> {
             ],
           ),
           Positioned(
+            left: 60,
             bottom: 90,
               child: Row(
                 children: _initIndicator(),
@@ -81,6 +84,11 @@ class _IntroScreenState extends State<IntroScreen> {
                     });
                   },
                   icon: const Icon(Icons.arrow_forward, size: 24, color: Colors.white,),),
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Consts.primaryColor
+                ),
               ))
         ],
       ),
