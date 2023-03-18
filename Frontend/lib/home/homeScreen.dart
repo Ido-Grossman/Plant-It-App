@@ -1,15 +1,90 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/constants.dart';
+import 'package:frontend/menu/cameraPage.dart';
+import 'package:frontend/menu/homeScreen.dart';
+import 'package:frontend/menu/myPlantsScreen.dart';
+import 'package:frontend/menu/profileScreen.dart';
+import 'package:frontend/menu/searchScreen.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class FirstScreen extends StatefulWidget {
+  const FirstScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<FirstScreen> createState() => _FirstScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _FirstScreenState extends State<FirstScreen> {
+  int _bottomNavigationIdx = 0;
+  List<Widget> screens = const [
+    HomeScreen(), MyPlants(), SearchScreen(), MyProfile()
+  ];
+
+  List<IconData> screenIconsList = [
+    Icons.home,
+    Icons.list,
+    Icons.search,
+    Icons.person
+  ];
+
+  List<String> screenTitleList = [
+    'Home',
+    'My Plants',
+    'Search',
+    'Profile'
+  ];
+
+
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(screenTitleList[_bottomNavigationIdx],
+            style: TextStyle(
+              color: Consts.lessBlack,
+              fontWeight: FontWeight.w500,
+              fontSize: 24,
+            ),),
+            Icon(Icons.notifications,color: Consts.lessBlack,
+                size: 30.0,)
+          ],
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0.0,
+      ),
+      body: IndexedStack(
+        index: _bottomNavigationIdx,
+        children: screens,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(context, PageTransition(
+              child: CameraScreen(title: "Camera"),
+              type: PageTransitionType.bottomToTop));
+        },
+        child: Image.asset('assets/camera.png', height: 40.0,),
+        backgroundColor: Consts.primaryColor,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+        splashColor: Consts.primaryColor,
+        activeColor: Consts.primaryColor,
+        inactiveColor: Consts.lessBlack.withOpacity(.5),
+        icons: screenIconsList,
+        activeIndex: _bottomNavigationIdx,
+        gapLocation: GapLocation.center,
+        notchSmoothness: NotchSmoothness.softEdge,
+        onTap: (index){
+          setState(() {
+            _bottomNavigationIdx = index;
+          });
+        },
+      ),
+    );
   }
 }
