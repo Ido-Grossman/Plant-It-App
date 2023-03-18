@@ -6,35 +6,17 @@ import 'package:frontend/service/httpService.dart';
 import 'package:frontend/menu/cardPicture.dart';
 import 'package:frontend/menu/takePhoto.dart';
 
-void main() {
-  runApp(MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Upload',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Upload'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+class CameraScreen extends StatefulWidget {
+  CameraScreen({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _CameraScreenState createState() => _CameraScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _CameraScreenState extends State<CameraScreen> {
   final HttpService _httpService = HttpService();
   late CameraDescription _cameraDescription;
   List<String> _images = [];

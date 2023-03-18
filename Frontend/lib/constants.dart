@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Consts {
+  // colors
   static var primaryColor = Color.fromARGB(255, 31, 85, 56);
+  static var lessBlack = Colors.black54;
 
   // Intro screen texts
   static var firstTitle = "Your perfect app for your plants!";
