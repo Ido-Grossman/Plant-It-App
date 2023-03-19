@@ -38,6 +38,7 @@ def save_base64_as_image(data, filename):
 
 
 class PhotoUploadView(APIView):
+    @api_view(['POST'])
     def post(self, request):
         serializer = PhotoSerializer(data=request.data)
         if serializer.is_valid():

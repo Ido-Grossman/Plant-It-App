@@ -1,9 +1,8 @@
 from django.urls import path
-from controllers import LoginController, RegisterController
-from .views import PhotoUploadView
+from .controllers import LoginController, RegisterController, PhotoController
 
 urlpatterns = [
     path('register/', RegisterController.Register),
     path('login/', LoginController.Login),
-    path('api/photo-upload/', PhotoUploadView.as_view(), name='photo_upload'),
+    path('photo-upload/', PhotoController.PhotoUploadView.as_view(), name='photo_upload'),
 ]
