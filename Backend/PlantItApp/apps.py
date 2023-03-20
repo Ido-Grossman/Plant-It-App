@@ -8,7 +8,7 @@ class PlantitappConfig(AppConfig):
     name = 'PlantItApp'
 
     def ready(self):
-        settings.MODEL.load_state_dict(torch.load("C:\\Users\\idodd\\PycharmProjects\\Plant-It-App\\Backend"
+        settings.MODEL.load_state_dict(torch.load("."
                                                   "\\PlantItApp\\plant-disease-model.pth", map_location=torch.device(
                                                     "cpu")))
         settings.MODEL.eval()
