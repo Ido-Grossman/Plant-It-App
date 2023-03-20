@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 
 import 'package:frontend/home/homeScreen.dart';
+import 'package:frontend/logins/loginScreen.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class _IntroScreenState extends State<IntroScreen> {
               padding: const EdgeInsets.only(right: 20, top: 20),
             child: InkWell(
               onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const FirstScreen()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const Login()));
               }, // to login screen
               child: const Text('Skip', style: TextStyle(
                 color: Colors.grey,
@@ -79,7 +80,7 @@ class _IntroScreenState extends State<IntroScreen> {
                           _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
                         }
                       } else {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> const FirstScreen()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> const Login()));
                       }
                     });
                   },
