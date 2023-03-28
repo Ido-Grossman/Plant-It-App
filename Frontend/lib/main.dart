@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Intro Screen',
-      home: FirstScreen(),
+      home: IntroScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
