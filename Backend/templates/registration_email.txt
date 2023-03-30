@@ -1,0 +1,16 @@
+{% autoescape off %}
+Dear {username},
+
+Thank you for registering for Plant-It-App! We are excited to have you join our community of plant enthusiasts and help you take care of your home plants.
+
+To get started, please log in to your account using the credentials you provided during registration. Once you are logged in, you can start adding your plants to the app, set reminders for watering, track your plants growth and check for diseases.
+
+If you have any questions or feedback, please do not hesitate to reach out to us. We are always here to help and improve our app.
+
+Happy planting!
+
+Best regards,
+
+Plant-It-App Team
+
+{% endautoescape %}
