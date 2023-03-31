@@ -77,8 +77,6 @@ class _LoginState extends State<Login> {
               GestureDetector(
                 onTap: () async {
                   if (_mailTextField.isNotEmpty && _passwordTextField.isNotEmpty){
-                    print(_mailTextField);
-                    print(_passwordTextField);
                     int statusCode = await _logIn(_mailTextField, _passwordTextField);
                     if (!mounted) {
                       return;
