@@ -41,10 +41,9 @@ class _SignUpState extends State<SignUp> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +58,7 @@ class _SignUpState extends State<SignUp> {
                 height: 30,
               ),
               LoginTextField(
-                textHint: 'Enter Mail',
+                textHint: 'Enter Email',
                 icon: Icons.alternate_email,
                 onChanged: _updateMailFieldValue,
               ),
