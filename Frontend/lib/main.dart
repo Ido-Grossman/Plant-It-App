@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/logins/loginScreen.dart';
 
-import 'intro/introScreen.dart';
 
 void main(){
   runApp(MyApp());
