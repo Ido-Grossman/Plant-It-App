@@ -4,8 +4,9 @@ import '../constants.dart';
 
 class PasswordValidationForms extends StatefulWidget {
   final Function(bool) onValidationChanged;
+  final Function(String) onPassChange;
 
-  const PasswordValidationForms({Key? key, required this.onValidationChanged}) : super(key: key);
+  const PasswordValidationForms({Key? key, required this.onValidationChanged, required this.onPassChange}) : super(key: key);
 
   @override
   PasswordValidationFormsState createState() => PasswordValidationFormsState();
@@ -36,7 +37,6 @@ class PasswordValidationFormsState extends State<PasswordValidationForms> {
       _isButtonDisabled = true;
     }
     else {
-      print(_passwordController.text);
       setState(() {
         _passwordError = null;
         _isButtonDisabled = false;
@@ -62,6 +62,7 @@ class PasswordValidationFormsState extends State<PasswordValidationForms> {
             color: Consts.lessBlack,
           ),
           controller: _passwordController,
+          onChanged: widget.onPassChange,
           decoration: InputDecoration(
               border: InputBorder.none,
               prefixIcon: Icon(Icons.password, color: Consts.lessBlack.withOpacity(.3),),
