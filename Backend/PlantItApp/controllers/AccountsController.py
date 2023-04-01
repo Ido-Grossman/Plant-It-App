@@ -5,7 +5,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -14,23 +14,24 @@ from ..serializers import UserSerializer
 
 
 @api_view(['Post'])
-def login(request):
+def signin(request):
     # Makes sure the user tried to do a post request.
     if request.method != "POST":
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-    serializer = UserSerializer(data=request.data)
-    if not serializer.is_valid():
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    # Check if the username and password are correct.
-    email = serializer.validated_data['email']
-    password = serializer.validated_data['password']
-    user = authenticate(request, email=email, password=password)
+    email = request.data.get('email')
+    password = request.data.get('password')
+    if email is None or password is None:
+        return Response({'error': 'Please provide both email and password'}, status=status.HTTP_400_BAD_REQUEST)
+    UserModel = get_user_model()
+    user = UserModel.objects.get(email=email)
+    username = user.username
+    user = authenticate(request._request, username=username, password=password)
     # If they are correct login the user and return 200, else return 401.
     if user is not None:
-        login(request, user)
+        login(request._request, user)
         return Response("User logged in.", status=status.HTTP_200_OK)
     else:
-        return Response("The email or password are incorrect.", status=status.HTTP_401_UNAUTHORIZED)
+        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['Post'])
@@ -44,6 +45,8 @@ def register(request):
     email = serializer.validated_data['email']
     username = serializer.validated_data['username']
     password = serializer.validated_data['password']
+    print(password)
+    print(email)
     User.objects.create_user(username, email, password)
     subject = "Welcome to Plant-It-App"
     email_template_name = "registration_email.txt"

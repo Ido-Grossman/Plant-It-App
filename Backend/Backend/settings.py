@@ -17,7 +17,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -36,14 +35,13 @@ DISEASES = ['Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust
             'Corn_(maize)___Northern_Leaf_Blight', 'Corn_(maize)___healthy', 'Grape___Black_rot',
             'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy',
             'Orange___Haunglongbing_(Citrus_greening)', 'Peach___Bacterial_spot', 'Peach___healthy',
-            'Pepper,_bell___Bacterial_spot' ,'Pepper,_bell___healthy', 'Potato___Early_blight',
+            'Pepper,_bell___Bacterial_spot', 'Pepper,_bell___healthy', 'Potato___Early_blight',
             'Potato___Late_blight', 'Potato___healthy', 'Raspberry___healthy', 'Soybean___healthy',
             'Squash___Powdery_mildew', 'Strawberry___Leaf_scorch', 'Strawberry___healthy',
             'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight',
             'Tomato___Leaf_Mold', 'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite',
             'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus',
             'Tomato___Tomato_mosaic_virus', 'Tomato___healthy']
-
 
 # Application definition
 
@@ -64,14 +62,13 @@ INSTALLED_APPS = [
     'crispy_forms',
     "crispy_bootstrap5",
     'PlantItApp.apps.PlantitappConfig',
-    
+
     'rest_framework',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,9 +80,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# AUTHENTICATION_BACKENDS = ['PlantItApp.EmailAuth.EmailBackend', 'django.contrib.auth.backends.ModelBackend', ]
+
 ROOT_URLCONF = 'Backend.urls'
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 TEMPLATES = [
@@ -108,7 +107,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -119,11 +117,10 @@ DATABASES = {
         'NAME': 'plant_it_app',
         'USER': 'root',
         'PASSWORD': 'SantIdOfek',
-        'HOST':'localhost',
-        'PORT':'3306',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -143,7 +140,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -154,7 +150,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
