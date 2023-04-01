@@ -56,7 +56,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                    margin: EdgeInsets.all(5.0),
+                    margin: const EdgeInsets.all(5.0),
                     child: const Center(
                       child: Text('Reset Password', style:
                       TextStyle(
@@ -103,9 +103,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  _updateMailFieldValue(String p1) {
+  _updateMailFieldValue(String value) {
   }
 
-  _updateUsernameFieldValue(String p1) {
-  }
 }
