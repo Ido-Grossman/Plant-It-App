@@ -3,7 +3,7 @@ import 'package:frontend/constants.dart';
 import 'package:frontend/home/homeScreen.dart';
 import 'package:frontend/logins/forgotPasswordScreen.dart';
 import 'package:frontend/logins/signUpScreen.dart';
-import 'package:frontend/service/passwordTextField.dart';
+import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
 
 import '../service/loginTextField.dart';
@@ -17,11 +17,25 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   String _mailTextField = '';
+  String _passwordTextField = '';
 
   void _updateMailFieldValue(String value){
     setState(() {
       _mailTextField = value;
     });
+  }
+
+  void _updatePasswordFieldValue(String value){
+    setState(() {
+      _passwordTextField = value;
+    });
+  }
+
+  Future<int> _logIn(String email, String password) async {
+    final url = Uri.parse('http://127.0.0.1:8000/api/accounts/login/');
+    final response = await http.post(url,
+        body: {'email': email, 'password': password});
+    return response.statusCode;
   }
 
   @override
@@ -49,19 +63,46 @@ class _LoginState extends State<Login> {
                 textHint: 'Enter Email',
                 icon: Icons.alternate_email,
                 onChanged: _updateMailFieldValue,
+                isEmail: true,
               ),
-              PasswordTextField(
+              LoginTextField(
                 textHint: 'Enter Password',
                 icon: Icons.password,
+                onChanged: _updatePasswordFieldValue,
+                hideText: true,
               ),
               const SizedBox(
                 height: 10,
               ),
               GestureDetector(
-                onTap: (){
-                  Navigator.push(context, PageTransition(
-                      child: const FirstScreen(),
-                      type: PageTransitionType.bottomToTop));
+                onTap: () async {
+                  if (_mailTextField.isNotEmpty && _passwordTextField.isNotEmpty){
+                    int statusCode = await _logIn(_mailTextField, _passwordTextField);
+                    if (!mounted) {
+                      return;
+                    }
+                    if(statusCode == 200){
+                      Navigator.push(context, PageTransition(
+                          child: const FirstScreen(),
+                          type: PageTransitionType.bottomToTop));
+                    } else {
+                      showDialog(context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Error'),
+                              content: const Text('Incorrect username or password'),
+                              actions: [
+                                TextButton(onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                    child: const Text('Ok'))
+                              ],
+                            );
+                          });
+                    }
+                  }
+
+
                 },
                 child: Container(
                   width: size.width,

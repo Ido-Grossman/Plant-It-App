@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/logins/loginScreen.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:http/http.dart' as http;
 
 import '../constants.dart';
+import '../home/homeScreen.dart';
 import '../service/loginTextField.dart';
 import '../service/passwordValidationFields.dart';
 
@@ -17,11 +19,19 @@ class _SignUpState extends State<SignUp> {
   bool _isButtonEnabled = false;
   String _mailTextField = '';
   String _usernameTextField = '';
+  String _passwordTextField = '';
 
   void _onValidationChanged(bool isEnabled){
     setState(() {
       _isButtonEnabled = isEnabled;
     });
+  }
+
+  Future<int> _signUp(String username, String password, String email) async {
+    final url = Uri.parse('http://127.0.0.1:8000/api/accounts/register/');
+    final response = await http.post(url,
+        body: {'username': username, 'password': password, 'email': email});
+    return response.statusCode;
   }
 
   void _updateMailFieldValue(String value){
@@ -33,6 +43,12 @@ class _SignUpState extends State<SignUp> {
   void _updateUsernameFieldValue(String value){
     setState(() {
       _usernameTextField = value;
+    });
+  }
+
+  void _updatePasswordFieldValue(String value){
+    setState(() {
+      _passwordTextField = value;
     });
   }
 
@@ -61,26 +77,45 @@ class _SignUpState extends State<SignUp> {
                 textHint: 'Enter Email',
                 icon: Icons.alternate_email,
                 onChanged: _updateMailFieldValue,
+                isEmail: true,
               ),
               LoginTextField(
                 textHint: 'Enter Username',
                 icon: Icons.supervised_user_circle,
                 onChanged: _updateUsernameFieldValue,
               ),
-              PasswordValidationForms(onValidationChanged: _onValidationChanged,),
+              PasswordValidationForms(
+                onValidationChanged: _onValidationChanged,
+                onPassChange: _updatePasswordFieldValue,),
               const SizedBox(
                 height: 10,
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (_isButtonEnabled && _mailTextField.isNotEmpty && _usernameTextField.isNotEmpty) {
-                    print('hey');
-                  } else {
-                    null;
-                  }},
-                  // Navigator.push(context, PageTransition(
-                  //     child: const FirstScreen(),
-                  //     type: PageTransitionType.bottomToTop));,
+                    int statusCode = await _signUp(_usernameTextField, _passwordTextField, _mailTextField);
+                    if (!mounted) {
+                      return;
+                    }
+                    if(statusCode == 201){
+                      Navigator.push(context, PageTransition(
+                          child: const FirstScreen(),
+                          type: PageTransitionType.bottomToTop));
+                    } else {
+                      showDialog(context: context,
+                          builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Error'),
+                          content: const Text('The user already exists, please try again.'),
+                          actions: [
+                            TextButton(onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                                child: const Text('Ok'))
+                          ],
+                        );
+                          });}}},
+
                   child: Container(
                   width: size.width,
                   decoration: BoxDecoration(
