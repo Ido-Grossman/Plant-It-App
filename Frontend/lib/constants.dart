@@ -12,4 +12,24 @@ class Consts {
   static var secondSubTitle = "Take a picture and we will help you take care of it.";
   static var thirdTitle = "Searching for a new plant?";
   static var thirdSubTitle = "Search for a new soulmate here.";
+
+  // Error msgs
+  static var errorTitle = 'Error';
+
+  // methods
+  static Future<dynamic> alertPopup(BuildContext context, String reason, {String title='Error', String button='Ok'}) {
+    return showDialog(context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(reason),
+            actions: [
+              TextButton(onPressed: () {
+                Navigator.of(context).pop();
+              },
+                  child: Text(button))
+            ],
+          );
+        });
+  }
 }

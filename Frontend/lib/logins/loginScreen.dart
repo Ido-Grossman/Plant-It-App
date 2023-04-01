@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/home/homeScreen.dart';
@@ -33,9 +35,16 @@ class _LoginState extends State<Login> {
 
   Future<int> _logIn(String email, String password) async {
     final url = Uri.parse('http://127.0.0.1:8000/api/accounts/login/');
-    final response = await http.post(url,
-        body: {'email': email, 'password': password});
-    return response.statusCode;
+    try {
+      final response = await http.post(url,
+          body: {'email': email, 'password': password}).timeout(
+        const Duration(seconds: 5),
+      );
+      return response.statusCode;
+    } on TimeoutException {
+      print('Request failed');
+      return -1;
+    }
   }
 
   @override
@@ -85,24 +94,14 @@ class _LoginState extends State<Login> {
                       Navigator.push(context, PageTransition(
                           child: const FirstScreen(),
                           type: PageTransitionType.bottomToTop));
+                    } else if (statusCode == 401) {
+                      String badCredentialsMsg = 'Incorrect email or password';
+                      Consts.alertPopup(context, badCredentialsMsg);
                     } else {
-                      showDialog(context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Error'),
-                              content: const Text('Incorrect username or password'),
-                              actions: [
-                                TextButton(onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                    child: const Text('Ok'))
-                              ],
-                            );
-                          });
+                      String badConnectionMsg = 'Connection refused or bad request. Please try again.';
+                      Consts.alertPopup(context, badConnectionMsg);
                     }
                   }
-
-
                 },
                 child: Container(
                   width: size.width,
