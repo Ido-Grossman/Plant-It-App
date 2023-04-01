@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/logins/loginScreen.dart';
@@ -34,7 +35,16 @@ class _SignUpState extends State<SignUp> {
     try {
       final response = await http
           .post(url, body: {'username': username, 'password': password, 'email': email})
-          .timeout(const Duration(seconds: 3));
+          .timeout(const Duration(seconds: 10));
+      final responseBody = response.body;
+      if (responseBody != ''){
+        final responseBody = jsonDecode(response.body);
+        if (responseBody['email'] != null){
+          return 100;
+        } else {
+          return 101;
+        }
+      }
       return response.statusCode;
     } catch (e) {
       return -1;
@@ -108,9 +118,12 @@ class _SignUpState extends State<SignUp> {
                       Navigator.push(context, PageTransition(
                           child: const FirstScreen(),
                           type: PageTransitionType.bottomToTop));
-                    } else if (statusCode == 400) {
-                      String cantConnectMsg = 'The user already exists. Please try again.';
-                      Consts.alertPopup(context, cantConnectMsg);
+                    } else if (statusCode == 100) {
+                      String emailExistsMsg = 'The email already exists. Please try again.';
+                      Consts.alertPopup(context, emailExistsMsg);
+                    } else if (statusCode == 101) {
+                      String userExistsMsg = 'The username already exists. Please try again.';
+                      Consts.alertPopup(context, userExistsMsg);
                     } else {
                       Consts.alertPopup(context, "Couldn't connect to server. Please try again.");
                       }}},
