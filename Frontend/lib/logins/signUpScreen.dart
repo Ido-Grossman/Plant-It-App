@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/logins/loginScreen.dart';
 import 'package:page_transition/page_transition.dart';
@@ -29,9 +31,14 @@ class _SignUpState extends State<SignUp> {
 
   Future<int> _signUp(String username, String password, String email) async {
     final url = Uri.parse('${Consts.prefixLink}api/accounts/register/');
-    final response = await http.post(url,
-        body: {'username': username, 'password': password, 'email': email});
-    return response.statusCode;
+    try {
+      final response = await http
+          .post(url, body: {'username': username, 'password': password, 'email': email})
+          .timeout(const Duration(seconds: 3));
+      return response.statusCode;
+    } catch (e) {
+      return -1;
+    }
   }
 
   void _updateMailFieldValue(String value){
@@ -101,20 +108,12 @@ class _SignUpState extends State<SignUp> {
                       Navigator.push(context, PageTransition(
                           child: const FirstScreen(),
                           type: PageTransitionType.bottomToTop));
+                    } else if (statusCode == 400) {
+                      String cantConnectMsg = 'The user already exists. Please try again.';
+                      Consts.alertPopup(context, cantConnectMsg);
                     } else {
-                      showDialog(context: context,
-                          builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Error'),
-                          content: const Text('The user already exists, please try again.'),
-                          actions: [
-                            TextButton(onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                                child: const Text('Ok'))
-                          ],
-                        );
-                          });}}},
+                      Consts.alertPopup(context, "Couldn't connect to server. Please try again.");
+                      }}},
 
                   child: Container(
                   width: size.width,
