@@ -28,7 +28,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<int> _signUp(String username, String password, String email) async {
-    final url = Uri.parse('http://127.0.0.1:8000/api/accounts/register/');
+    final url = Uri.parse('${Consts.prefixLink}api/accounts/register/');
     final response = await http.post(url,
         body: {'username': username, 'password': password, 'email': email});
     return response.statusCode;

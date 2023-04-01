@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Consts {
+  // API prefix link
+  static var prefixLink = 'http://10.0.2.2:8000/';
+
   // colors
   static var primaryColor = Color.fromARGB(255, 31, 85, 56);
   static var lessBlack = Colors.black54;

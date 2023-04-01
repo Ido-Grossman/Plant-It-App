@@ -34,7 +34,7 @@ class _LoginState extends State<Login> {
   }
 
   Future<int> _logIn(String email, String password) async {
-    final url = Uri.parse('http://127.0.0.1:8000/api/accounts/login/');
+    final url = Uri.parse('${Consts.prefixLink}/api/accounts/login/');
     try {
       final response = await http.post(url,
           body: {'email': email, 'password': password}).timeout(
