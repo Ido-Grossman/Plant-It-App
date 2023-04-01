@@ -42,7 +42,6 @@ class _LoginState extends State<Login> {
       );
       return response.statusCode;
     } on TimeoutException {
-      print('Request failed');
       return -1;
     }
   }
@@ -110,7 +109,7 @@ class _LoginState extends State<Login> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                  margin: EdgeInsets.all(5.0),
+                  margin: const EdgeInsets.all(5.0),
                   child: const Center(
                     child: Text('Login In', style: TextStyle(
                       color: Colors.white,

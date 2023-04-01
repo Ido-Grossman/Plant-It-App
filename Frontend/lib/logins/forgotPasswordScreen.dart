@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:http/http.dart' as http;
 
 import '../constants.dart';
 import '../home/homeScreen.dart';
 import '../service/loginTextField.dart';
 import 'loginScreen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -14,9 +18,30 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  String _usernameTextField = '';
+
+  _updateUsernameFieldValue(String value) {
+    setState(() {
+      _usernameTextField = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    Future<int> _forgotPass(String username) async {
+      final url = Uri.parse('${Consts.prefixLink}api/accounts/forgot-password/');
+      try {
+        final response = await http.post(url,
+            body: {'email': username}).timeout(
+          const Duration(seconds: 10),
+        );
+        return response.statusCode;
+      } on TimeoutException {
+        return -1;
+      }
+    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -36,18 +61,36 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 height: 30,
               ),
               LoginTextField(
-                textHint: 'Enter Email',
-                icon: Icons.alternate_email,
-                onChanged: _updateMailFieldValue,
+                textHint: 'Enter username',
+                icon: Icons.person,
+                onChanged: _updateUsernameFieldValue,
               ),
               const SizedBox(
                 height: 10,
               ),
               GestureDetector(
-                onTap: () {
-                  Navigator.push(context, PageTransition(
-                      child: const FirstScreen(),
-                      type: PageTransitionType.bottomToTop));
+                onTap: () async {
+                  if (_usernameTextField.isNotEmpty) {
+                    int statusCode = await _forgotPass(_usernameTextField);
+                    if (!mounted) {
+                      return;
+                    }
+                    if(statusCode == 200){
+                      Fluttertoast.showToast(
+                        msg: "Check your mail, you received a reset password link.",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.blue,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    } else if (statusCode == 404) {
+                      String emailExistsMsg = "That doesn't username exists. Please try again.";
+                      Consts.alertPopup(context, emailExistsMsg);
+                    } else {
+                      Consts.alertPopup(context, "Couldn't connect to server. Please try again.");
+                    }}
                   },
                 child: Container(
                     width: size.width,
@@ -56,7 +99,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                    margin: EdgeInsets.all(5.0),
+                    margin: const EdgeInsets.all(5.0),
                     child: const Center(
                       child: Text('Reset Password', style:
                       TextStyle(
@@ -103,9 +146,4 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  _updateMailFieldValue(String p1) {
-  }
-
-  _updateUsernameFieldValue(String p1) {
-  }
 }

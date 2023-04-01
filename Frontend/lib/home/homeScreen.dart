@@ -67,8 +67,8 @@ class _FirstScreenState extends State<FirstScreen> {
               child: CameraScreen(title: "Camera"),
               type: PageTransitionType.bottomToTop));
         },
-        child: Image.asset('assets/camera.png', height: 40.0,),
         backgroundColor: Consts.primaryColor,
+        child: Image.asset('assets/camera.png', height: 40.0,),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(

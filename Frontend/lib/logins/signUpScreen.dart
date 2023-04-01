@@ -135,7 +135,7 @@ class _SignUpState extends State<SignUp> {
                   borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                  margin: EdgeInsets.all(5.0),
+                  margin: const EdgeInsets.all(5.0),
                   child: const Center(
                   child: Text('Sign Up', style:
                   TextStyle(
