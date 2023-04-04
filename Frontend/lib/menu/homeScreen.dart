@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,9 +11,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final user = FirebaseAuth.instance.currentUser!;
+
+    return Scaffold(
       body: Center(
-        child: Text("Home Page"),
+        child: Text('Name: ${user.displayName!}'),
       ),
     );
   }
