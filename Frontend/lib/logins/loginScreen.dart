@@ -6,7 +6,6 @@ import 'package:frontend/home/homeScreen.dart';
 import 'package:frontend/logins/forgotPasswordScreen.dart';
 import 'package:frontend/logins/signUpScreen.dart';
 import 'package:frontend/service/googleSignIn.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
