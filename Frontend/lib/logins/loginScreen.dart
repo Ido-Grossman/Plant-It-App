@@ -59,9 +59,7 @@ class _LoginState extends State<Login> {
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(),);
-          } else if (snapshot.hasData) {
+           if (snapshot.hasData) {
             return const FirstScreen();
           } else if (snapshot.hasError) {
             return const Center(child: Text('Something went wrong!'),);
@@ -106,7 +104,7 @@ class _LoginState extends State<Login> {
                           }
                           if(statusCode == 200){
                             Navigator.push(context, PageTransition(
-                                child: const FirstScreen(),
+                                child: FirstScreen(username: _mailTextField,),
                                 type: PageTransitionType.bottomToTop));
                           } else if (statusCode == 401) {
                             String badCredentialsMsg = 'Incorrect email or password';
@@ -120,7 +118,7 @@ class _LoginState extends State<Login> {
                       child: Container(
                           width: size.width,
                           decoration: BoxDecoration(
-                            color: Consts.primaryColor,
+                            color: (_mailTextField.isNotEmpty && _passwordTextField.isNotEmpty) ? Consts.primaryColor : Colors.grey,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
