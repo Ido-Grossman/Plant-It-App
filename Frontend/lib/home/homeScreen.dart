@@ -11,8 +11,12 @@ import 'package:page_transition/page_transition.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../logins/loginScreen.dart';
+
 class FirstScreen extends StatefulWidget {
-  const FirstScreen({Key? key}) : super(key: key);
+  final String? username;
+
+  const FirstScreen({Key? key, this.username}) : super(key: key);
 
   @override
   State<FirstScreen> createState() => _FirstScreenState();
@@ -20,9 +24,6 @@ class FirstScreen extends StatefulWidget {
 
 class _FirstScreenState extends State<FirstScreen> {
   int _bottomNavigationIdx = 0;
-  List<Widget> screens = const [
-    HomeScreen(), MyPlants(), SearchScreen(), MyProfile()
-  ];
 
   List<IconData> screenIconsList = [
     Icons.home,
@@ -42,7 +43,9 @@ class _FirstScreenState extends State<FirstScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser!;
+    List<Widget> screens = [
+      HomeScreen(username: widget.username,), MyPlants(), SearchScreen(), MyProfile()
+    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -61,9 +64,15 @@ class _FirstScreenState extends State<FirstScreen> {
         elevation: 0.0,
         actions: [
           TextButton(onPressed: () {
-            final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-            provider.logOut();
-          }, child: Text('Logout'))
+            if (widget.username == null){
+              final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+              provider.logOut();
+            } else {
+              Navigator.push(context, PageTransition(
+                  child: const Login(),
+                  type: PageTransitionType.bottomToTop));
+            }
+          }, child: const Text('Logout'))
         ],
       ),
       body: IndexedStack(

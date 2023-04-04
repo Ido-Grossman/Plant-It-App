@@ -82,9 +82,7 @@ class _SignUpState extends State<SignUp> {
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(),);
-          } else if (snapshot.hasData) {
+           if (snapshot.hasData) {
             return const FirstScreen();
           } else if (snapshot.hasError) {
             return const Center(child: Text('Something went wrong!'),);
@@ -131,7 +129,7 @@ class _SignUpState extends State<SignUp> {
                           }
                           if(statusCode == 201){
                             Navigator.push(context, PageTransition(
-                                child: const FirstScreen(),
+                                child: FirstScreen(username: _usernameTextField,),
                                 type: PageTransitionType.bottomToTop));
                           } else if (statusCode == 100) {
                             String emailExistsMsg = 'The email already exists. Please try again.';
