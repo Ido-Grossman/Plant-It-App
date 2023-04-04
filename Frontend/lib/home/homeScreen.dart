@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/menu/cameraPage.dart';
@@ -5,8 +6,10 @@ import 'package:frontend/menu/homeScreen.dart';
 import 'package:frontend/menu/myPlantsScreen.dart';
 import 'package:frontend/menu/profileScreen.dart';
 import 'package:frontend/menu/searchScreen.dart';
+import 'package:frontend/service/googleSignIn.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:provider/provider.dart';
 
 class FirstScreen extends StatefulWidget {
   const FirstScreen({Key? key}) : super(key: key);
@@ -39,6 +42,8 @@ class _FirstScreenState extends State<FirstScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser!;
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -50,12 +55,16 @@ class _FirstScreenState extends State<FirstScreen> {
               fontWeight: FontWeight.w500,
               fontSize: 24,
             ),),
-            Icon(Icons.notifications,color: Consts.lessBlack,
-                size: 30.0,)
           ],
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0.0,
+        actions: [
+          TextButton(onPressed: () {
+            final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+            provider.logOut();
+          }, child: Text('Logout'))
+        ],
       ),
       body: IndexedStack(
         index: _bottomNavigationIdx,

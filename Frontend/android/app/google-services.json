@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "246874156381",
+    "project_id": "plant-it-app-5c251",
+    "storage_bucket": "plant-it-app-5c251.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246874156381:android:d55d90e2bb4c2895814cb4",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "246874156381-7art3j8vnqhe4agovb4aih90lv8ak9dl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.frontend",
+            "certificate_hash": "c9a0f04329f90f72e3c06089d3efd622927ac790"
+          }
+        },
+        {
+          "client_id": "246874156381-dm35sbq6t0u4pd7kf1btkd3mpa6ehhg7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOn-57I2HF5CFECA0C8J0I6CfXXipWuho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "246874156381-3fo8oguftfus6cbglqhv7tq7q9abm0jl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "246874156381-27qlpli37tc6uq8tihv3idknpogjmli7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.frontend"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
