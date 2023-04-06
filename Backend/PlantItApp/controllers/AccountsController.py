@@ -52,12 +52,15 @@ def register(request):
 def set_username(request):
     if request.method != "POST":
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-    username = request.data.get('username')
+    username = request.data.get('username', None)
     if not username:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    email = request.data.get('email')
+    email = request.data.get('email', None)
     if not username:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+    username_user = User.objects.get(username=username)
+    if username_user:
+        return Response("Username already exists", status=status.HTTP_409_CONFLICT)
     user = User.objects.get(email=email)
     if not user:
         return Response("User doesn't exist.", status=status.HTTP_404_NOT_FOUND)
@@ -71,7 +74,6 @@ def set_username(request):
     message = render_to_string(email_template_name, c)
     send_mail(subject, message, 'idoddii@gmail.com', [email], fail_silently=False)
     return Response(status=status.HTTP_200_OK)
-
 
 
 @api_view(['Post'])
