@@ -26,7 +26,6 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   bool _isButtonEnabled = false;
   String _mailTextField = '';
-  String _usernameTextField = '';
   String _passwordTextField = '';
 
   void _onValidationChanged(bool isEnabled){
@@ -35,11 +34,11 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  Future<int> _signUp(String username, String password, String email) async {
+  Future<int> _signUp(String password, String email) async {
     final url = Uri.parse('${Consts.prefixLink}api/accounts/register/');
     try {
       final response = await http
-          .post(url, body: {'username': username, 'password': password, 'email': email})
+          .post(url, body: {'password': password, 'email': email})
           .timeout(const Duration(seconds: 10));
       final responseBody = response.body;
       if (responseBody != ''){
@@ -59,12 +58,6 @@ class _SignUpState extends State<SignUp> {
   void _updateMailFieldValue(String value){
     setState(() {
       _mailTextField = value;
-    });
-  }
-
-  void _updateUsernameFieldValue(String value){
-    setState(() {
-      _usernameTextField = value;
     });
   }
 
@@ -109,11 +102,6 @@ class _SignUpState extends State<SignUp> {
                       onChanged: _updateMailFieldValue,
                       isEmail: true,
                     ),
-                    LoginTextField(
-                      textHint: 'Enter Username',
-                      icon: Icons.supervised_user_circle,
-                      onChanged: _updateUsernameFieldValue,
-                    ),
                     PasswordValidationForms(
                       onValidationChanged: _onValidationChanged,
                       onPassChange: _updatePasswordFieldValue,),
@@ -122,14 +110,14 @@ class _SignUpState extends State<SignUp> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        if (_isButtonEnabled && _mailTextField.isNotEmpty && _usernameTextField.isNotEmpty) {
-                          int statusCode = await _signUp(_usernameTextField, _passwordTextField, _mailTextField);
+                        if (_isButtonEnabled && _mailTextField.isNotEmpty) {
+                          int statusCode = await _signUp(_passwordTextField, _mailTextField);
                           if (!mounted) {
                             return;
                           }
                           if(statusCode == 201){
                             Navigator.push(context, PageTransition(
-                                child: FirstScreen(username: _usernameTextField,),
+                                child: FirstScreen(username: _mailTextField,),
                                 type: PageTransitionType.bottomToTop));
                           } else if (statusCode == 100) {
                             String emailExistsMsg = 'The email already exists. Please try again.';
@@ -144,7 +132,7 @@ class _SignUpState extends State<SignUp> {
                       child: Container(
                           width: size.width,
                           decoration: BoxDecoration(
-                            color: (_isButtonEnabled && _mailTextField.isNotEmpty && _usernameTextField.isNotEmpty) ? Consts.primaryColor : Colors.grey,
+                            color: (_isButtonEnabled && _mailTextField.isNotEmpty) ? Consts.primaryColor : Colors.grey,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
