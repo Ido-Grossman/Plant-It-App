@@ -59,6 +59,8 @@ def set_username(request):
     if not username:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     user = User.objects.get(email=email)
+    if not user:
+        return Response("User doesn't exist.", status=status.HTTP_404_NOT_FOUND)
     user.email = email
     subject = "Welcome to Plant-It-App"
     email_template_name = "registration_email.txt"
