@@ -43,11 +43,23 @@ def register(request):
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     email = serializer.validated_data['email']
-    username = serializer.validated_data['username']
     password = serializer.validated_data['password']
-    print(password)
-    print(email)
-    User.objects.create_user(username, email, password)
+    User.objects.create_user(email, password)
+    return Response(status=status.HTTP_201_CREATED)
+
+
+@api_view(['Get'])
+def set_username(request):
+    if request.method != "POST":
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    username = request.data.get('username')
+    if not username:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    email = request.data.get('email')
+    if not username:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    user = User.objects.get(email=email)
+    user.email = email
     subject = "Welcome to Plant-It-App"
     email_template_name = "registration_email.txt"
     c = {
@@ -56,7 +68,8 @@ def register(request):
     # Renders the email to a string and sends it to the user email.
     message = render_to_string(email_template_name, c)
     send_mail(subject, message, 'idoddii@gmail.com', [email], fail_silently=False)
-    return Response(status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_200_OK)
+
 
 
 @api_view(['Post'])
