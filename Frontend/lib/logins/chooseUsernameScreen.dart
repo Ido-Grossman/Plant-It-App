@@ -5,23 +5,24 @@ import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants.dart';
+import '../home/homeScreen.dart';
 import '../service/loginTextField.dart';
 import 'loginScreen.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({Key? key}) : super(key: key);
+class ChooseUsernameScreen extends StatefulWidget {
+  final String email;
+  const ChooseUsernameScreen({Key? key, required this.email}) : super(key: key);
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  State<ChooseUsernameScreen> createState() => _ChooseUsernameScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  String _emailTextField = '';
+class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> {
+  String _usernameTextField = '';
 
   _updateUsernameFieldValue(String value) {
     setState(() {
-      _emailTextField = value;
+      _usernameTextField = value;
     });
   }
 
@@ -29,11 +30,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    Future<int> _forgotPass(String email) async {
-      final url = Uri.parse('${Consts.prefixLink}api/accounts/forgot-password/');
+    Future<int> _chooseUsername(String username) async {
+      final url = Uri.parse('${Consts.prefixLink}api/accounts/set-username/');
       try {
         final response = await http.post(url,
-            body: {'email': email}).timeout(
+            body: {'username': username, 'email': widget.email}).timeout(
           const Duration(seconds: 10),
         );
         return response.statusCode;
@@ -51,7 +52,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.asset('assets/reset-password.png', fit: BoxFit.fitWidth,),
-              const Text('Forgot\nPassword',
+              const Text('Choose your\nusername',
                 style: TextStyle(
                     fontSize: 35.0,
                     fontWeight: FontWeight.w700
@@ -60,7 +61,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 height: 30,
               ),
               LoginTextField(
-                textHint: 'Enter email',
+                textHint: 'Please choose a username',
                 icon: Icons.person,
                 onChanged: _updateUsernameFieldValue,
               ),
@@ -69,28 +70,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               GestureDetector(
                 onTap: () async {
-                  if (_emailTextField.isNotEmpty) {
-                    int statusCode = await _forgotPass(_emailTextField);
+                  if (_usernameTextField.isNotEmpty) {
+                    int statusCode = await _chooseUsername(_usernameTextField);
                     if (!mounted) {
                       return;
                     }
                     if(statusCode == 200){
-                      Fluttertoast.showToast(
-                        msg: "Check your mail, you received a reset password link.",
-                        toastLength: Toast.LENGTH_LONG,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.blue,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-                    } else if (statusCode == 404) {
-                      String emailExistsMsg = "That email doesn't exist. Please try again.";
+                      Navigator.push(context, PageTransition(
+                          child: FirstScreen(username: _usernameTextField,),
+                          type: PageTransitionType.bottomToTop));
+                    } else if (statusCode == 409) {
+                      String emailExistsMsg = "That username already exists. Please enter another one.";
                       Consts.alertPopup(context, emailExistsMsg);
                     } else {
                       Consts.alertPopup(context, "Couldn't connect to server. Please try again.");
                     }}
-                  },
+                },
                 child: Container(
                     width: size.width,
                     decoration: BoxDecoration(
@@ -100,7 +95,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                     margin: const EdgeInsets.all(5.0),
                     child: const Center(
-                      child: Text('Reset Password', style:
+                      child: Text('I chose one!', style:
                       TextStyle(
                         color: Colors.white,
                         fontSize: 18.0,
