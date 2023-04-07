@@ -51,6 +51,7 @@ dependencies:
   image: ^4.0.15
   flutter_exif_rotation: ^0.5.1
   line_awesome_flutter: ^2.0.0
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:
