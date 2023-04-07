@@ -1,15 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:frontend/constants.dart';
-import 'package:frontend/menu/cameraPage.dart';
+import 'package:image/image.dart' as img;
+
 import 'package:frontend/menu/homeScreen.dart';
 import 'package:frontend/menu/myPlantsScreen.dart';
 import 'package:frontend/menu/profileScreen.dart';
 import 'package:frontend/menu/searchScreen.dart';
 import 'package:frontend/service/googleSignIn.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:frontend/service/httpService.dart';
 
 import '../logins/loginScreen.dart';
 
@@ -23,6 +28,10 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
+  File? image;
+  final ImagePicker picker = ImagePicker();
+  final HttpService _httpService = HttpService();
+
   int _bottomNavigationIdx = 0;
 
   List<IconData> screenIconsList = [
@@ -39,7 +48,82 @@ class _FirstScreenState extends State<FirstScreen> {
     'Profile'
   ];
 
+  Future takePhoto() async {
+    try {
+      final image = await picker.pickImage(source: ImageSource.camera);
+      File rotatedImg = await FlutterExifRotation.rotateImage(path: image!.path);
+      final imgTmp = File(rotatedImg.path);
+      setState(() {
+        this.image = imgTmp;
+      });
+    } on PlatformException catch (e) {
+      print('error taking picture because of $e');
+    }
+  }
 
+  void presentLoader(BuildContext context,
+      {
+        String text = 'Aguarde...',
+        bool barrierDismissible = false,
+        bool willPop = true}
+      )
+  {
+    showDialog(
+        barrierDismissible: barrierDismissible,
+        context: context,
+        builder: (c) {
+          return WillPopScope(
+            onWillPop: () async {
+              return willPop;
+            },
+            child: AlertDialog(
+              content: Container(
+                child: Row(
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      width: 20.0,
+                    ),
+                    Text(
+                      text,
+                      style: TextStyle(fontSize: 18.0),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Future<void> presentAlert(BuildContext context,
+      {String title = '', String message = '', Function()? ok}) {
+    return showDialog(
+        context: context,
+        builder: (c) {
+          return AlertDialog(
+            title: Text('$title'),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  child: Text('$message'),
+                )
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text(
+                  'OK',
+                  // style: greenText,
+                ),
+                onPressed: ok != null ? ok : Navigator.of(context).pop,
+              ),
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +164,21 @@ class _FirstScreenState extends State<FirstScreen> {
         children: screens,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(context, PageTransition(
-              child: CameraScreen(title: "Camera"),
-              type: PageTransitionType.bottomToTop));
+        onPressed: () async {
+          await takePhoto();
+          if (image != null){
+            // rotate picture
+            if (!mounted) {
+              return;
+            }
+            // show loader
+            presentLoader(context, text: 'Sending image...');
+            // calling with http
+            var responseDataHttp = await _httpService.uploadPhoto(image!.path);
+            // hide loader
+            Navigator.of(context).pop();
+            // showing alert dialogs
+          }
         },
         backgroundColor: Consts.primaryColor,
         child: Image.asset('assets/camera.png', height: 40.0,),
