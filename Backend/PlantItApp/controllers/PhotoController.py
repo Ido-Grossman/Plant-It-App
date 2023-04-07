@@ -15,8 +15,6 @@ class PhotoUploadView(APIView):
                 # Assuming you want to save the image in a 'media' folder
                 img = Image.open(image_file)
                 img = img.resize((256, 256))
-                img = img.rotate(270)
-                img.show()
                 transform = transforms.ToTensor()
                 img = transform(img)
                 yb = settings.MODEL(torch.unsqueeze(img, 0))

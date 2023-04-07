@@ -28,20 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['10.0.2.2', '127.0.0.1']
 
-MODEL = Classification.ModelClasses.ResNet9(3, 38)
-DISEASES = ['scab', 'Black_rot', 'rust', 'healthy',
-            'healthy', 'Powdery_mildew', 'healthy',
-            'Cercospora_leaf_spot Gray_leaf_spot', 'Common_rust',
-            'Northern_Leaf_Blight', 'healthy', 'Black_rot',
-            'Esca_(Black_Measles)', 'Leaf_blight', 'healthy',
-            'Haunglongbing_(Citrus_greening)', 'Bacterial_spot', 'healthy',
-            'Bacterial_spot', 'healthy', 'Early_blight',
-            'Late_blight', 'healthy', 'healthy', 'healthy',
-            'Powdery_mildew', 'Leaf_scorch', 'healthy',
-            'Bacterial_spot', 'Early_blight', 'Late_blight',
-            'Leaf_Mold', 'Septoria_leaf_spot', 'Spider_mites Two-spotted_spider_mite',
-            'Target_Spot', 'Yellow_Leaf_Curl_Virus',
-            'mosaic_virus', 'healthy']
+DISEASES = ['Haunglongbing', 'Scorch', 'Esca', 'Scab', 'Bacterial spot', 'Mosaic virus', 'Mold', 'Blight',
+            'Healthy', 'Spider mites', 'Leaf curl virus', 'Rust', 'Target spot', 'Black rot', 'leaf spot',
+            'Powdery Miledew']
+MODEL = Classification.ModelClasses.ResNet9(3, len(DISEASES))
 
 # Application definition
 

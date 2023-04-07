@@ -1,6 +1,7 @@
 import torch
 from django.apps import AppConfig
 from django.conf import settings
+import os
 
 
 class PlantitappConfig(AppConfig):
@@ -8,7 +9,6 @@ class PlantitappConfig(AppConfig):
     name = 'PlantItApp'
 
     def ready(self):
-        settings.MODEL.load_state_dict(torch.load("."
-                                                  "\\PlantItApp\\plant-disease-model.pth", map_location=torch.device(
-                                                    "cpu")))
+        path = os.path.join(".", 'PlantItApp', 'plant-disease-model.pth')
+        settings.MODEL.load_state_dict(torch.load(path, map_location=torch.device("cpu")))
         settings.MODEL.eval()
