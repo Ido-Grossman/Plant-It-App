@@ -70,7 +70,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# AUTHENTICATION_BACKENDS = ['PlantItApp.EmailAuth.EmailBackend', 'django.contrib.auth.backends.ModelBackend', ]
+AUTHENTICATION_BACKENDS = ['PlantItApp.backends.CustomAuthBackend', 'django.contrib.auth.backends.ModelBackend', ]
 
 ROOT_URLCONF = 'Backend.urls'
 
@@ -114,6 +114,8 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+
+AUTH_USER_MODEL = 'PlantItApp.CustomUser'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

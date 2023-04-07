@@ -5,10 +5,10 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth import authenticate, login
 from rest_framework import status
-from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
 
 from ..serializers import UserSerializer
 
@@ -22,10 +22,25 @@ def signin(request):
     password = request.data.get('password')
     if email is None or password is None:
         return Response({'error': 'Please provide both email and password'}, status=status.HTTP_400_BAD_REQUEST)
-    UserModel = get_user_model()
-    user = UserModel.objects.get(email=email)
-    username = user.username
-    user = authenticate(request._request, username=username, password=password)
+    user = authenticate(request._request, email=email, password=password)
+    # If they are correct login the user and return 200, else return 401.
+    if user is not None:
+        login(request._request, user)
+        return Response("User logged in.", status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['Post'])
+def signin_google(request):
+    # Makes sure the user tried to do a post request.
+    if request.method != "POST":
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    email = request.data.get('email', None)
+    uid = request.data.get('uid', None)
+    if email is None or uid is None:
+        return Response({'error': 'Please provide both email and uid'}, status=status.HTTP_400_BAD_REQUEST)
+    user = authenticate(request._request, email=email, uid=uid)
     # If they are correct login the user and return 200, else return 401.
     if user is not None:
         login(request._request, user)
@@ -39,11 +54,27 @@ def register(request):
     # Makes sure the user tried to do a post request.
     if request.method != "POST":
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-    serializer = UserSerializer(data=request.data, context={'require_username': True})
+    serializer = UserSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     email = serializer.validated_data['email']
     password = serializer.validated_data['password']
+    User = get_user_model()
+    User.objects.create_user(email, password)
+    return Response(status=status.HTTP_201_CREATED)
+
+
+@api_view(['Post'])
+def register_google(request):
+    # Makes sure the user tried to do a post request.
+    if request.method != "POST":
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    serializer = UserSerializer(data=request.data, context={'require_uid': True})
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    email = serializer.validated_data['email']
+    password = serializer.validated_data['password']
+    User = get_user_model()
     User.objects.create_user(email, password)
     return Response(status=status.HTTP_201_CREATED)
 
@@ -52,12 +83,11 @@ def register(request):
 def set_username(request):
     if request.method != "POST":
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-    username = request.data.get('username', None)
-    if not username:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    email = request.data.get('email', None)
-    if not username:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+    email = request.data.get('email')
+    username = request.data.get('username')
+    User = get_user_model()
+    if email is None or username is None:
+        return Response({'error': 'Please provide both email and username'}, status=status.HTTP_400_BAD_REQUEST)
     try:
         User.objects.get(username=username)
         return Response("Username already exists", status=status.HTTP_409_CONFLICT)
@@ -87,6 +117,7 @@ def forgot_password(request):
     if not email:
         return Response("No email parameter was sent.", status=status.HTTP_400_BAD_REQUEST)
     # Returns the user from the DB or returns 404 if the user doesn't exist.
+    User = get_user_model()
     user = get_object_or_404(User, email=email)
     # Defines the email parameters.
     subject = "Password Reset Requested"
