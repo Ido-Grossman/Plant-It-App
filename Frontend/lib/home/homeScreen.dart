@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:frontend/constants.dart';
-import 'package:image/image.dart' as img;
 
 import 'package:frontend/menu/homeScreen.dart';
 import 'package:frontend/menu/myPlantsScreen.dart';
@@ -41,17 +40,13 @@ class _FirstScreenState extends State<FirstScreen> {
     Icons.person
   ];
 
-  List<String> screenTitleList = [
-    'Home',
-    'My Plants',
-    'Search',
-    'Profile'
-  ];
+  List<String> screenTitleList = ['Home', 'My Plants', 'Search', 'Profile'];
 
   Future takePhoto() async {
     try {
       final image = await picker.pickImage(source: ImageSource.camera);
-      File rotatedImg = await FlutterExifRotation.rotateImage(path: image!.path);
+      File rotatedImg =
+          await FlutterExifRotation.rotateImage(path: image!.path);
       final imgTmp = File(rotatedImg.path);
       setState(() {
         this.image = imgTmp;
@@ -62,12 +57,9 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   void presentLoader(BuildContext context,
-      {
-        String text = 'Aguarde...',
-        bool barrierDismissible = false,
-        bool willPop = true}
-      )
-  {
+      {String text = 'Aguarde...',
+      bool barrierDismissible = false,
+      bool willPop = true}) {
     showDialog(
         barrierDismissible: barrierDismissible,
         context: context,
@@ -114,11 +106,11 @@ class _FirstScreenState extends State<FirstScreen> {
             ),
             actions: <Widget>[
               TextButton(
-                child: Text(
+                onPressed: ok ?? Navigator.of(context).pop,
+                child: const Text(
                   'OK',
                   // style: greenText,
                 ),
-                onPressed: ok != null ? ok : Navigator.of(context).pop,
               ),
             ],
           );
@@ -128,7 +120,12 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   Widget build(BuildContext context) {
     List<Widget> screens = [
-      HomeScreen(username: widget.username,), MyPlants(), SearchScreen(), MyProfile()
+      HomeScreen(
+        username: widget.username,
+      ),
+      MyPlants(),
+      SearchScreen(),
+      MyProfile()
     ];
 
     return Scaffold(
@@ -136,27 +133,34 @@ class _FirstScreenState extends State<FirstScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(screenTitleList[_bottomNavigationIdx],
-            style: TextStyle(
-              color: Consts.lessBlack,
-              fontWeight: FontWeight.w500,
-              fontSize: 24,
-            ),),
+            Text(
+              screenTitleList[_bottomNavigationIdx],
+              style: TextStyle(
+                color: Consts.lessBlack,
+                fontWeight: FontWeight.w500,
+                fontSize: 24,
+              ),
+            ),
           ],
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0.0,
         actions: [
-          TextButton(onPressed: () {
-            if (widget.username == null){
-              final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-              provider.logOut();
-            } else {
-              Navigator.push(context, PageTransition(
-                  child: const Login(),
-                  type: PageTransitionType.bottomToTop));
-            }
-          }, child: const Text('Logout'))
+          TextButton(
+              onPressed: () {
+                if (widget.username == null) {
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  provider.logOut();
+                } else {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const Login(),
+                          type: PageTransitionType.bottomToTop));
+                }
+              },
+              child: const Text('Logout'))
         ],
       ),
       body: IndexedStack(
@@ -166,7 +170,7 @@ class _FirstScreenState extends State<FirstScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await takePhoto();
-          if (image != null){
+          if (image != null) {
             // rotate picture
             if (!mounted) {
               return;
@@ -181,7 +185,10 @@ class _FirstScreenState extends State<FirstScreen> {
           }
         },
         backgroundColor: Consts.primaryColor,
-        child: Image.asset('assets/camera.png', height: 40.0,),
+        child: Image.asset(
+          'assets/camera.png',
+          height: 40.0,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
@@ -192,7 +199,7 @@ class _FirstScreenState extends State<FirstScreen> {
         activeIndex: _bottomNavigationIdx,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.softEdge,
-        onTap: (index){
+        onTap: (index) {
           setState(() {
             _bottomNavigationIdx = index;
           });
