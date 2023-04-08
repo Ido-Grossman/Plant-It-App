@@ -35,9 +35,7 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
       Navigator.push(
           context,
           PageTransition(
-              child: FirstScreen(
-                username: user.displayName,
-              ),
+              child: FirstScreen(),
               type: PageTransitionType.bottomToTop));
     } else {
       Navigator.push(

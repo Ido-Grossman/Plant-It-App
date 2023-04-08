@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend/logins/chooseUsernameScreen.dart';
 import 'package:frontend/service/httpService.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
+import '../service/googleSignIn.dart';
 import '../service/passwordValidationFields.dart';
 
 class ChoosePassScreen extends StatefulWidget {
@@ -40,7 +42,7 @@ class _ChoosePassScreenState extends State<ChoosePassScreen> {
       if (!mounted) {
         return;
       }
-      if (statusCode == 200) {
+      if (statusCode == 201) {
           Navigator.push(
               context,
               PageTransition(

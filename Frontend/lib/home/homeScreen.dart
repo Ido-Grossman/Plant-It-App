@@ -151,13 +151,12 @@ class _FirstScreenState extends State<FirstScreen> {
                   final provider =
                       Provider.of<GoogleSignInProvider>(context, listen: false);
                   provider.logOut();
-                } else {
+                }
                   Navigator.push(
                       context,
                       PageTransition(
                           child: const Login(),
                           type: PageTransitionType.bottomToTop));
-                }
               },
               child: const Text('Logout'))
         ],

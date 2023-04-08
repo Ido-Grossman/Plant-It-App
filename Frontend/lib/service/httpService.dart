@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 
 Future<String> uploadPhoto(String path) async {
-  Uri uri = Uri.parse('${Consts.prefixApiLink}/photo-upload/');
+  Uri uri = Uri.parse('${Consts.prefixApiLink}photo-upload/');
   http.MultipartRequest request = http.MultipartRequest('POST', uri);
   http.MultipartFile multipartFile = await http.MultipartFile.fromPath('file', path);
   request.files.add(multipartFile);
