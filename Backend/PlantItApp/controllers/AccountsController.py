@@ -74,8 +74,9 @@ def register_google(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     email = serializer.validated_data['email']
     password = serializer.validated_data['password']
+    uid = serializer.validated_data['uid']
     User = get_user_model()
-    User.objects.create_user(email, password)
+    User.objects.create_user(email, uid=uid, password=password)
     return Response(status=status.HTTP_201_CREATED)
 
 

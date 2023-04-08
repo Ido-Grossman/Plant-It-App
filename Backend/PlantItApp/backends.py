@@ -10,7 +10,7 @@ class CustomAuthBackend(ModelBackend):
             user = CustomUser.objects.get(email=email)
             if password is not None and user.check_password(password):
                 return user
-            if uid is not None and CustomUser.objects.check_uid(email=email, uid=uid):
+            if uid is not None and user.check_uid(uid):
                 return user
         except CustomUser.DoesNotExist:
             return None
