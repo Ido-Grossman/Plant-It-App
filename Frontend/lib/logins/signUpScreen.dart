@@ -46,7 +46,7 @@ class _SignUpState extends State<SignUp> {
 
   Future<void> onSignUp() async {
     if (_isButtonEnabled && _mailTextField.isNotEmpty) {
-      int statusCode = await signUp(_passwordTextField, _mailTextField);
+      int statusCode = await signUp(_mailTextField, _passwordTextField);
       if (!mounted) {
         return;
       }
@@ -215,3 +215,5 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
+
+

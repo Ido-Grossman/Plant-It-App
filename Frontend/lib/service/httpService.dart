@@ -56,6 +56,7 @@ Future<int> chooseUsername(String username, String? email) async {
   }
 }
 
+
 Future<int> logInGoogle(String? email, String uid) async {
   final url = Uri.parse('${Consts.prefixApiLink}accounts/google-login/');
   try {
@@ -69,7 +70,7 @@ Future<int> logInGoogle(String? email, String uid) async {
   }
 }
 
-Future<int> signUpGoogle(String email, String uid, String password) async {
+Future<int> signUpGoogle(String? email, String uid, String password) async {
   final url = Uri.parse('${Consts.prefixApiLink}accounts/google-register/');
   try {
     final response = await http.post(url,
