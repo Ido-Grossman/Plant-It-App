@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Consts {
   // API prefix link
-  static var prefixLink = 'http://10.0.2.2:8000/';
+  static var prefixApiLink = 'http://10.0.2.2:8000/api/';
 
   // colors
   static var primaryColor = Color.fromARGB(255, 31, 85, 56);

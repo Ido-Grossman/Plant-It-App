@@ -29,7 +29,6 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreenState extends State<FirstScreen> {
   File? image;
   final ImagePicker picker = ImagePicker();
-  final HttpService _httpService = HttpService();
 
   int _bottomNavigationIdx = 0;
 
@@ -178,7 +177,7 @@ class _FirstScreenState extends State<FirstScreen> {
             // show loader
             presentLoader(context, text: 'Sending image...');
             // calling with http
-            var responseDataHttp = await _httpService.uploadPhoto(image!.path);
+            var responseDataHttp = await uploadPhoto(image!.path);
             // hide loader
             Navigator.of(context).pop();
             // showing alert dialogs
