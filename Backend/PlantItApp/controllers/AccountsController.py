@@ -84,7 +84,9 @@ def set_username(request):
         return Response("Username already exists", status=status.HTTP_409_CONFLICT)
     except User.DoesNotExist:
         try:
-            User.objects.get(email=email)
+            user = User.objects.get(email=email)
+            user.username = username
+            user.save()
         except User.DoesNotExist:
             return Response("User doesn't exist.", status=status.HTTP_404_NOT_FOUND)
     subject = "Welcome to Plant-It-App"
