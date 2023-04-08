@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:frontend/constants.dart';
+import 'package:frontend/logins/choosePassScreen.dart';
 import 'package:frontend/logins/chooseUsernameScreen.dart';
 import 'package:frontend/service/httpService.dart';
 import 'package:page_transition/page_transition.dart';
@@ -41,7 +43,7 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
       Navigator.push(
           context,
           PageTransition(
-              child: ChooseUsernameScreen(email: widget.email),
+              child: const ChoosePassScreen(),
               type: PageTransitionType.bottomToTop));
     }
   }
@@ -49,7 +51,7 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: Consts.primaryColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +62,7 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
             ),
             SizedBox(height: 30.0),
             Text(
-              'Logging in in progress',
+              'Logging in progress',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,

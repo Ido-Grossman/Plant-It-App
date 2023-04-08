@@ -2,61 +2,54 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/logins/chooseUsernameScreen.dart';
 import 'package:frontend/service/httpService.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../constants.dart';
-import '../home/homeScreen.dart';
-import '../service/loginTextField.dart';
+import '../service/passwordValidationFields.dart';
 
-class ChooseUsernameScreen extends StatefulWidget {
-  final String? email;
+class ChoosePassScreen extends StatefulWidget {
 
-  const ChooseUsernameScreen({Key? key, required this.email}) : super(key: key);
+  const ChoosePassScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChooseUsernameScreen> createState() => _ChooseUsernameScreenState();
+  State<ChoosePassScreen> createState() => _ChoosePassScreenState();
 }
 
-class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> {
-  String _usernameTextField = '';
+class _ChoosePassScreenState extends State<ChoosePassScreen> {
+  bool _isButtonEnabled = false;
+  String _passwordTextField = '';
   final user = FirebaseAuth.instance.currentUser;
 
-  _updateUsernameFieldValue(String value) {
+  void _onValidationChanged(bool isEnabled) {
     setState(() {
-      _usernameTextField = value;
+      _isButtonEnabled = isEnabled;
     });
   }
 
-  Future<void> onSetUsername() async {
-    if (_usernameTextField.isNotEmpty) {
-      int statusCode = await chooseUsername(_usernameTextField, widget.email);
+  void _updatePasswordFieldValue(String value) {
+    setState(() {
+      _passwordTextField = value;
+    });
+  }
+
+  Future<void> onSetPassword() async {
+    if (_isButtonEnabled && _passwordTextField.isNotEmpty) {
+      int statusCode = await signUpGoogle(user!.email, user!.uid, _passwordTextField);
       if (!mounted) {
         return;
       }
       if (statusCode == 200) {
-        if (user != null){
           Navigator.push(
               context,
               PageTransition(
-                  child: const FirstScreen(),
+                  child: ChooseUsernameScreen(email: user!.email),
                   type: PageTransitionType.bottomToTop));
-        } else {
-          Navigator.push(
-              context,
-              PageTransition(
-                  child: FirstScreen(
-                    username: _usernameTextField,
-                  ),
-                  type: PageTransitionType.bottomToTop));
-        }
-      } else if (statusCode == 409) {
-        String usernameExistsMsg =
-            "That username already exists. Please enter another one.";
-        Consts.alertPopup(context, usernameExistsMsg);
+        } else if (statusCode == 404) {
+        Consts.alertPopup(context, 'The password is not strong enough, please try another one');
       } else {
-        Consts.alertPopup(
-            context, "Couldn't connect to server. Please try again.");
+        Consts.alertPopup(context, 'Could not connect to server. Try again.');
       }
     }
   }
@@ -78,26 +71,28 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> {
                 fit: BoxFit.fitWidth,
               ),
               const Text(
-                'Choose your\nusername',
+                'Choose your\npassword',
                 style: TextStyle(fontSize: 35.0, fontWeight: FontWeight.w700),
               ),
               const SizedBox(
                 height: 30,
               ),
-              LoginTextField(
-                textHint: 'Please choose a username',
-                icon: Icons.person,
-                onChanged: _updateUsernameFieldValue,
+              PasswordValidationForms(
+                onValidationChanged: _onValidationChanged,
+                onPassChange: _updatePasswordFieldValue,
               ),
               const SizedBox(
                 height: 10,
               ),
               GestureDetector(
-                onTap: onSetUsername,
+                onTap: onSetPassword,
                 child: Container(
                     width: size.width,
                     decoration: BoxDecoration(
-                      color: Consts.primaryColor,
+                      color: (_isButtonEnabled &&
+                          _passwordTextField.isNotEmpty)
+                          ? Consts.primaryColor
+                          : Colors.grey,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.symmetric(
