@@ -62,7 +62,7 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=100, unique=True, default=None, null=True)
-    uid = models.CharField(max_length=100, unique=True)
+    uid = models.CharField(max_length=100, unique=True, null=True, default=None)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
