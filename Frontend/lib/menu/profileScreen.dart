@@ -54,7 +54,7 @@ class _MyProfileState extends State<MyProfile> {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, PageTransition(
-                      child: const EditProfilePhotoScreen(),
+                      child: EditProfilePicture(),
                       type: PageTransitionType.rightToLeft));
                 },
                 style: ElevatedButton.styleFrom(
