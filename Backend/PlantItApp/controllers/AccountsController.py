@@ -16,8 +16,6 @@ from ..serializers import UserSerializer
 @api_view(['Post'])
 def signin(request):
     # Makes sure the user tried to do a post request.
-    if request.method != "POST":
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     email = request.data.get('email')
     password = request.data.get('password')
     if email is None or password is None:
@@ -34,8 +32,6 @@ def signin(request):
 @api_view(['Post'])
 def signin_google(request):
     # Makes sure the user tried to do a post request.
-    if request.method != "POST":
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     email = request.data.get('email', None)
     uid = request.data.get('uid', None)
     if email is None or uid is None:
@@ -52,8 +48,6 @@ def signin_google(request):
 @api_view(['Post'])
 def register(request):
     # Makes sure the user tried to do a post request.
-    if request.method != "POST":
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     serializer = UserSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -67,22 +61,19 @@ def register(request):
 @api_view(['Post'])
 def register_google(request):
     # Makes sure the user tried to do a post request.
-    if request.method != "POST":
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     serializer = UserSerializer(data=request.data, context={'require_uid': True})
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     email = serializer.validated_data['email']
     password = serializer.validated_data['password']
+    uid = serializer.validated_data['uid']
     User = get_user_model()
-    User.objects.create_user(email, password)
+    User.objects.create_user(email, uid=uid, password=password)
     return Response(status=status.HTTP_201_CREATED)
 
 
-@api_view(['Get'])
+@api_view(['Post'])
 def set_username(request):
-    if request.method != "POST":
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     email = request.data.get('email')
     username = request.data.get('username')
     User = get_user_model()
@@ -93,7 +84,9 @@ def set_username(request):
         return Response("Username already exists", status=status.HTTP_409_CONFLICT)
     except User.DoesNotExist:
         try:
-            User.objects.get(email=email)
+            user = User.objects.get(email=email)
+            user.username = username
+            user.save()
         except User.DoesNotExist:
             return Response("User doesn't exist.", status=status.HTTP_404_NOT_FOUND)
     subject = "Welcome to Plant-It-App"
@@ -110,8 +103,6 @@ def set_username(request):
 @api_view(['Post'])
 def forgot_password(request):
     # Makes sure the user tried to do a post request.
-    if request.method != "POST":
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     # Tries to get the username from the post request, or returns 400 if it doesn't exist.
     email = request.data.get('email', None)
     if not email:

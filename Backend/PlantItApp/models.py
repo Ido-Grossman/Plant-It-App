@@ -37,8 +37,9 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Email is required')
 
         email = self.normalize_email(email)
-        user = self.model(email=email, uid=uid, **kwargs)
-        user.uid = make_password(uid)
+        user = self.model(email=email, **kwargs)
+        if uid:
+            user.uid = make_password(uid)
         user.password = make_password(password)
         user.save(using=self._db)
         return user
@@ -60,6 +61,7 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
+    username = models.CharField(max_length=100, unique=True, default=None, null=True)
     uid = models.CharField(max_length=100, unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -80,3 +82,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
+
+    def check_uid(self, raw_uid):
+        return check_password(raw_uid, self.uid)
