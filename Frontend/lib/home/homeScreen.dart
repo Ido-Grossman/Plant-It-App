@@ -151,7 +151,7 @@ class _FirstScreenState extends State<FirstScreen> {
                   final provider =
                       Provider.of<GoogleSignInProvider>(context, listen: false);
                   provider.logOut();
-                  await Future.delayed(const Duration(seconds: 3));
+                  await Future.delayed(const Duration(seconds: 2));
                 }
                 if (!mounted){
                   return;
