@@ -65,7 +65,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
       _gifController.repeat(min: 0, max: 29, period: const Duration(milliseconds: 1500));
       int statusCode =
           await logIn(_mailTextField, _passwordTextField);
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 1));
       _gifController.stop();
       setState(() {
         _isLoading = false;
@@ -166,7 +166,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                 child: Text(
                                   'Login',
                                   style: TextStyle(
-                                    color: Colors.white,כ
+                                    color: Colors.white,
                                   ),
                                 ),
                               )),
