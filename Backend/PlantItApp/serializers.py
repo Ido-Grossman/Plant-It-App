@@ -9,15 +9,12 @@ class PhotoSerializer(serializers.Serializer):
 class UserSerializer(serializers.Serializer):
     email = serializers.EmailField()
     username = serializers.CharField(max_length=100, required=False)
-    uid = serializers.CharField(max_length=100, required=False)
     password = serializers.CharField(max_length=100)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.context.get('require_username', False):
             self.fields['username'].required = True
-        if self.context.get('require_uid', False):
-            self.fields['uid'].required = True
 
     def validate_username(self, value):
         User = get_user_model()
