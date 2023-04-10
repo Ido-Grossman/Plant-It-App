@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 
 Future<String> uploadPhoto(String path) async {
-  Uri uri = Uri.parse('${Consts.prefixApiLink}photo-upload/');
+  Uri uri = Uri.parse('${Consts.getApiLink()}photo-upload/');
   http.MultipartRequest request = http.MultipartRequest('POST', uri);
   http.MultipartFile multipartFile = await http.MultipartFile.fromPath('file', path);
   request.files.add(multipartFile);
@@ -19,7 +19,7 @@ Future<String> uploadPhoto(String path) async {
 }
 
 Future<int> signUp(String email, String password) async {
-  final url = Uri.parse('${Consts.prefixApiLink}accounts/register/');
+  final url = Uri.parse('${Consts.getApiLink()}accounts/register/');
   try {
     final response = await http
         .post(url, body: {'email': email, 'password': password})
@@ -31,7 +31,7 @@ Future<int> signUp(String email, String password) async {
 }
 
 Future<String?> logIn(String email, String password) async {
-  final url = Uri.parse('${Consts.prefixApiLink}accounts/login/');
+  final url = Uri.parse('${Consts.getApiLink()}accounts/login/');
   try {
     final response = await http.post(url,
         body: {'email': email, 'password': password}).timeout(
@@ -46,7 +46,7 @@ Future<String?> logIn(String email, String password) async {
 }
 
 Future<int> chooseUsername(String username, String? token) async {
-  final url = Uri.parse('${Consts.prefixApiLink}accounts/set-username/');
+  final url = Uri.parse('${Consts.getApiLink()}accounts/set-username/');
   try {
     Map<String, String> headers = {
       "Authorization": "Token $token"
@@ -64,7 +64,7 @@ Future<int> chooseUsername(String username, String? token) async {
 
 
 Future<String?> logInGoogle(String? email, String uid) async {
-  final url = Uri.parse('${Consts.prefixApiLink}accounts/google-login/');
+  final url = Uri.parse('${Consts.getApiLink()}accounts/google-login/');
   try {
     final response = await http.post(url,
         body: {'email': email, 'uid': uid}).timeout(
@@ -79,7 +79,7 @@ Future<String?> logInGoogle(String? email, String uid) async {
 }
 
 Future<int> signUpGoogle(String? email, String uid, String password) async {
-  final url = Uri.parse('${Consts.prefixApiLink}accounts/google-register/');
+  final url = Uri.parse('${Consts.getApiLink()}accounts/google-register/');
   try {
     final response = await http.post(url,
         body: {'email': email, 'uid': uid, 'password': password}).timeout(
@@ -92,7 +92,7 @@ Future<int> signUpGoogle(String? email, String uid, String password) async {
 }
 
 Future<int> forgotPass(String email) async {
-  final url = Uri.parse('${Consts.prefixApiLink}accounts/forgot-password/');
+  var url = Uri.parse('${Consts.getApiLink()}accounts/forgot-password/');
   try {
     final response = await http.post(url,
         body: {'email': email}).timeout(

@@ -1,8 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class Consts {
   // API prefix link
-  static var prefixApiLink = 'http://10.0.2.2:8000/api/';
+  static String getApiLink() {
+    if (Platform.isAndroid){
+      return 'http://10.0.2.2:8000/api/';
+    } else {
+      return 'http://127.0.0.1:8000/api/';
+    }
+  }
 
   // colors
   static var primaryColor = Color.fromARGB(255, 31, 85, 56);
