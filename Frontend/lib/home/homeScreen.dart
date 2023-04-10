@@ -147,12 +147,10 @@ class _FirstScreenState extends State<FirstScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                if (widget.username == null) {
                   final provider =
                       Provider.of<GoogleSignInProvider>(context, listen: false);
                   provider.logOut();
                   await Future.delayed(const Duration(seconds: 2));
-                }
                 if (!mounted){
                   return;
                 }

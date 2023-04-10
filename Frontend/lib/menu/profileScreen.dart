@@ -3,6 +3,10 @@ import 'package:frontend/constants.dart';
 import 'package:frontend/settings/editProfilePhoto.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+
+import '../logins/loginScreen.dart';
+import '../service/googleSignIn.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({Key? key}) : super(key: key);
@@ -12,6 +16,52 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
+
+  void _signOut() async {
+    final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+    provider.logOut();
+    await Future.delayed(const Duration(seconds: 2));
+  }
+
+  Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap a button to close the dialog.
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Log Out Confirmation'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Are you sure you want to log out?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Log Out'),
+              onPressed: () {
+                _signOut();
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: const Login(),
+                        type: PageTransitionType.bottomToTop));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,9 +103,11 @@ class _MyProfileState extends State<MyProfile> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, PageTransition(
-                      child: EditProfilePicture(),
-                      type: PageTransitionType.rightToLeft));
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: EditProfilePicture(),
+                          type: PageTransitionType.rightToLeft));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Consts.primaryColor,
@@ -104,7 +156,9 @@ class _MyProfileState extends State<MyProfile> {
             ProfileMenuOption(
               title: 'Logout',
               icon: LineAwesomeIcons.alternate_sign_out,
-              onPress: () {},
+              onPress: () async {
+                await _showLogoutConfirmationDialog(context);
+              },
               endIcon: false,
               textColor: Colors.red,
             ),
