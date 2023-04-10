@@ -15,7 +15,7 @@ def authenticate_user(request):
         return Response({'error': 'Please provide access_token'}, status=status.HTTP_400_BAD_REQUEST)
     try:
         # Verify the access token and get the user's Google ID and email
-        idinfo = id_token.verify_oauth2_token(access_token, requests.Request(), settings.GOOGLE_CLIENT_ID)
+        idinfo = id_token.verify_firebase_token(access_token, requests.Request(), 'plant-it-app-5c251')
         user_email = idinfo['email']
         first_name = idinfo.get('given_name')
         last_name = idinfo.get('family_name')
