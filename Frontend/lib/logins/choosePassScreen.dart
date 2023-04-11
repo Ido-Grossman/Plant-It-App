@@ -8,10 +8,8 @@ import 'package:frontend/service/httpService.dart';
 import 'package:frontend/service/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import '../service/googleSignIn.dart';
 import '../service/passwordValidationFields.dart';
 
 class ChoosePassScreen extends StatefulWidget {
@@ -65,14 +63,15 @@ class _ChoosePassScreenState extends State<ChoosePassScreen> with TickerProvider
       setState(() {
         _isLoading = false;
       });
-      if (!mounted) {
-        return;
-      }
       if (statusCode == 201) {
+        String? token = await logInGoogle(user!.email, user!.uid);
+        if (!mounted) {
+          return;
+        }
           Navigator.push(
               context,
               PageTransition(
-                  child: ChooseUsernameScreen(email: user!.email),
+                  child: ChooseUsernameScreen(email: user!.email, token: token,),
                   type: PageTransitionType.bottomToTop));
         } else if (statusCode == 404) {
         Consts.alertPopup(context, 'The password is not strong enough, please try another one');
