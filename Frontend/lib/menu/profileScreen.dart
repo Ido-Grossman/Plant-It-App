@@ -99,31 +99,6 @@ class _MyProfileState extends State<MyProfile> {
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-              width: 200,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          child: EditProfilePicture(),
-                          type: PageTransitionType.rightToLeft));
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Consts.primaryColor,
-                  side: BorderSide.none,
-                  shape: const StadiumBorder(),
-                ),
-                child: const Text(
-                  'Edit Profile Picture',
-                  style: TextStyle(fontSize: 17),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
             const Divider(),
             const SizedBox(
               height: 10,
