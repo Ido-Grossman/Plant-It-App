@@ -1,5 +1,6 @@
 from django.template.loader import render_to_string
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.mail import send_mail
@@ -7,9 +8,10 @@ from django.contrib.auth import get_user_model
 
 
 @api_view(['Post'])
+@authentication_classes([TokenAuthentication])
 def set_username(request):
     # Gets the parameters from the request.
-    email = request.data.get('email', None)
+    email = request.user.email
     username = request.data.get('username', None)
     User = get_user_model()
     # If one of the parameters wasn't included it returns 400.
