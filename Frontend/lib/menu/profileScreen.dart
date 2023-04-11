@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/settings/editProfilePhoto.dart';
+import 'package:frontend/settings/settings.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -130,17 +131,13 @@ class _MyProfileState extends State<MyProfile> {
             ProfileMenuOption(
               title: 'Settings',
               icon: LineAwesomeIcons.cog,
-              onPress: () {},
-            ),
-            ProfileMenuOption(
-              title: 'Notifications',
-              icon: LineAwesomeIcons.bell,
-              onPress: () {},
-            ),
-            ProfileMenuOption(
-              title: 'User Management',
-              icon: LineAwesomeIcons.user_check,
-              onPress: () {},
+              onPress: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: const SettingsScreen(),
+                        type: PageTransitionType.rightToLeft));
+              },
             ),
             const Divider(
               color: Colors.grey,
