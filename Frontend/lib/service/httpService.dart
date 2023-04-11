@@ -30,6 +30,7 @@ Future<int> signUp(String email, String password) async {
   }
 }
 
+
 Future<String?> logIn(String email, String password) async {
   final url = Uri.parse('${Consts.getApiLink()}accounts/login/');
   try {
