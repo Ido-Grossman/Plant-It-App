@@ -71,7 +71,7 @@ class _ChoosePassScreenState extends State<ChoosePassScreen> with TickerProvider
           Navigator.push(
               context,
               PageTransition(
-                  child: ChooseUsernameScreen(email: user!.email, token: token,),
+                  child: ChooseUsernameScreen(token: token,),
                   type: PageTransitionType.bottomToTop));
         } else if (statusCode == 404) {
         Consts.alertPopup(context, 'The password is not strong enough, please try another one');

@@ -45,7 +45,7 @@ Future<String?> logIn(String email, String password) async {
   }
 }
 
-Future<int> chooseUsername(String username, String? email, String? token) async {
+Future<int> chooseUsername(String username, String? token) async {
   final url = Uri.parse('${Consts.prefixApiLink}accounts/set-username/');
   try {
     Map<String, String> headers = {
@@ -53,7 +53,7 @@ Future<int> chooseUsername(String username, String? email, String? token) async 
     };
     final response = await http.post(url,
         headers: headers,
-        body: {'username': username, 'email': email}).timeout(
+        body: {'username': username}).timeout(
       const Duration(seconds: 10),
     );
     return response.statusCode;
