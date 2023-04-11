@@ -104,3 +104,19 @@ Future<int> forgotPass(String email) async {
     return -1;
   }
 }
+
+Future<int> logOut(String? token) async {
+  var url = Uri.parse('${Consts.getApiLink()}accounts/logout/');
+  try {
+    Map<String, String> headers = {
+      "Authorization": "Token $token"
+    };
+    final response = await http.post(url,
+        headers: headers).timeout(
+      const Duration(seconds: 10),
+    );
+    return response.statusCode;
+  } on TimeoutException {
+    return -1;
+  }
+}

@@ -26,6 +26,7 @@ class Consts {
 
   // Error msgs
   static var errorTitle = 'Error';
+  static var cantConnect = "lost connection to server, Please try again.";
 
   // methods
   static Future<dynamic> alertPopup(BuildContext context, String reason, {String title='Error', String button='Ok'}) {

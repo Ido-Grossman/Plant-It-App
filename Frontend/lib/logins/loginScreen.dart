@@ -79,6 +79,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
             PageTransition(
                 child: FirstScreen(
                   username: _mailTextField,
+                  token: token,
                 ),
                 type: PageTransitionType.bottomToTop));
       } else if (token == 'error') {
@@ -86,9 +87,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
             'Incorrect email or password';
         Consts.alertPopup(context, badCredentialsMsg);
       } else {
-        String badConnectionMsg =
-            'Connection refused or bad request. Please try again.';
-        Consts.alertPopup(context, badConnectionMsg);
+        Consts.alertPopup(context, Consts.cantConnect);
       }
     }
   }

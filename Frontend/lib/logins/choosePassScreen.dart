@@ -76,7 +76,7 @@ class _ChoosePassScreenState extends State<ChoosePassScreen> with TickerProvider
         } else if (statusCode == 404) {
         Consts.alertPopup(context, 'The password is not strong enough, please try another one');
       } else {
-        Consts.alertPopup(context, 'Could not connect to server. Try again.');
+        Consts.alertPopup(context, Consts.cantConnect);
       }
     }
   }

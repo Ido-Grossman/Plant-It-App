@@ -19,8 +19,9 @@ import '../logins/loginScreen.dart';
 
 class FirstScreen extends StatefulWidget {
   final String? username;
+  final String? token;
 
-  const FirstScreen({Key? key, this.username}) : super(key: key);
+  const FirstScreen({Key? key, this.username, required this.token}) : super(key: key);
 
   @override
   State<FirstScreen> createState() => _FirstScreenState();
@@ -124,7 +125,7 @@ class _FirstScreenState extends State<FirstScreen> {
       ),
       MyPlants(),
       SearchScreen(),
-      MyProfile()
+      MyProfile(token: widget.token,)
     ];
 
     return Scaffold(
@@ -146,20 +147,7 @@ class _FirstScreenState extends State<FirstScreen> {
         elevation: 0.0,
         actions: [
           TextButton(
-              onPressed: () async {
-                  final provider =
-                      Provider.of<GoogleSignInProvider>(context, listen: false);
-                  provider.logOut();
-                  await Future.delayed(const Duration(seconds: 2));
-                if (!mounted){
-                  return;
-                }
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          child: const Login(),
-                          type: PageTransitionType.bottomToTop));
-              },
+              onPressed: (){},
               child: const Text('Logout'))
         ],
       ),

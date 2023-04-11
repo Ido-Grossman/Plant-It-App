@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
+import 'package:frontend/service/httpService.dart';
 import 'package:frontend/settings/editProfilePhoto.dart';
 import 'package:frontend/settings/settings.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -10,7 +11,9 @@ import '../logins/loginScreen.dart';
 import '../service/googleSignIn.dart';
 
 class MyProfile extends StatefulWidget {
-  const MyProfile({Key? key}) : super(key: key);
+  final String? token;
+
+  const MyProfile({Key? key, required this.token}) : super(key: key);
 
   @override
   State<MyProfile> createState() => _MyProfileState();
@@ -19,9 +22,14 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
 
   void _signOut() async {
-    final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-    provider.logOut();
-    await Future.delayed(const Duration(seconds: 2));
+    int statusCode = await logOut(widget.token);
+    if (statusCode == 200){
+      final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+      provider.logOut();
+      await Future.delayed(const Duration(seconds: 1));
+    } else {
+      Consts.alertPopup(context, Consts.cantConnect);
+    }
   }
 
   Future<void> _showLogoutConfirmationDialog(BuildContext context) async {

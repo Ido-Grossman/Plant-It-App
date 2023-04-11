@@ -65,7 +65,7 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> with Ticker
           Navigator.push(
               context,
               PageTransition(
-                  child: const FirstScreen(),
+                  child: FirstScreen(token: widget.token,),
                   type: PageTransitionType.bottomToTop));
         } else {
           Navigator.push(
@@ -73,6 +73,7 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> with Ticker
               PageTransition(
                   child: FirstScreen(
                     username: _usernameTextField,
+                    token: widget.token,
                   ),
                   type: PageTransitionType.bottomToTop));
         }
@@ -82,7 +83,7 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> with Ticker
         Consts.alertPopup(context, usernameExistsMsg);
       } else {
         Consts.alertPopup(
-            context, "Couldn't connect to server. Please try again.");
+            context, Consts.cantConnect);
       }
     }
   }
