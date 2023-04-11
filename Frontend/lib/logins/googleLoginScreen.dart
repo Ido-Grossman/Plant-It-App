@@ -27,22 +27,24 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
   }
 
   void checkStatusCode() async {
-    final statusCode = await logInGoogle(widget.email, widget.uid);
+    final token = await logInGoogle(widget.email, widget.uid);
     if (!mounted) {
       return;
     }
-    if (statusCode == 200) {
+    if (token != 'error' && token != null) {
       Navigator.push(
           context,
           PageTransition(
               child: FirstScreen(),
               type: PageTransitionType.bottomToTop));
-    } else {
+    } else if (token != null) {
       Navigator.push(
           context,
           PageTransition(
               child: const ChoosePassScreen(),
               type: PageTransitionType.bottomToTop));
+    } else {
+      Consts.alertPopup(context, 'Connection refused');
     }
   }
 

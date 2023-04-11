@@ -30,24 +30,31 @@ Future<int> signUp(String email, String password) async {
   }
 }
 
-Future<int> logIn(String email, String password) async {
+
+Future<String?> logIn(String email, String password) async {
   final url = Uri.parse('${Consts.getApiLink()}accounts/login/');
   try {
     final response = await http.post(url,
         body: {'email': email, 'password': password}).timeout(
       const Duration(seconds: 10),
     );
-    return response.statusCode;
+    var body = jsonDecode(response.body);
+    String token = body['token'];
+    return token;
   } on TimeoutException {
-    return -1;
+    return null;
   }
 }
 
-Future<int> chooseUsername(String username, String? email) async {
+Future<int> chooseUsername(String username, String? token) async {
   final url = Uri.parse('${Consts.getApiLink()}accounts/set-username/');
   try {
+    Map<String, String> headers = {
+      "Authorization": "Token $token"
+    };
     final response = await http.post(url,
-        body: {'username': username, 'email': email}).timeout(
+        headers: headers,
+        body: {'username': username}).timeout(
       const Duration(seconds: 10),
     );
     return response.statusCode;
@@ -57,16 +64,18 @@ Future<int> chooseUsername(String username, String? email) async {
 }
 
 
-Future<int> logInGoogle(String? email, String uid) async {
+Future<String?> logInGoogle(String? email, String uid) async {
   final url = Uri.parse('${Consts.getApiLink()}accounts/google-login/');
   try {
     final response = await http.post(url,
         body: {'email': email, 'uid': uid}).timeout(
       const Duration(seconds: 10),
     );
-    return response.statusCode;
+    var body = jsonDecode(response.body);
+    String token = body['token'];
+    return token;
   } on TimeoutException {
-    return -1;
+    return null;
   }
 }
 

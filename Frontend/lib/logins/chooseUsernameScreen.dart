@@ -13,9 +13,9 @@ import '../service/loginTextField.dart';
 import '../service/widgets.dart';
 
 class ChooseUsernameScreen extends StatefulWidget {
-  final String? email;
+  final String? token;
 
-  const ChooseUsernameScreen({Key? key, required this.email}) : super(key: key);
+  const ChooseUsernameScreen({Key? key, required this.token}) : super(key: key);
 
   @override
   State<ChooseUsernameScreen> createState() => _ChooseUsernameScreenState();
@@ -51,7 +51,7 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> with Ticker
         _isLoading = true;
       });
       _gifController.repeat(min: 0, max: 29, period: const Duration(milliseconds: 1500));
-      int statusCode = await chooseUsername(_usernameTextField, widget.email);
+      int statusCode = await chooseUsername(_usernameTextField, widget.token);
       await Future.delayed(const Duration(seconds: 1));
       _gifController.stop();
       setState(() {

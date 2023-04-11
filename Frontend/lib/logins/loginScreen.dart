@@ -63,7 +63,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         _isLoading = true;
       });
       _gifController.repeat(min: 0, max: 29, period: const Duration(milliseconds: 1500));
-      int statusCode =
+      String? token =
           await logIn(_mailTextField, _passwordTextField);
       await Future.delayed(const Duration(seconds: 1));
       _gifController.stop();
@@ -73,7 +73,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
       if (!mounted) {
         return;
       }
-      if (statusCode == 200) {
+      if (token != 'error' && token != null) {
         Navigator.push(
             context,
             PageTransition(
@@ -81,7 +81,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                   username: _mailTextField,
                 ),
                 type: PageTransitionType.bottomToTop));
-      } else if (statusCode == 401) {
+      } else if (token == 'error') {
         String badCredentialsMsg =
             'Incorrect email or password';
         Consts.alertPopup(context, badCredentialsMsg);

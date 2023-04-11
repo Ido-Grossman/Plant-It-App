@@ -73,15 +73,16 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
       setState(() {
         _isLoading = false;
       });
-      if (!mounted) {
-        return;
-      }
       if (statusCode == 201) {
+        String? token = await logIn(_mailTextField, _passwordTextField);
+        if (!mounted) {
+          return;
+        }
         Navigator.push(
             context,
             PageTransition(
                 child: ChooseUsernameScreen(
-                  email: _mailTextField,
+                  token: token,
                 ),
                 type: PageTransitionType.bottomToTop));
       } else if (statusCode == 400) {
