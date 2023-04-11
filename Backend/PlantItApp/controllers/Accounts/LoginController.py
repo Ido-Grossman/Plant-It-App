@@ -1,6 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as django_login
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
@@ -8,7 +9,7 @@ from rest_framework.authtoken.models import Token
 def log_user_in(user, request):
     # If the user is valid are correct login the user and return 200, else return 401.
     if user is not None:
-        login(request._request, user)
+        djang_login(request._request, user)
         token, _ = Token.objects.get_or_create(user=user)
         return Response({'token': token.key}, status=status.HTTP_200_OK)
     else:
@@ -16,7 +17,7 @@ def log_user_in(user, request):
 
 
 @api_view(['Post'])
-def signin(request):
+def login(request):
     # Gets the email and password from the request.
     email = request.data.get('email', None)
     password = request.data.get('password', None)
@@ -29,7 +30,7 @@ def signin(request):
 
 
 @api_view(['Post'])
-def signin_google(request):
+def google_login(request):
     # Gets the email and uid from the request.
     email = request.data.get('email', None)
     uid = request.data.get('uid', None)

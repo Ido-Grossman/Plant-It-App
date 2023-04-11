@@ -9,8 +9,6 @@ import os
 
 class PhotoUploadView(APIView):
     def post(self, request):
-        user = request.user
-        print(user.email)
         image_file = request.FILES.get('file')
         if image_file:
             # Assuming you want to save the image in a 'media' folder

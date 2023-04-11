@@ -23,7 +23,7 @@ def register(request):
 
 
 @api_view(['Post'])
-def register_google(request):
+def google_register(request):
     # Getting the userSerializer and validated the data.
     serializer = UserSerializer(data=request.data, context={'require_uid': True})
     # If the data is incorrect, returns 400 Bad Request.
