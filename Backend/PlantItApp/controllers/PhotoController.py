@@ -9,14 +9,15 @@ import os
 
 class PhotoUploadView(APIView):
     def post(self, request):
-        if request.method == 'POST':
-            image_file = request.FILES.get('file')
-            if image_file:
-                # Assuming you want to save the image in a 'media' folder
-                img = Image.open(image_file)
-                img = img.resize((256, 256))
-                transform = transforms.ToTensor()
-                img = transform(img)
-                yb = settings.MODEL(torch.unsqueeze(img, 0))
-                _, preds = torch.max(yb, dim=1)
-                return Response(settings.DISEASES[preds[0].item()])
+        user = request.user
+        print(user.email)
+        image_file = request.FILES.get('file')
+        if image_file:
+            # Assuming you want to save the image in a 'media' folder
+            img = Image.open(image_file)
+            img = img.resize((256, 256))
+            transform = transforms.ToTensor()
+            img = transform(img)
+            yb = settings.MODEL(torch.unsqueeze(img, 0))
+            _, preds = torch.max(yb, dim=1)
+            return Response(settings.DISEASES[preds[0].item()])
