@@ -66,8 +66,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
-    first_name = models.CharField(max_length=100, default=None, null=True)
-    last_name = models.CharField(max_length=100, default=None, null=True)
+    first_name = models.CharField(max_length=100, null=True)
+    last_name = models.CharField(max_length=100, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True)
 
     objects = CustomUserManager()
 
