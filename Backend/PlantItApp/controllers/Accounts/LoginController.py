@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 def log_user_in(user, request):
     # If the user is valid are correct login the user and return 200, else return 401.
     if user is not None:
-        djang_login(request._request, user)
+        django_login(request._request, user)
         token, _ = Token.objects.get_or_create(user=user)
         return Response({'token': token.key}, status=status.HTTP_200_OK)
     else:
