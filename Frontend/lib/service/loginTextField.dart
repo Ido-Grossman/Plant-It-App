@@ -46,20 +46,25 @@ class _LoginTextFieldState extends State<LoginTextField> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
+    Color textColor = currentTheme.textTheme.bodyLarge!.color!;
+    Color cursorColor = textColor.withOpacity(.5);
+    Color iconColor = textColor.withOpacity(.3);
+
     return TextFormField(
       controller: _textEditingController,
       onChanged: widget.onChanged,
       obscureText: widget.hideText,
       style: TextStyle(
-        color: Consts.lessBlack,
+        color: textColor,
       ),
       decoration: InputDecoration(
           border: InputBorder.none,
           errorText: _emailError,
-          prefixIcon: Icon(widget.icon, color: Consts.lessBlack.withOpacity(.3),),
+          prefixIcon: Icon(widget.icon, color: iconColor,),
           hintText: widget.textHint
       ),
-      cursorColor: Consts.lessBlack.withOpacity(.5),
+      cursorColor: cursorColor,
     );
   }
 }

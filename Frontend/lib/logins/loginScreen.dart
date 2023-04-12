@@ -94,6 +94,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
+    Color textColor = currentTheme.textTheme.bodyLarge!.color!;
+    Color linkColor = currentTheme.brightness == Brightness.light
+        ? Consts.primaryColor : Consts.greenDark;
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -186,13 +190,13 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                               TextSpan(
                                 text: 'Forgot Password? ',
                                 style: TextStyle(
-                                  color: Consts.lessBlack,
+                                  color: textColor,
                                 ),
                               ),
                               TextSpan(
                                 text: ' Reset Password',
                                 style: TextStyle(
-                                  color: Consts.primaryColor,
+                                  color: linkColor,
                                 ),
                               ),
                             ])),
@@ -246,13 +250,13 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                               TextSpan(
                                 text: "Don't have an account? ",
                                 style: TextStyle(
-                                  color: Consts.lessBlack,
+                                  color: textColor,
                                 ),
                               ),
                               TextSpan(
                                 text: ' Register here!',
                                 style: TextStyle(
-                                  color: Consts.primaryColor,
+                                  color: linkColor,
                                 ),
                               ),
                             ])),

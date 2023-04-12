@@ -55,33 +55,40 @@ class PasswordValidationFormsState extends State<PasswordValidationForms> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
+    Color textColor = currentTheme.textTheme.bodyLarge!.color!;
+    Color cursorColor = textColor.withOpacity(.5);
+    Color iconColor = textColor.withOpacity(.3);
+
     return Column(
       children: [
         TextFormField(
           style: TextStyle(
-            color: Consts.lessBlack,
+            color: textColor,
           ),
           controller: _passwordController,
           onChanged: widget.onPassChange,
           decoration: InputDecoration(
               border: InputBorder.none,
-              prefixIcon: Icon(Icons.password, color: Consts.lessBlack.withOpacity(.3),),
+              prefixIcon: Icon(Icons.password, color: iconColor,),
               hintText: 'Enter your password'
           ),
           obscureText: true,
+          cursorColor: cursorColor,
         ),
         TextFormField(
           style: TextStyle(
-            color: Consts.lessBlack,
+            color: textColor,
           ),
           controller: _confirmPasswordController,
           decoration: InputDecoration(
               border: InputBorder.none,
-              prefixIcon: Icon(Icons.password, color: Consts.lessBlack.withOpacity(.3),),
+              prefixIcon: Icon(Icons.password, color: iconColor,),
               hintText: 'Enter your password again',
               errorText: _passwordError,
           ),
           obscureText: true,
+          cursorColor: cursorColor,
         ),
       ],
     );

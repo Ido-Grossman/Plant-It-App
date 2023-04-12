@@ -79,6 +79,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Ticker
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
+    Color textColor = currentTheme.textTheme.bodyLarge!.color!;
+    Color linkColor = currentTheme.brightness == Brightness.light
+        ? Consts.primaryColor : Consts.greenDark;
     Size size = MediaQuery.of(context).size;
 
     return ModalProgressHUD(
@@ -148,13 +152,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Ticker
                       TextSpan(
                         text: "Have an account? ",
                         style: TextStyle(
-                          color: Consts.lessBlack,
+                          color: textColor,
                         ),
                       ),
                       TextSpan(
                         text: ' Login here!',
                         style: TextStyle(
-                          color: Consts.primaryColor,
+                          color: linkColor,
                         ),
                       ),
                     ])),
