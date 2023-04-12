@@ -1,5 +1,5 @@
 from django.urls import path
-from . import LoginController, RegisterController, PasswordController, UsernameController
+from . import LoginController, RegisterController, PasswordController, UsernameController, ProfilepictureController
 
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     path('google-register/', RegisterController.register_google),
     path('forgot-password/', PasswordController.forgot_password),
     path('set-username/', UsernameController.set_username),
+    path('upload-profile-picture/', ProfilepictureController.upload_profile_picture)
 ]
