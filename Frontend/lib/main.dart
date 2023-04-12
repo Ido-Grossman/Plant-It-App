@@ -12,8 +12,11 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => AppTheme(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AppTheme()),
+        ChangeNotifierProvider(create: (_) => FontSizeNotifier()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -28,6 +31,17 @@ class AppTheme extends ChangeNotifier {
     _themeData = _themeData.brightness == Brightness.light
         ? ThemeData.dark()
         : ThemeData.light();
+    notifyListeners();
+  }
+}
+
+class FontSizeNotifier extends ChangeNotifier {
+  double _fontSize = 12.0;
+
+  double get fontSize => _fontSize;
+
+  void updateFontSize(double newSize) {
+    _fontSize = newSize;
     notifyListeners();
   }
 }
