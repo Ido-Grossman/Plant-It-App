@@ -90,6 +90,7 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> with Ticker
 
   @override
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
 
     return ModalProgressHUD(

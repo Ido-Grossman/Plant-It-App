@@ -174,6 +174,10 @@ class ProfileMenuOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
+    Color settingColor = currentTheme.brightness == Brightness.light
+        ? Consts.primaryColor
+        : Colors.white;
     return ListTile(
         onTap: onPress,
         leading: Container(
@@ -181,11 +185,11 @@ class ProfileMenuOption extends StatelessWidget {
           height: 40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
-            color: Consts.primaryColor.withOpacity(0.1),
+            color: settingColor.withOpacity(0.1),
           ),
           child: Icon(
             icon,
-            color: Consts.primaryColor,
+            color: settingColor,
           ),
         ),
         title: Text(
@@ -198,11 +202,11 @@ class ProfileMenuOption extends StatelessWidget {
                 height: 30,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
-                  color: Consts.primaryColor.withOpacity(0.1),
+                  color: settingColor.withOpacity(0.1),
                 ),
                 child: Icon(
                   LineAwesomeIcons.angle_right,
-                  color: Consts.primaryColor,
+                  color: settingColor,
                 ),
               )
             : null);

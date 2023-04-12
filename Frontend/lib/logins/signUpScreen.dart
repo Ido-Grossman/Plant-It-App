@@ -97,6 +97,10 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
+    Color textColor = currentTheme.textTheme.bodyLarge!.color!;
+    Color linkColor = currentTheme.brightness == Brightness.light
+      ? Consts.primaryColor : Consts.greenDark;
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -224,13 +228,13 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                               TextSpan(
                                 text: "Have an account? ",
                                 style: TextStyle(
-                                  color: Consts.lessBlack,
+                                  color: textColor,
                                 ),
                               ),
                               TextSpan(
                                 text: ' Login here!',
                                 style: TextStyle(
-                                  color: Consts.primaryColor,
+                                  color: linkColor,
                                 ),
                               ),
                             ])),

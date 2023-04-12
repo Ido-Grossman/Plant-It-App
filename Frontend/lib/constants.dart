@@ -15,7 +15,7 @@ class Consts {
   // colors
   static var primaryColor = Color.fromARGB(255, 31, 85, 56);
   static var lessBlack = Colors.black54;
-
+  static Color greenDark = Colors.greenAccent;
   // Intro screen texts
   static var firstTitle = "Your perfect app for your plants!";
   static var firstSubTitle = "Make it easier for you to maintain your plant(s) with our guides.";

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
+import 'package:provider/provider.dart';
+
+import '../main.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = Provider.of<AppTheme>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -92,9 +96,9 @@ class SettingsScreen extends StatelessWidget {
             trailing: SizedBox(
               width: 80,
               child: Switch(
-                value: true, // Change this value based on the selected theme
+                value: appTheme.themeData.brightness == Brightness.dark, // Update the switch value based on the theme brightness
                 onChanged: (bool value) {
-                  // Toggle between light and dark mode
+                  appTheme.toggleTheme(); // Make sure to call the function with parentheses
                 },
               ),
             ),
