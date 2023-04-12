@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../logins/loginScreen.dart';
 import '../service/googleSignIn.dart';
+import '../service/widgets.dart';
 
 class MyProfile extends StatefulWidget {
   final String? token;
@@ -192,8 +193,8 @@ class ProfileMenuOption extends StatelessWidget {
             color: settingColor,
           ),
         ),
-        title: Text(
-          title,
+        title: CustomFontText(text:
+        title,
           style: const TextStyle(fontSize: 18).apply(color: textColor),
         ),
         trailing: endIcon

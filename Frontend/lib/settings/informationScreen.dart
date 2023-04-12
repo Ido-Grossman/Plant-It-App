@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 
+import '../service/widgets.dart';
+
 class InformationScreen extends StatelessWidget {
   final String appVersion = '1.0.0';
   final String buildNumber = '100';
@@ -21,22 +23,22 @@ class InformationScreen extends StatelessWidget {
         padding: EdgeInsets.all(16),
         children: [
           ListTile(
-            title: Text('App Version'),
-            subtitle: Text(appVersion),
+            title: CustomFontText(text: 'App Version'),
+            subtitle: CustomFontText(text: appVersion),
           ),
           ListTile(
-            title: Text('Build Number'),
-            subtitle: Text(buildNumber),
+            title: CustomFontText(text: 'Build Number'),
+            subtitle: CustomFontText(text: buildNumber),
           ),
           Divider(),
           ListTile(
-            title: Text('Privacy Policy'),
+            title: CustomFontText(text: 'Privacy Policy'),
             onTap: () {
               // Open privacy policy URL
             },
           ),
           ListTile(
-            title: Text('Terms of Service'),
+            title: CustomFontText(text: 'Terms of Service'),
             onTap: () {
               // Open terms of service URL
             },
