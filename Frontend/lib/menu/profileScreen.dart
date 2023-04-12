@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/settings/editProfilePhoto.dart';
+import 'package:frontend/settings/informationScreen.dart';
 import 'package:frontend/settings/settings.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
@@ -123,7 +124,13 @@ class _MyProfileState extends State<MyProfile> {
             ProfileMenuOption(
               title: 'Information',
               icon: LineAwesomeIcons.info,
-              onPress: () {},
+              onPress: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: const InformationScreen(),
+                        type: PageTransitionType.rightToLeft));
+              },
             ),
             ProfileMenuOption(
               title: 'Logout',
