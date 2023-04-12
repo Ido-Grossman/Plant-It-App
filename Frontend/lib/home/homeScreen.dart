@@ -119,6 +119,16 @@ class _FirstScreenState extends State<FirstScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
+    Color activeColor = currentTheme.brightness == Brightness.light
+        ? Consts.primaryColor
+        : Consts.lessBlack;
+    Color inactiveColor = currentTheme.brightness == Brightness.light
+        ? Consts.lessBlack.withOpacity(.5)
+        : Colors.white;
+    Color? backgroundColor = currentTheme.brightness == Brightness.light
+        ? null
+        : Consts.lessBlack.withOpacity(0.5);
     List<Widget> screens = [
       HomeScreen(
         username: widget.username,
@@ -180,9 +190,10 @@ class _FirstScreenState extends State<FirstScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
-        splashColor: Consts.primaryColor,
+        backgroundColor: backgroundColor,
+        splashColor: activeColor,
         activeColor: Consts.primaryColor,
-        inactiveColor: Consts.lessBlack.withOpacity(.5),
+        inactiveColor: inactiveColor,
         icons: screenIconsList,
         activeIndex: _bottomNavigationIdx,
         gapLocation: GapLocation.center,
