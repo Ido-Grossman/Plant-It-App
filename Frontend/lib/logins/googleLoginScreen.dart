@@ -35,7 +35,7 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
       Navigator.push(
           context,
           PageTransition(
-              child: FirstScreen(),
+              child: FirstScreen(token: token,),
               type: PageTransitionType.bottomToTop));
     } else if (token != null) {
       Navigator.push(
@@ -44,7 +44,7 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
               child: const ChoosePassScreen(),
               type: PageTransitionType.bottomToTop));
     } else {
-      Consts.alertPopup(context, 'Connection refused');
+      Consts.alertPopup(context, Consts.cantConnect);
     }
   }
 

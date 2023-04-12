@@ -90,7 +90,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
         Consts.alertPopup(context, emailExistsMsg);
       } else {
         Consts.alertPopup(
-            context, "Couldn't connect to server. Please try again.");
+            context, Consts.cantConnect);
       }
     }
   }

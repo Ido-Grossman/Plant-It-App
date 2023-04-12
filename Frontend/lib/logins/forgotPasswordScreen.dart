@@ -72,7 +72,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Ticker
         Consts.alertPopup(context, emailExistsMsg);
       } else {
         Consts.alertPopup(
-            context, "Couldn't connect to server. Please try again.");
+            context, Consts.cantConnect);
       }
     }
   }
