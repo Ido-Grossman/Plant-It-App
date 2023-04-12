@@ -93,13 +93,13 @@ class _FirstScreenState extends State<FirstScreen> {
         context: context,
         builder: (c) {
           return AlertDialog(
-            title: Text('$title'),
+            title: Text(title),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
-                  child: Text('$message'),
+                  child: Text(message),
                 )
               ],
             ),
@@ -135,14 +135,14 @@ class _FirstScreenState extends State<FirstScreen> {
             Text(
               screenTitleList[_bottomNavigationIdx],
               style: TextStyle(
-                color: Consts.lessBlack,
+                color: Colors.white,
                 fontWeight: FontWeight.w500,
                 fontSize: 24,
               ),
             ),
           ],
         ),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Consts.primaryColor,
         elevation: 0.0,
         actions: [
           TextButton(
