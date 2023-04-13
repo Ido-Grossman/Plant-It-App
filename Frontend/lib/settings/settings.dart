@@ -25,7 +25,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<String> upPhoto(String path) async {
     Uri uri = Uri.parse('${Consts.getApiLink()}accounts/upload-profile-picture/');
-    http.MultipartRequest request = http.MultipartRequest('POST', uri);
+    http.MultipartRequest request = http.MultipartRequest('PUT', uri);
     http.MultipartFile multipartFile = await http.MultipartFile.fromPath('file', path);
     request.files.add(multipartFile);
     String? token = widget.token;
