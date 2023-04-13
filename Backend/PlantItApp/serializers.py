@@ -11,6 +11,7 @@ class UserSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=100, required=False)
     uid = serializers.CharField(max_length=100, required=False)
     password = serializers.CharField(max_length=100)
+    profile_image = serializers.ImageField(required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
