@@ -13,7 +13,7 @@
 .buildlog/
 .history
 .svn/
-
+*.jpg
 # IntelliJ related
 *.iml
 *.ipr
