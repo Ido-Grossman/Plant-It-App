@@ -24,6 +24,6 @@ def upload_profile_picture(request):
         user.save()
         image_url = default_storage.url(file_path)
         print(image_url)
-        return Response({'success': 'Profile picture uploaded successfully', 'image_url': image_url})
+        return Response({'success': 'Profile picture uploaded successfully'})
     else:
         return Response({'error': 'Profile picture upload failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
