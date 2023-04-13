@@ -1,11 +1,58 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:frontend/constants.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../main.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+class SettingsScreen extends StatefulWidget {
+  final String? token;
+  const SettingsScreen({super.key, required this.token});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  File? image;
+  final ImagePicker picker = ImagePicker();
+
+  Future<String> upPhoto(String path) async {
+    Uri uri = Uri.parse('${Consts.getApiLink()}upload-profile-picture/');
+    http.MultipartRequest request = http.MultipartRequest('POST', uri);
+    http.MultipartFile multipartFile = await http.MultipartFile.fromPath('file', path);
+    request.files.add(multipartFile);
+    String? token = widget.token;
+    request.headers.addAll(<String, String>{
+      'Authorization': 'Token $token',
+    });
+
+    http.StreamedResponse response = await request.send();
+    var responseBytes = await response.stream.toBytes();
+    var responseString = utf8.decode(responseBytes);
+    print(responseString);
+    return responseString;
+  }
+
+  Future takePhoto() async {
+    try {
+      final image = await picker.pickImage(source: ImageSource.camera);
+      File rotatedImg =
+      await FlutterExifRotation.rotateImage(path: image!.path);
+      final imgTmp = File(rotatedImg.path);
+      setState(() {
+        this.image = imgTmp;
+      });
+    } on PlatformException catch (e) {
+      print('error taking picture because of $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +101,9 @@ class SettingsScreen extends StatelessWidget {
               width: 50,
               child: IconButton(
                 icon: Icon(Icons.edit),
-                onPressed: () {
+                onPressed: () async {
+                  await takePhoto();
+                  var responseDataHttp = await upPhoto(image!.path);
                   // Edit profile picture
                 },
               ),

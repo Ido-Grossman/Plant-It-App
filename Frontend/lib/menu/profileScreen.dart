@@ -119,7 +119,7 @@ class _MyProfileState extends State<MyProfile> {
                 Navigator.push(
                     context,
                     PageTransition(
-                        child: const SettingsScreen(),
+                        child: SettingsScreen(token: widget.token,),
                         type: PageTransitionType.rightToLeft));
               },
             ),
