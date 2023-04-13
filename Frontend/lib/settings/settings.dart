@@ -36,8 +36,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     http.StreamedResponse response = await request.send();
     var responseBytes = await response.stream.toBytes();
     var responseString = utf8.decode(responseBytes);
-    print(responseString);
-    return responseString;
+    var decodedResponse = jsonDecode(responseString);
+    return decodedResponse['image_url'];
   }
 
   Future takePhoto() async {
