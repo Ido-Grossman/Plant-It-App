@@ -155,30 +155,10 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                         const SizedBox(
                           height: 10,
                         ),
-                        GestureDetector(
-                          onTap: onSignUp,
-                          child: Container(
-                              width: size.width,
-                              decoration: BoxDecoration(
-                                color: (_isButtonEnabled &&
-                                        _mailTextField.isNotEmpty)
-                                    ? Consts.primaryColor
-                                    : Colors.grey,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 20),
-                              margin: const EdgeInsets.all(5.0),
-                              child: const Center(
-                                child: Text(
-                                  'Sign Up',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18.0,
-                                  ),
-                                ),
-                              )),
-                        ),
+                        NormalSignButton(size: size,
+                            onLogin: onSignUp,
+                            isEnabled: _isButtonEnabled && _mailTextField.isNotEmpty,
+                            buttonText: 'Sign Up'),
                         const SizedBox(
                           height: 20,
                         ),
@@ -198,20 +178,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                             )),
                           ],
                         ),
-                        Container(
-                          width: size.width,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 15),
-                          child: SignInButton(
-                            Buttons.Google,
-                            onPressed: () {
-                              final provider = Provider.of<GoogleSignInProvider>(
-                                  context,
-                                  listen: false);
-                              provider.googleLogin();
-                            },
-                          ),
-                        ),
+                        GoogleSignButton(size: size),
                         const SizedBox(
                           height: 20,
                         ),

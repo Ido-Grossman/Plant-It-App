@@ -115,27 +115,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Ticker
                 const SizedBox(
                   height: 10,
                 ),
-                GestureDetector(
-                  onTap: onForgotPass,
-                  child: Container(
-                      width: size.width,
-                      decoration: BoxDecoration(
-                        color: Consts.primaryColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 20),
-                      margin: const EdgeInsets.all(5.0),
-                      child: const Center(
-                        child: Text(
-                          'Reset Password',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      )),
-                ),
+                NormalSignButton(
+                    size: size,
+                    onLogin: onForgotPass,
+                    isEnabled: true,
+                    buttonText: 'Reset Password'),
                 const SizedBox(
                   height: 20,
                 ),
