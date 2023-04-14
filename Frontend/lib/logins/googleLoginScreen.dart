@@ -4,10 +4,13 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/logins/choosePassScreen.dart';
 import 'package:frontend/logins/chooseUsernameScreen.dart';
+import 'package:frontend/logins/loginScreen.dart';
 import 'package:frontend/service/httpService.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../home/homeScreen.dart';
+import '../service/googleSignIn.dart';
 
 class GoogleLoginPage extends StatefulWidget {
   final String? email;
@@ -44,7 +47,13 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
               child: const ChoosePassScreen(),
               type: PageTransitionType.bottomToTop));
     } else {
-      Consts.alertPopup(context, Consts.cantConnect);
+      final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+      await provider.logOut();
+      Navigator.push(
+          context,
+          PageTransition(
+              child: const Login(),
+              type: PageTransitionType.bottomToTop));
     }
   }
 
