@@ -36,7 +36,7 @@ class AppTheme extends ChangeNotifier {
 }
 
 class FontSizeNotifier extends ChangeNotifier {
-  double _fontSize = 12.0;
+  double _fontSize = 16.0;
 
   double get fontSize => _fontSize;
 

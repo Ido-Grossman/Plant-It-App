@@ -24,13 +24,22 @@ class _MyProfileState extends State<MyProfile> {
 
   Future<void> _signOut() async {
     int statusCode = await logOut(widget.token);
-    if (statusCode == 200){
+    if (statusCode == 200) {
       final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
       await provider.logOut();
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            PageTransition(
+                child: const Login(), type: PageTransitionType.bottomToTop),
+                (route) => false);
+      });
     } else {
       Consts.alertPopup(context, Consts.cantConnect);
     }
   }
+
+
 
   Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
     return showDialog<void>(
@@ -58,13 +67,6 @@ class _MyProfileState extends State<MyProfile> {
               onPressed: () async {
                 Navigator.of(context).pop();
                 await _signOut();
-                if (!mounted) {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          child: const Login(),
-                          type: PageTransitionType.bottomToTop));
-                }
                 Navigator.push(
                     context,
                     PageTransition(

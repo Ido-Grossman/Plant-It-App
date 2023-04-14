@@ -140,12 +140,13 @@ class _FirstScreenState extends State<FirstScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               screenTitleList[_bottomNavigationIdx],
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
                 fontSize: 24,
@@ -155,11 +156,6 @@ class _FirstScreenState extends State<FirstScreen> {
         ),
         backgroundColor: Consts.primaryColor,
         elevation: 0.0,
-        actions: [
-          TextButton(
-              onPressed: (){},
-              child: const Text('Logout'))
-        ],
       ),
       body: IndexedStack(
         index: _bottomNavigationIdx,
