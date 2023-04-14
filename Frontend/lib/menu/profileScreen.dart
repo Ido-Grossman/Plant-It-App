@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/service/httpService.dart';
-import 'package:frontend/settings/editProfilePhoto.dart';
 import 'package:frontend/settings/informationScreen.dart';
 import 'package:frontend/settings/settings.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -23,12 +22,11 @@ class MyProfile extends StatefulWidget {
 
 class _MyProfileState extends State<MyProfile> {
 
-  void _signOut() async {
+  Future<void> _signOut() async {
     int statusCode = await logOut(widget.token);
     if (statusCode == 200){
       final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-      provider.logOut();
-      await Future.delayed(const Duration(seconds: 1));
+      await provider.logOut();
     } else {
       Consts.alertPopup(context, Consts.cantConnect);
     }
@@ -57,9 +55,9 @@ class _MyProfileState extends State<MyProfile> {
             ),
             TextButton(
               child: const Text('Log Out'),
-              onPressed: () {
-                _signOut();
+              onPressed: () async {
                 Navigator.of(context).pop();
+                await _signOut();
                 Navigator.push(
                     context,
                     PageTransition(
