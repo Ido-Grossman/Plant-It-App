@@ -58,6 +58,13 @@ class _MyProfileState extends State<MyProfile> {
               onPressed: () async {
                 Navigator.of(context).pop();
                 await _signOut();
+                if (!mounted) {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const Login(),
+                          type: PageTransitionType.bottomToTop));
+                }
                 Navigator.push(
                     context,
                     PageTransition(

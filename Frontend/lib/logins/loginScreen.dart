@@ -15,6 +15,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
+import '../plants/plantInfo.dart';
 import '../service/httpService.dart';
 import '../service/loginTextField.dart';
 
@@ -35,12 +36,6 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _gifController = GifController(vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _gifController.dispose();
-    super.dispose();
   }
 
   void _updateMailFieldValue(String value) {
@@ -262,6 +257,24 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                             ])),
                           ),
                         ),
+                        ElevatedButton(onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PlantDetailsScreen(
+                                imageUrl: 'https://st.depositphotos.com/2632165/4026/i/600/depositphotos_40264933-stock-photo-young-plant.jpg',
+                                plantName: 'Monstera Deliciosa',
+                                commonNames: 'Swiss Cheese Plant, Split-leaf Philodendron',
+                                plantFamily: 'Araceae',
+                                light: 'Bright indirect light',
+                                howToWater: 'Water when the top 1-2 inches of soil are dry',
+                                howToUse: 'Indoor houseplant or outdoor in shaded areas',
+                                temperatureRange: '65°F - 85°F (18°C - 29°C)',
+                                wateringFrequency: 'Every 1-2 weeks',
+                              ),
+                            ),
+                          );
+                        }, child: Text('plant info')),
                       ],
                     ),
                   ),
