@@ -10,10 +10,12 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 import '../main.dart';
-import '../service/widgets.dart';
+import '../widgets/plant_loading_icon.dart';
+import '../widgets/font_adjusted_text.dart';
 
 class SettingsScreen extends StatefulWidget {
   final String? token;
+
   const SettingsScreen({super.key, required this.token});
 
   @override
@@ -25,9 +27,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final ImagePicker picker = ImagePicker();
 
   Future<String> upPhoto(String path) async {
-    Uri uri = Uri.parse('${Consts.getApiLink()}accounts/upload-profile-picture/');
+    Uri uri =
+        Uri.parse('${Consts.getApiLink()}accounts/upload-profile-picture/');
     http.MultipartRequest request = http.MultipartRequest('PUT', uri);
-    http.MultipartFile multipartFile = await http.MultipartFile.fromPath('file', path);
+    http.MultipartFile multipartFile =
+        await http.MultipartFile.fromPath('file', path);
     request.files.add(multipartFile);
     String? token = widget.token;
     request.headers.addAll(<String, String>{
@@ -45,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     try {
       final image = await picker.pickImage(source: ImageSource.camera);
       File rotatedImg =
-      await FlutterExifRotation.rotateImage(path: image!.path);
+          await FlutterExifRotation.rotateImage(path: image!.path);
       final imgTmp = File(rotatedImg.path);
       setState(() {
         this.image = imgTmp;
@@ -66,10 +70,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: ListView(
         children: [
-          ListTile(title: CustomFontText(text: 'Account Information',)),
           ListTile(
-            title: CustomFontText(text: 'Email'),
-            subtitle: CustomFontText(text: 'johndoe@email.com'),
+              title: FontAdjustedText(
+            text: 'Account Information',
+          )),
+          ListTile(
+            title: FontAdjustedText(text: 'Email'),
+            subtitle: FontAdjustedText(text: 'johndoe@email.com'),
             trailing: SizedBox(
               width: 50,
               child: IconButton(
@@ -81,8 +88,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           ListTile(
-            title: CustomFontText(text: 'Password'),
-            subtitle: CustomFontText(text: '**********'),
+            title: FontAdjustedText(text: 'Password'),
+            subtitle: FontAdjustedText(text: '**********'),
             trailing: SizedBox(
               width: 50,
               child: IconButton(
@@ -94,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           ListTile(
-            title: CustomFontText(text: 'Profile Picture'),
+            title: FontAdjustedText(text: 'Profile Picture'),
             leading: CircleAvatar(
               backgroundImage: AssetImage('assets/default-profile.png'),
               backgroundColor: Colors.white,
@@ -112,11 +119,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           Divider(),
-          ListTile(title: CustomFontText(text: 'Notifications Preferences')),
+          ListTile(title: FontAdjustedText(text: 'Notifications Preferences')),
           ListTile(
-            title: CustomFontText(text: 'Preferred Notification Times'),
-            subtitle: CustomFontText(text:
-            'Watering: 9:00 AM, Plant Health: 12:00 PM, New Plant Suggestions: 6:00 PM'),
+            title: FontAdjustedText(text: 'Preferred Notification Times'),
+            subtitle: FontAdjustedText(
+                text:
+                    'Watering: 9:00 AM, Plant Health: 12:00 PM, New Plant Suggestions: 6:00 PM'),
             trailing: SizedBox(
               width: 50,
               child: IconButton(
@@ -128,8 +136,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           ListTile(
-            title: CustomFontText(text: 'Location Settings'),
-            subtitle: CustomFontText(text: 'Use GPS: On, Zip Code: 12345'),
+            title: FontAdjustedText(text: 'Location Settings'),
+            subtitle: FontAdjustedText(text: 'Use GPS: On, Zip Code: 12345'),
             trailing: SizedBox(
               width: 50,
               child: IconButton(
@@ -141,21 +149,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           Divider(),
-          ListTile(title: CustomFontText(text: 'Display Settings')),
+          ListTile(title: FontAdjustedText(text: 'Display Settings')),
           ListTile(
-            title: CustomFontText(text: 'Theme'),
+            title: FontAdjustedText(text: 'Theme'),
             trailing: SizedBox(
               width: 80,
               child: Switch(
-                value: appTheme.themeData.brightness == Brightness.dark, // Update the switch value based on the theme brightness
+                value: appTheme.themeData.brightness == Brightness.dark,
+                // Update the switch value based on the theme brightness
                 onChanged: (bool value) {
-                  appTheme.toggleTheme(); // Make sure to call the function with parentheses
+                  appTheme
+                      .toggleTheme(); // Make sure to call the function with parentheses
                 },
               ),
             ),
           ),
           ListTile(
-            title: CustomFontText(text: 'Font Size'),
+            title: FontAdjustedText(text: 'Font Size'),
             trailing: SizedBox(
               width: 150,
               child: Slider(
@@ -170,25 +180,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           Divider(),
           ListTile(
-            title: CustomFontText(text: 'Frequently Asked Questions'),
+            title: FontAdjustedText(text: 'Frequently Asked Questions'),
             onTap: () {
               // Access FAQ
             },
           ),
           ListTile(
-            title: CustomFontText(text: 'Tutorials'),
+            title: FontAdjustedText(text: 'Tutorials'),
             onTap: () {
               // Access video and text tutorials
             },
           ),
           ListTile(
-            title: CustomFontText(text: 'Report a Bug'),
+            title: FontAdjustedText(text: 'Report a Bug'),
             onTap: () {
               // Submit a bug report
             },
           ),
           ListTile(
-            title: CustomFontText(text: 'Contact Support'),
+            title: FontAdjustedText(text: 'Contact Support'),
             onTap: () {
               // Access support contact options
             },

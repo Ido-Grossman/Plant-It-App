@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
-import 'package:frontend/service/widgets.dart';
+import 'package:frontend/widgets/plant_loading_icon.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -20,7 +20,8 @@ class ForgotPasswordScreen extends StatefulWidget {
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with TickerProviderStateMixin {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
+    with TickerProviderStateMixin {
   String _emailTextField = '';
   bool _isLoading = false;
   late GifController _gifController;
@@ -48,7 +49,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Ticker
       setState(() {
         _isLoading = true;
       });
-      _gifController.repeat(min: 0, max: 29, period: const Duration(milliseconds: 1500));
+      _gifController.repeat(
+          min: 0, max: 29, period: const Duration(milliseconds: 1500));
       int statusCode = await forgotPass(_emailTextField);
       await Future.delayed(const Duration(seconds: 1));
       _gifController.stop();
@@ -72,8 +74,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Ticker
         String emailExistsMsg = "That email doesn't exist. Please try again.";
         Consts.alertPopup(context, emailExistsMsg);
       } else {
-        Consts.alertPopup(
-            context, Consts.cantConnect);
+        Consts.alertPopup(context, Consts.cantConnect);
       }
     }
   }
@@ -83,12 +84,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Ticker
     ThemeData currentTheme = Theme.of(context);
     Color textColor = currentTheme.textTheme.bodyLarge!.color!;
     Color linkColor = currentTheme.brightness == Brightness.light
-        ? Consts.primaryColor : Consts.greenDark;
+        ? Consts.primaryColor
+        : Consts.greenDark;
     Size size = MediaQuery.of(context).size;
 
     return ModalProgressHUD(
       inAsyncCall: _isLoading,
-      progressIndicator: buildCustomLoadingWidget(_gifController),
+      progressIndicator: getPlantLoadingIcon(_gifController),
       child: Scaffold(
         body: SingleChildScrollView(
           child: Padding(

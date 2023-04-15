@@ -7,17 +7,15 @@ import 'package:frontend/home/home_screen.dart';
 import 'package:frontend/logins/forgot_password_screen.dart';
 import 'package:frontend/logins/google_login_screen.dart';
 import 'package:frontend/logins/sign_up_screen.dart';
-import 'package:frontend/service/google_sign_in.dart';
-import 'package:frontend/service/widgets.dart';
+import 'package:frontend/widgets/plant_loading_icon.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import '../plants/plantInfo.dart';
 import '../service/http_service.dart';
 import '../service/login_text_field.dart';
+import '../widgets/google_sign_button.dart';
 import '../widgets/normal_button.dart';
 
 class Login extends StatefulWidget {
@@ -45,7 +43,6 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     });
   }
 
-
   void _updatePasswordFieldValue(String value) {
     setState(() {
       _passwordTextField = value;
@@ -53,14 +50,13 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   }
 
   Future<void> onLogin() async {
-    if (_mailTextField.isNotEmpty &&
-        _passwordTextField.isNotEmpty) {
+    if (_mailTextField.isNotEmpty && _passwordTextField.isNotEmpty) {
       setState(() {
         _isLoading = true;
       });
-      _gifController.repeat(min: 0, max: 29, period: const Duration(milliseconds: 1500));
-      String? token =
-          await logIn(_mailTextField, _passwordTextField);
+      _gifController.repeat(
+          min: 0, max: 29, period: const Duration(milliseconds: 1500));
+      String? token = await logIn(_mailTextField, _passwordTextField);
       await Future.delayed(const Duration(seconds: 1));
       _gifController.stop();
       setState(() {
@@ -79,8 +75,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                 ),
                 type: PageTransitionType.bottomToTop));
       } else if (token == 'error') {
-        String badCredentialsMsg =
-            'Incorrect email or password';
+        String badCredentialsMsg = 'Incorrect email or password';
         Consts.alertPopup(context, badCredentialsMsg);
       } else {
         Consts.alertPopup(context, Consts.cantConnect);
@@ -93,7 +88,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     ThemeData currentTheme = Theme.of(context);
     Color textColor = currentTheme.textTheme.bodyLarge!.color!;
     Color linkColor = currentTheme.brightness == Brightness.light
-        ? Consts.primaryColor : Consts.greenDark;
+        ? Consts.primaryColor
+        : Consts.greenDark;
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -103,7 +99,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
             if (snapshot.hasData) {
               String? email = snapshot.data?.email;
               String uid = snapshot.data!.uid;
-              return GoogleLoginPage(email: email, uid: uid,);
+              return GoogleLoginPage(
+                email: email,
+                uid: uid,
+              );
             } else if (snapshot.hasError) {
               return const Center(
                 child: Text('Something went wrong!'),
@@ -111,7 +110,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
             } else {
               return ModalProgressHUD(
                 inAsyncCall: _isLoading,
-                progressIndicator: buildCustomLoadingWidget(_gifController),
+                progressIndicator: getPlantLoadingIcon(_gifController),
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -150,7 +149,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                         NormalButton(
                           size: size,
                           onPress: onLogin,
-                          isEnabled: _mailTextField.isNotEmpty && _passwordTextField.isNotEmpty,
+                          isEnabled: _mailTextField.isNotEmpty &&
+                              _passwordTextField.isNotEmpty,
                           buttonText: 'Login',
                         ),
                         const SizedBox(
@@ -229,24 +229,31 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                             ])),
                           ),
                         ),
-                        ElevatedButton(onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PlantDetailsScreen(
-                                imageUrl: 'https://st.depositphotos.com/2632165/4026/i/600/depositphotos_40264933-stock-photo-young-plant.jpg',
-                                plantName: 'Monstera Deliciosa',
-                                commonNames: 'Swiss Cheese Plant, Split-leaf Philodendron',
-                                plantFamily: 'Araceae',
-                                light: 'Bright indirect light',
-                                howToWater: 'Water when the top 1-2 inches of soil are dry',
-                                howToUse: 'Indoor houseplant or outdoor in shaded areas',
-                                temperatureRange: '65°F - 85°F (18°C - 29°C)',
-                                wateringFrequency: 'Every 1-2 weeks',
-                              ),
-                            ),
-                          );
-                        }, child: Text('plant info')),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PlantDetailsScreen(
+                                    imageUrl:
+                                        'https://st.depositphotos.com/2632165/4026/i/600/depositphotos_40264933-stock-photo-young-plant.jpg',
+                                    plantName: 'Monstera Deliciosa',
+                                    commonNames:
+                                        'Swiss Cheese Plant, Split-leaf Philodendron',
+                                    plantFamily: 'Araceae',
+                                    light: 'Bright indirect light',
+                                    howToWater:
+                                        'Water when the top 1-2 inches of soil are dry',
+                                    howToUse:
+                                        'Indoor houseplant or outdoor in shaded areas',
+                                    temperatureRange:
+                                        '65°F - 85°F (18°C - 29°C)',
+                                    wateringFrequency: 'Every 1-2 weeks',
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text('plant info')),
                       ],
                     ),
                   ),

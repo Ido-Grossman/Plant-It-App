@@ -8,20 +8,16 @@ import 'package:frontend/menu/home_screen.dart';
 import 'package:frontend/menu/my_plants_screen.dart';
 import 'package:frontend/menu/profile_screen.dart';
 import 'package:frontend/menu/search_screen.dart';
-import 'package:frontend/service/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:provider/provider.dart';
 import 'package:frontend/service/http_service.dart';
-
-import '../logins/login_screen.dart';
 
 class FirstScreen extends StatefulWidget {
   final String? username;
   final String? token;
 
-  const FirstScreen({Key? key, this.username, required this.token}) : super(key: key);
+  const FirstScreen({Key? key, this.username, required this.token})
+      : super(key: key);
 
   @override
   State<FirstScreen> createState() => _FirstScreenState();
@@ -135,7 +131,9 @@ class _FirstScreenState extends State<FirstScreen> {
       ),
       MyPlants(),
       SearchScreen(),
-      MyProfile(token: widget.token,)
+      MyProfile(
+        token: widget.token,
+      )
     ];
 
     return Scaffold(

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:frontend/logins/choose_username_screen.dart';
 import 'package:frontend/service/http_service.dart';
-import 'package:frontend/service/widgets.dart';
+import 'package:frontend/widgets/plant_loading_icon.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -13,14 +13,14 @@ import '../constants.dart';
 import '../service/password_validation_fields.dart';
 
 class ChoosePassScreen extends StatefulWidget {
-
   const ChoosePassScreen({Key? key}) : super(key: key);
 
   @override
   State<ChoosePassScreen> createState() => _ChoosePassScreenState();
 }
 
-class _ChoosePassScreenState extends State<ChoosePassScreen> with TickerProviderStateMixin {
+class _ChoosePassScreenState extends State<ChoosePassScreen>
+    with TickerProviderStateMixin {
   bool _isButtonEnabled = false;
   String _passwordTextField = '';
   final user = FirebaseAuth.instance.currentUser;
@@ -56,8 +56,10 @@ class _ChoosePassScreenState extends State<ChoosePassScreen> with TickerProvider
       setState(() {
         _isLoading = true;
       });
-      _gifController.repeat(min: 0, max: 29, period: const Duration(milliseconds: 1500));
-      int statusCode = await signUpGoogle(user!.email, user!.uid, _passwordTextField);
+      _gifController.repeat(
+          min: 0, max: 29, period: const Duration(milliseconds: 1500));
+      int statusCode =
+          await signUpGoogle(user!.email, user!.uid, _passwordTextField);
       await Future.delayed(const Duration(seconds: 1));
       _gifController.stop();
       setState(() {
@@ -68,13 +70,16 @@ class _ChoosePassScreenState extends State<ChoosePassScreen> with TickerProvider
         if (!mounted) {
           return;
         }
-          Navigator.push(
-              context,
-              PageTransition(
-                  child: ChooseUsernameScreen(token: token,),
-                  type: PageTransitionType.bottomToTop));
-        } else if (statusCode == 404) {
-        Consts.alertPopup(context, 'The password is not strong enough, please try another one');
+        Navigator.push(
+            context,
+            PageTransition(
+                child: ChooseUsernameScreen(
+                  token: token,
+                ),
+                type: PageTransitionType.bottomToTop));
+      } else if (statusCode == 404) {
+        Consts.alertPopup(context,
+            'The password is not strong enough, please try another one');
       } else {
         Consts.alertPopup(context, Consts.cantConnect);
       }
@@ -87,7 +92,7 @@ class _ChoosePassScreenState extends State<ChoosePassScreen> with TickerProvider
 
     return ModalProgressHUD(
       inAsyncCall: _isLoading,
-      progressIndicator: buildCustomLoadingWidget(_gifController),
+      progressIndicator: getPlantLoadingIcon(_gifController),
       child: Scaffold(
         body: SingleChildScrollView(
           child: Padding(
@@ -119,10 +124,10 @@ class _ChoosePassScreenState extends State<ChoosePassScreen> with TickerProvider
                   child: Container(
                       width: size.width,
                       decoration: BoxDecoration(
-                        color: (_isButtonEnabled &&
-                            _passwordTextField.isNotEmpty)
-                            ? Consts.primaryColor
-                            : Colors.grey,
+                        color:
+                            (_isButtonEnabled && _passwordTextField.isNotEmpty)
+                                ? Consts.primaryColor
+                                : Colors.grey,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: const EdgeInsets.symmetric(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 
-import '../service/widgets.dart';
+import '../widgets/font_adjusted_text.dart';
 
 class InformationScreen extends StatelessWidget {
   final String appVersion = '1.0.0';
@@ -23,22 +23,22 @@ class InformationScreen extends StatelessWidget {
         padding: EdgeInsets.all(16),
         children: [
           ListTile(
-            title: CustomFontText(text: 'App Version'),
-            subtitle: CustomFontText(text: appVersion),
+            title: FontAdjustedText(text: 'App Version'),
+            subtitle: FontAdjustedText(text: appVersion),
           ),
           ListTile(
-            title: CustomFontText(text: 'Build Number'),
-            subtitle: CustomFontText(text: buildNumber),
+            title: FontAdjustedText(text: 'Build Number'),
+            subtitle: FontAdjustedText(text: buildNumber),
           ),
           Divider(),
           ListTile(
-            title: CustomFontText(text: 'Privacy Policy'),
+            title: FontAdjustedText(text: 'Privacy Policy'),
             onTap: () {
               // Open privacy policy URL
             },
           ),
           ListTile(
-            title: CustomFontText(text: 'Terms of Service'),
+            title: FontAdjustedText(text: 'Terms of Service'),
             onTap: () {
               // Open terms of service URL
             },

@@ -8,15 +8,16 @@ class PasswordTextField extends StatefulWidget {
   final formKey = GlobalKey<FormState>();
 
   PasswordTextField({
-    super.key, required this.icon, required this.textHint,
-});
+    super.key,
+    required this.icon,
+    required this.textHint,
+  });
 
   @override
   PasswordTextFieldState createState() => PasswordTextFieldState();
-  }
+}
 
 class PasswordTextFieldState extends State<PasswordTextField> {
-
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -26,9 +27,11 @@ class PasswordTextFieldState extends State<PasswordTextField> {
       ),
       decoration: InputDecoration(
           border: InputBorder.none,
-          prefixIcon: Icon(widget.icon, color: Consts.lessBlack.withOpacity(.3),),
-          hintText: widget.textHint
-      ),
+          prefixIcon: Icon(
+            widget.icon,
+            color: Consts.lessBlack.withOpacity(.3),
+          ),
+          hintText: widget.textHint),
       cursorColor: Consts.lessBlack.withOpacity(.5),
     );
   }

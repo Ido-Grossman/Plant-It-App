@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   final String? username;
+
   const HomeScreen({Key? key, required this.username}) : super(key: key);
 
   @override
@@ -13,13 +14,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     String? name;
-    if (widget.username == null){
+    if (widget.username == null) {
       final user = FirebaseAuth.instance.currentUser!;
       name = user.displayName;
     } else {
       name = widget.username;
     }
-
 
     return Scaffold(
       body: Center(

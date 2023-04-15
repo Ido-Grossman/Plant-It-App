@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/logins/choose_pass_screen.dart';
-import 'package:frontend/logins/choose_username_screen.dart';
 import 'package:frontend/logins/login_screen.dart';
 import 'package:frontend/service/http_service.dart';
 import 'package:page_transition/page_transition.dart';
@@ -15,6 +14,7 @@ import '../service/google_sign_in.dart';
 class GoogleLoginPage extends StatefulWidget {
   final String? email;
   final String uid;
+
   const GoogleLoginPage({super.key, required this.email, required this.uid});
 
   @override
@@ -23,6 +23,7 @@ class GoogleLoginPage extends StatefulWidget {
 
 class _GoogleLoginPageState extends State<GoogleLoginPage> {
   final user = FirebaseAuth.instance.currentUser!;
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +39,9 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
       Navigator.push(
           context,
           PageTransition(
-              child: FirstScreen(token: token,),
+              child: FirstScreen(
+                token: token,
+              ),
               type: PageTransitionType.bottomToTop));
     } else if (token != null) {
       Navigator.push(
@@ -47,13 +50,13 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
               child: const ChoosePassScreen(),
               type: PageTransitionType.bottomToTop));
     } else {
-      final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+      final provider =
+          Provider.of<GoogleSignInProvider>(context, listen: false);
       await provider.logOut();
       Navigator.push(
           context,
           PageTransition(
-              child: const Login(),
-              type: PageTransitionType.bottomToTop));
+              child: const Login(), type: PageTransitionType.bottomToTop));
     }
   }
 

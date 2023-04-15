@@ -1,20 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
 import 'package:frontend/logins/choose_username_screen.dart';
 import 'package:frontend/logins/login_screen.dart';
-import 'package:frontend/service/widgets.dart';
+import 'package:frontend/widgets/plant_loading_icon.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import '../service/google_sign_in.dart';
 import '../service/http_service.dart';
 import '../service/login_text_field.dart';
 import '../service/password_validation_fields.dart';
+import '../widgets/google_sign_button.dart';
 import '../widgets/normal_button.dart';
 import 'google_login_screen.dart';
 
@@ -67,7 +64,8 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
       setState(() {
         _isLoading = true;
       });
-      _gifController.repeat(min: 0, max: 29, period: const Duration(milliseconds: 1500));
+      _gifController.repeat(
+          min: 0, max: 29, period: const Duration(milliseconds: 1500));
       int statusCode = await signUp(_mailTextField, _passwordTextField);
       await Future.delayed(const Duration(seconds: 1));
       _gifController.stop();
@@ -90,8 +88,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
         String emailExistsMsg = 'The email already exists. Please try again.';
         Consts.alertPopup(context, emailExistsMsg);
       } else {
-        Consts.alertPopup(
-            context, Consts.cantConnect);
+        Consts.alertPopup(context, Consts.cantConnect);
       }
     }
   }
@@ -101,7 +98,8 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
     ThemeData currentTheme = Theme.of(context);
     Color textColor = currentTheme.textTheme.bodyLarge!.color!;
     Color linkColor = currentTheme.brightness == Brightness.light
-      ? Consts.primaryColor : Consts.greenDark;
+        ? Consts.primaryColor
+        : Consts.greenDark;
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -122,7 +120,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
             } else {
               return ModalProgressHUD(
                 inAsyncCall: _isLoading,
-                progressIndicator: buildCustomLoadingWidget(_gifController),
+                progressIndicator: getPlantLoadingIcon(_gifController),
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -156,9 +154,11 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                         const SizedBox(
                           height: 10,
                         ),
-                        NormalButton(size: size,
+                        NormalButton(
+                            size: size,
                             onPress: onSignUp,
-                            isEnabled: _isButtonEnabled && _mailTextField.isNotEmpty,
+                            isEnabled:
+                                _isButtonEnabled && _mailTextField.isNotEmpty,
                             buttonText: 'Sign Up'),
                         const SizedBox(
                           height: 20,
@@ -218,5 +218,3 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
     );
   }
 }
-
-

@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../logins/login_screen.dart';
 import '../service/google_sign_in.dart';
-import '../service/widgets.dart';
+import '../widgets/font_adjusted_text.dart';
 
 class MyProfile extends StatefulWidget {
   final String? token;
@@ -21,25 +21,23 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
-
   Future<void> _signOut() async {
     int statusCode = await logOut(widget.token);
     if (statusCode == 200) {
-      final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+      final provider =
+          Provider.of<GoogleSignInProvider>(context, listen: false);
       await provider.logOut();
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushAndRemoveUntil(
             context,
             PageTransition(
                 child: const Login(), type: PageTransitionType.bottomToTop),
-                (route) => false);
+            (route) => false);
       });
     } else {
       Consts.alertPopup(context, Consts.cantConnect);
     }
   }
-
-
 
   Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
     return showDialog<void>(
@@ -127,7 +125,9 @@ class _MyProfileState extends State<MyProfile> {
                 Navigator.push(
                     context,
                     PageTransition(
-                        child: SettingsScreen(token: widget.token,),
+                        child: SettingsScreen(
+                          token: widget.token,
+                        ),
                         type: PageTransitionType.rightToLeft));
               },
             ),
@@ -200,8 +200,8 @@ class ProfileMenuOption extends StatelessWidget {
             color: settingColor,
           ),
         ),
-        title: CustomFontText(text:
-        title,
+        title: FontAdjustedText(
+          text: title,
           style: const TextStyle(fontSize: 18).apply(color: textColor),
         ),
         trailing: endIcon

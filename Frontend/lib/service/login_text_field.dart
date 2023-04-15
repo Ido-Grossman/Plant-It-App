@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-
 class LoginTextField extends StatefulWidget {
   final IconData icon;
   final String textHint;
@@ -10,7 +8,12 @@ class LoginTextField extends StatefulWidget {
   final bool isEmail;
 
   const LoginTextField({
-    super.key, required this.icon, required this.textHint, required this.onChanged, this.isEmail = false, this.hideText = false,
+    super.key,
+    required this.icon,
+    required this.textHint,
+    required this.onChanged,
+    this.isEmail = false,
+    this.hideText = false,
   });
 
   @override
@@ -21,9 +24,10 @@ class _LoginTextFieldState extends State<LoginTextField> {
   final TextEditingController _textEditingController = TextEditingController();
   String? _emailError;
 
-  void _validateEmail(){
+  void _validateEmail() {
     if (widget.isEmail &&
-        !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_textEditingController.text)) {
+        !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+            .hasMatch(_textEditingController.text)) {
       _emailError = 'Please enter a correct email';
     } else {
       _emailError = null;
@@ -61,9 +65,11 @@ class _LoginTextFieldState extends State<LoginTextField> {
       decoration: InputDecoration(
           border: InputBorder.none,
           errorText: _emailError,
-          prefixIcon: Icon(widget.icon, color: iconColor,),
-          hintText: widget.textHint
-      ),
+          prefixIcon: Icon(
+            widget.icon,
+            color: iconColor,
+          ),
+          hintText: widget.textHint),
       cursorColor: cursorColor,
     );
   }

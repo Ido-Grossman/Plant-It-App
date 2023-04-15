@@ -10,7 +10,7 @@ import 'package:page_transition/page_transition.dart';
 import '../constants.dart';
 import '../home/home_screen.dart';
 import '../service/login_text_field.dart';
-import '../service/widgets.dart';
+import '../widgets/plant_loading_icon.dart';
 
 class ChooseUsernameScreen extends StatefulWidget {
   final String? token;
@@ -21,7 +21,8 @@ class ChooseUsernameScreen extends StatefulWidget {
   State<ChooseUsernameScreen> createState() => _ChooseUsernameScreenState();
 }
 
-class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> with TickerProviderStateMixin {
+class _ChooseUsernameScreenState extends State<ChooseUsernameScreen>
+    with TickerProviderStateMixin {
   String _usernameTextField = '';
   final user = FirebaseAuth.instance.currentUser;
   bool _isLoading = false;
@@ -50,7 +51,8 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> with Ticker
       setState(() {
         _isLoading = true;
       });
-      _gifController.repeat(min: 0, max: 29, period: const Duration(milliseconds: 1500));
+      _gifController.repeat(
+          min: 0, max: 29, period: const Duration(milliseconds: 1500));
       int statusCode = await chooseUsername(_usernameTextField, widget.token);
       await Future.delayed(const Duration(seconds: 1));
       _gifController.stop();
@@ -61,11 +63,13 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> with Ticker
         return;
       }
       if (statusCode == 200) {
-        if (user != null){
+        if (user != null) {
           Navigator.push(
               context,
               PageTransition(
-                  child: FirstScreen(token: widget.token,),
+                  child: FirstScreen(
+                    token: widget.token,
+                  ),
                   type: PageTransitionType.bottomToTop));
         } else {
           Navigator.push(
@@ -82,20 +86,18 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen> with Ticker
             "That username already exists. Please enter another one.";
         Consts.alertPopup(context, usernameExistsMsg);
       } else {
-        Consts.alertPopup(
-            context, Consts.cantConnect);
+        Consts.alertPopup(context, Consts.cantConnect);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
 
     return ModalProgressHUD(
       inAsyncCall: _isLoading,
-      progressIndicator: buildCustomLoadingWidget(_gifController),
+      progressIndicator: getPlantLoadingIcon(_gifController),
       child: Scaffold(
         body: SingleChildScrollView(
           child: Padding(

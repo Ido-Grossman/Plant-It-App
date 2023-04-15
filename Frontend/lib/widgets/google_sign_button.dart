@@ -1,56 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import '../main.dart';
-import 'google_sign_in.dart';
-
-Widget buildCustomLoadingWidget(GifController gifController) {
-  return GifImage(
-    controller: gifController,
-    image: const AssetImage('assets/plant-loading.gif'),
-    height: 100,
-    width: 100,
-  );
-}
-
-class CustomFontText extends StatelessWidget {
-  final String text;
-  final TextStyle? style;
-
-  const CustomFontText({Key? key, required this.text, this.style}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    FontSizeNotifier fontSizeNotifier = Provider.of<FontSizeNotifier>(context);
-
-    return Text(
-      text,
-      style: (style ?? DefaultTextStyle.of(context).style).copyWith(
-        fontSize: fontSizeNotifier.fontSize,
-      ),
-    );
-  }
-}
-
-class CustomIcon extends StatelessWidget {
-  final IconData icon;
-  final double? size;
-  final Color? color;
-
-  const CustomIcon({Key? key, required this.icon, this.size, this.color}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    FontSizeNotifier fontSizeNotifier = Provider.of<FontSizeNotifier>(context);
-    return Icon(
-      icon,
-      size: size ?? fontSizeNotifier.fontSize,
-      color: color,
-    );
-  }
-}
+import '../service/google_sign_in.dart';
 
 class GoogleSignButton extends StatelessWidget {
   const GoogleSignButton({
@@ -67,14 +19,16 @@ class GoogleSignButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Consts.primaryColor, // Set the background color to green
+          backgroundColor: Consts.primaryColor,
+          // Set the background color to green
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30), // Add rounded corners
           ),
           padding: const EdgeInsets.all(14), // Set padding for the button
         ),
         onPressed: () {
-          final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+          final provider =
+              Provider.of<GoogleSignInProvider>(context, listen: false);
           provider.googleLogin();
         },
         child: Row(
@@ -94,7 +48,8 @@ class GoogleSignButton extends StatelessWidget {
                 height: 20.0, // Set the Google logo size
               ),
             ),
-            const SizedBox(width: 8), // Add some space between the logo and the text
+            const SizedBox(width: 8),
+            // Add some space between the logo and the text
             const Text(
               'Sign in with Google',
               style: TextStyle(
@@ -109,5 +64,3 @@ class GoogleSignButton extends StatelessWidget {
     );
   }
 }
-
-

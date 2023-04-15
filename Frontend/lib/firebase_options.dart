@@ -54,7 +54,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '246874156381',
     projectId: 'plant-it-app-5c251',
     storageBucket: 'plant-it-app-5c251.appspot.com',
-    iosClientId: '246874156381-27qlpli37tc6uq8tihv3idknpogjmli7.apps.googleusercontent.com',
+    iosClientId:
+        '246874156381-27qlpli37tc6uq8tihv3idknpogjmli7.apps.googleusercontent.com',
     iosBundleId: 'com.example.frontend',
   );
 }

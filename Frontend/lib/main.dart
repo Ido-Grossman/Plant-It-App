@@ -5,7 +5,6 @@ import 'package:frontend/service/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -46,11 +45,8 @@ class FontSizeNotifier extends ChangeNotifier {
   }
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +57,8 @@ class MyApp extends StatelessWidget {
         theme: appTheme.themeData,
         title: 'Intro Screen',
         home: Login(),
-        debugShowCheckedModeBanner: false,),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

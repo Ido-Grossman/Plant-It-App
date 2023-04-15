@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-
 class PasswordValidationForms extends StatefulWidget {
   final Function(bool) onValidationChanged;
   final Function(String) onPassChange;
 
-  const PasswordValidationForms({Key? key, required this.onValidationChanged, required this.onPassChange}) : super(key: key);
+  const PasswordValidationForms(
+      {Key? key, required this.onValidationChanged, required this.onPassChange})
+      : super(key: key);
 
   @override
   PasswordValidationFormsState createState() => PasswordValidationFormsState();
@@ -33,10 +33,10 @@ class PasswordValidationFormsState extends State<PasswordValidationForms> {
         _passwordError = "Passwords do not match";
         _isButtonDisabled = true;
       });
-    } else if (_passwordController.text.isEmpty || _confirmPasswordController.text.isEmpty) {
+    } else if (_passwordController.text.isEmpty ||
+        _confirmPasswordController.text.isEmpty) {
       _isButtonDisabled = true;
-    }
-    else {
+    } else {
       setState(() {
         _passwordError = null;
         _isButtonDisabled = false;
@@ -44,7 +44,6 @@ class PasswordValidationFormsState extends State<PasswordValidationForms> {
     }
     widget.onValidationChanged(!_isButtonDisabled);
   }
-
 
   @override
   void dispose() {
@@ -70,9 +69,11 @@ class PasswordValidationFormsState extends State<PasswordValidationForms> {
           onChanged: widget.onPassChange,
           decoration: InputDecoration(
               border: InputBorder.none,
-              prefixIcon: Icon(Icons.password, color: iconColor,),
-              hintText: 'Enter your password'
-          ),
+              prefixIcon: Icon(
+                Icons.password,
+                color: iconColor,
+              ),
+              hintText: 'Enter your password'),
           obscureText: true,
           cursorColor: cursorColor,
         ),
@@ -82,10 +83,13 @@ class PasswordValidationFormsState extends State<PasswordValidationForms> {
           ),
           controller: _confirmPasswordController,
           decoration: InputDecoration(
-              border: InputBorder.none,
-              prefixIcon: Icon(Icons.password, color: iconColor,),
-              hintText: 'Enter your password again',
-              errorText: _passwordError,
+            border: InputBorder.none,
+            prefixIcon: Icon(
+              Icons.password,
+              color: iconColor,
+            ),
+            hintText: 'Enter your password again',
+            errorText: _passwordError,
           ),
           obscureText: true,
           cursorColor: cursorColor,
