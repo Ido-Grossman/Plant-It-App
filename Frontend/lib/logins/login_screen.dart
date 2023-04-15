@@ -12,7 +12,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-import '../plants/plantInfo.dart';
+import '../plants/plant_info.dart';
 import '../service/http_service.dart';
 import '../service/login_text_field.dart';
 import '../widgets/google_sign_button.dart';
