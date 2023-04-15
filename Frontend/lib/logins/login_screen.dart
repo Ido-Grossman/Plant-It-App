@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:frontend/constants.dart';
-import 'package:frontend/home/home_screen.dart';
+import 'package:frontend/home/main_screen.dart';
 import 'package:frontend/logins/forgot_password_screen.dart';
 import 'package:frontend/logins/google_login_screen.dart';
 import 'package:frontend/logins/sign_up_screen.dart';
@@ -69,7 +69,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         Navigator.push(
             context,
             PageTransition(
-                child: FirstScreen(
+                child: MainScreen(
                   username: _mailTextField,
                   token: token,
                 ),

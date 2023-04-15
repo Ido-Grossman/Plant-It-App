@@ -8,7 +8,7 @@ import 'package:frontend/service/http_service.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../home/home_screen.dart';
+import '../home/main_screen.dart';
 import '../service/google_sign_in.dart';
 
 class GoogleLoginPage extends StatefulWidget {
@@ -39,7 +39,7 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
       Navigator.push(
           context,
           PageTransition(
-              child: FirstScreen(
+              child: MainScreen(
                 token: token,
               ),
               type: PageTransitionType.bottomToTop));

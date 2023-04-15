@@ -8,7 +8,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../constants.dart';
-import '../home/home_screen.dart';
+import '../home/main_screen.dart';
 import '../service/login_text_field.dart';
 import '../widgets/plant_loading_icon.dart';
 
@@ -67,7 +67,7 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen>
           Navigator.push(
               context,
               PageTransition(
-                  child: FirstScreen(
+                  child: MainScreen(
                     token: widget.token,
                   ),
                   type: PageTransitionType.bottomToTop));
@@ -75,7 +75,7 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen>
           Navigator.push(
               context,
               PageTransition(
-                  child: FirstScreen(
+                  child: MainScreen(
                     username: _usernameTextField,
                     token: widget.token,
                   ),

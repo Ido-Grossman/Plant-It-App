@@ -12,18 +12,18 @@ import 'package:image_picker/image_picker.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:frontend/service/http_service.dart';
 
-class FirstScreen extends StatefulWidget {
+class MainScreen extends StatefulWidget {
   final String? username;
   final String? token;
 
-  const FirstScreen({Key? key, this.username, required this.token})
+  const MainScreen({Key? key, this.username, required this.token})
       : super(key: key);
 
   @override
-  State<FirstScreen> createState() => _FirstScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _FirstScreenState extends State<FirstScreen> {
+class _MainScreenState extends State<MainScreen> {
   File? image;
   final ImagePicker picker = ImagePicker();
 
