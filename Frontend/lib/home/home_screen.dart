@@ -4,18 +4,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:frontend/constants.dart';
 
-import 'package:frontend/menu/homeScreen.dart';
-import 'package:frontend/menu/myPlantsScreen.dart';
-import 'package:frontend/menu/profileScreen.dart';
-import 'package:frontend/menu/searchScreen.dart';
-import 'package:frontend/service/googleSignIn.dart';
+import 'package:frontend/menu/home_screen.dart';
+import 'package:frontend/menu/my_plants_screen.dart';
+import 'package:frontend/menu/profile_screen.dart';
+import 'package:frontend/menu/search_screen.dart';
+import 'package:frontend/service/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:frontend/service/httpService.dart';
+import 'package:frontend/service/http_service.dart';
 
-import '../logins/loginScreen.dart';
+import '../logins/login_screen.dart';
 
 class FirstScreen extends StatefulWidget {
   final String? username;

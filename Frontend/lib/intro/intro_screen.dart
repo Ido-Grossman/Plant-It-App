@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 
-import 'package:frontend/home/homeScreen.dart';
-import 'package:frontend/logins/loginScreen.dart';
+import 'package:frontend/home/home_screen.dart';
+import 'package:frontend/logins/login_screen.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);

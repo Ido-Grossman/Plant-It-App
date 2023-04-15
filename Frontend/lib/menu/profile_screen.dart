@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
-import 'package:frontend/service/httpService.dart';
-import 'package:frontend/settings/informationScreen.dart';
+import 'package:frontend/service/http_service.dart';
+import 'package:frontend/settings/information_screen.dart';
 import 'package:frontend/settings/settings.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../logins/loginScreen.dart';
-import '../service/googleSignIn.dart';
+import '../logins/login_screen.dart';
+import '../service/google_sign_in.dart';
 import '../service/widgets.dart';
 
 class MyProfile extends StatefulWidget {

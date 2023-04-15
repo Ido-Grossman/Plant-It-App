@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
-import 'package:frontend/logins/chooseUsernameScreen.dart';
-import 'package:frontend/service/httpService.dart';
+import 'package:frontend/logins/choose_username_screen.dart';
+import 'package:frontend/service/http_service.dart';
 import 'package:frontend/service/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../constants.dart';
-import '../service/passwordValidationFields.dart';
+import '../service/password_validation_fields.dart';
 
 class ChoosePassScreen extends StatefulWidget {
 

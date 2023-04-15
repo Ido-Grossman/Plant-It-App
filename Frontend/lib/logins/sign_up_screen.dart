@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
-import 'package:frontend/logins/chooseUsernameScreen.dart';
-import 'package:frontend/logins/loginScreen.dart';
+import 'package:frontend/logins/choose_username_screen.dart';
+import 'package:frontend/logins/login_screen.dart';
 import 'package:frontend/service/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import '../service/googleSignIn.dart';
-import '../service/httpService.dart';
-import '../service/loginTextField.dart';
-import '../service/passwordValidationFields.dart';
-import 'googleLoginScreen.dart';
+import '../service/google_sign_in.dart';
+import '../service/http_service.dart';
+import '../service/login_text_field.dart';
+import '../service/password_validation_fields.dart';
+import '../widgets/normal_button.dart';
+import 'google_login_screen.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -155,7 +156,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                         const SizedBox(
                           height: 10,
                         ),
-                        NormalSignButton(size: size,
+                        NormalButton(size: size,
                             onPress: onSignUp,
                             isEnabled: _isButtonEnabled && _mailTextField.isNotEmpty,
                             buttonText: 'Sign Up'),

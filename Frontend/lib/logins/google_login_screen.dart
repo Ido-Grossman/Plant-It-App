@@ -2,15 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:frontend/constants.dart';
-import 'package:frontend/logins/choosePassScreen.dart';
-import 'package:frontend/logins/chooseUsernameScreen.dart';
-import 'package:frontend/logins/loginScreen.dart';
-import 'package:frontend/service/httpService.dart';
+import 'package:frontend/logins/choose_pass_screen.dart';
+import 'package:frontend/logins/choose_username_screen.dart';
+import 'package:frontend/logins/login_screen.dart';
+import 'package:frontend/service/http_service.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../home/homeScreen.dart';
-import '../service/googleSignIn.dart';
+import '../home/home_screen.dart';
+import '../service/google_sign_in.dart';
 
 class GoogleLoginPage extends StatefulWidget {
   final String? email;

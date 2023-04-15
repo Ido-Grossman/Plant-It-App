@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
-import 'package:frontend/service/httpService.dart';
+import 'package:frontend/service/http_service.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../constants.dart';
-import '../home/homeScreen.dart';
-import '../service/loginTextField.dart';
+import '../home/home_screen.dart';
+import '../service/login_text_field.dart';
 import '../service/widgets.dart';
 
 class ChooseUsernameScreen extends StatefulWidget {

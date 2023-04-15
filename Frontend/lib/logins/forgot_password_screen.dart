@@ -7,9 +7,10 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../constants.dart';
-import '../service/httpService.dart';
-import '../service/loginTextField.dart';
-import 'loginScreen.dart';
+import '../service/http_service.dart';
+import '../service/login_text_field.dart';
+import '../widgets/normal_button.dart';
+import 'login_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -115,7 +116,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Ticker
                 const SizedBox(
                   height: 10,
                 ),
-                NormalSignButton(
+                NormalButton(
                     size: size,
                     onPress: onForgotPass,
                     isEnabled: true,

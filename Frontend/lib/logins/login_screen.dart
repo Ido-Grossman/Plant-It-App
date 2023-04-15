@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:frontend/constants.dart';
-import 'package:frontend/home/homeScreen.dart';
-import 'package:frontend/logins/forgotPasswordScreen.dart';
-import 'package:frontend/logins/googleLoginScreen.dart';
-import 'package:frontend/logins/signUpScreen.dart';
-import 'package:frontend/service/googleSignIn.dart';
+import 'package:frontend/home/home_screen.dart';
+import 'package:frontend/logins/forgot_password_screen.dart';
+import 'package:frontend/logins/google_login_screen.dart';
+import 'package:frontend/logins/sign_up_screen.dart';
+import 'package:frontend/service/google_sign_in.dart';
 import 'package:frontend/service/widgets.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -16,8 +16,9 @@ import 'package:provider/provider.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import '../plants/plantInfo.dart';
-import '../service/httpService.dart';
-import '../service/loginTextField.dart';
+import '../service/http_service.dart';
+import '../service/login_text_field.dart';
+import '../widgets/normal_button.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -146,7 +147,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                         const SizedBox(
                           height: 10,
                         ),
-                        NormalSignButton(
+                        NormalButton(
                           size: size,
                           onPress: onLogin,
                           isEnabled: _mailTextField.isNotEmpty && _passwordTextField.isNotEmpty,
