@@ -160,6 +160,7 @@ class _MainScreenState extends State<MainScreen> {
         children: screens,
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'main_fab',
         onPressed: () async {
           await takePhoto();
           if (image != null) {
