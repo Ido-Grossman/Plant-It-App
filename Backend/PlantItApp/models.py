@@ -22,6 +22,7 @@ class Plant(models.Model):
     maxcelsius = models.IntegerField(default=20)
     minfahrenheit = models.IntegerField(default=0)
     maxfahrenheit = models.IntegerField(default=20)
+    plant_photo = models.ImageField(upload_to='plant_photos/')
 
 
 class User_Plants(models.Model):
