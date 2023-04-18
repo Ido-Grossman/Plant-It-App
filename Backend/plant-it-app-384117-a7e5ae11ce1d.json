@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "plant-it-app-384117",
+  "private_key_id": "a7e5ae11ce1d75b0d09e2984db5acf3e3941790f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDhq2wnIZYI57rM\nQ6hBXRMYcP7i9VjF7s86kGrmNam7KSSULTkUlrEA+j9er37QwiCTudq1uHwvl0FH\nfjMqXismgCdfQ4E73hIAw4aBrhG2XlzNaPyp8Dxt06QsldROaywqSehrr8xnsBxd\nMLEuo10YRrB5Crtg+8vgQLaMEW6MNi+sx4eyHm08lkvtIqWjxSHUXuD2fJQA9ZiB\n6LKt+oxNR5jKO4+mrLy5oUh7UmaVCMn+uo9ZFsC5AFfbTpTQHamSXaZug+O9dwYh\nvxk18GMByxdnCIL4XacB/WmUPQn/SaAkbnwMPX7CGSl0X9ivpiSHINHe3g6xLNTl\n3hKeeCmfAgMBAAECggEAEo9Ur8s1WbolRNNzrRyIi4QPkn73NCA17u0dvZ1APmJd\n3cnyXd0e5aOvPoxUc7rjjwLEGBn6LLfV6Jlaf+uKxPnZQx58LH5RILrz/wpf7o3I\nOCSgUyGs9qNnZztTYLezxC6b7O9ickyrqIZurBVHfM2jifD2BD3xQJpR6Sct3l4W\n6aZwj1ZSZ4xLK//LUqBxtuRzE3U8tRD+ML8iT8n9D+o4BP3uxEuHuiiI8Glnrrhj\nVAMzSk066u/CbEbAyfBr8ZsouEZ968+DQ/398sUGCHWTUVgWz5YXKY14vsszRt6u\n3HEVmM3HGxaNHsmk+IeBi8ZF/zcCDrcp5hrC/jaZoQKBgQD9scUXGgtEC7Ncx5bL\nW/sTKHl6dkdZQK6Qk4av0PHi74+h2XGX0oxdqar+QbYjeul1HoihnFZUO54KfhLQ\nTMThHAQqDgL2S90Hr98zZIrw6StU4HjwQnhvrg1aoKfbFQJKXXvueDiVj0ULKQ7U\nQukPVaWpHWznG99BQewLl9xppwKBgQDjuHOopi/D7+EwrSWswodDO5v5XGGtY/Xx\ntzmvUp47RsPXcO8Goug7E16JokYZ3r/1ZByvESx3Hu5ZVNGEdNnJOI2eylxYxNcd\n6Qc6Cd6doGJoDQA5h5eSudUpcPkcMtp9DMSrshDiUW6QOC/ggpBWrRKV1EwkjoAt\ndxQTtVDPSQKBgGUFkhcV7uCEzEKo07pdAUjquBz01oqLADhgFqUSTg/xFz/654nu\ndKijdIzUu+O7ARX7N6srJxFZwCArffBmcYu2bU4V0EYlhXmXJglAAzfVkcS1slLy\nFSVbqMOq78yEvCnCuiQGyXl82KCOE/KgRlAt6c7DAeexqKBC0Oz45vNHAoGBAN53\nf35+RGG+ApiEPy8kp/I11O3qo346DrcC0jcGlpDAVGkv6kPoeMnl5VC+mI+DfrLk\nB+W7+F2zeRUKeNlXMsCTID/F4CvUuXd+BVJc+/+wBRMzyElrvtdX9vhSZvt2bt8F\nz0kRX89J0KLSUWubAhm7YVHAolaAZJaGI7YRR44JAoGBAJUDljA/+f6dIq3wNh6l\nkx52tBWliGVqILwRfQ7M6m5fCTuj1wsH8Wn7b+QafTeQQ3+ZZbc3dzfruFmPx3X8\nZtYjWTH9Dezf/NDFfIdbIW3XupMqso6NIzq2tu0CKzauRTWUrU+YVlvJSnz+23PW\nP+68UchgHB2K0/SEueTXZ8Sy\n-----END PRIVATE KEY-----\n",
+  "client_email": "plantitapp@plant-it-app-384117.iam.gserviceaccount.com",
+  "client_id": "105476482097464320222",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/plantitapp%40plant-it-app-384117.iam.gserviceaccount.com"
+}
