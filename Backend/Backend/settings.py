@@ -123,7 +123,7 @@ DATABASES = {
         'NAME': 'plant_it_app',
         'USER': 'root',
         'PASSWORD': 'SantIdo',
-        'HOST': '/cloudsql/plant-it-app-384117:me-west1:plantitapp',
+        'HOST': '34.165.144.249',
     }
 }
 
