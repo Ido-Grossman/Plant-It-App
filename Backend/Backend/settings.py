@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from . import Classification
 import os
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,8 +57,20 @@ INSTALLED_APPS = [
     'PlantItApp.apps.PlantitappConfig',
 
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+
+    'storages',
 ]
+
+KEY_PATH = os.path.join(BASE_DIR, 'plant-it-app-384117-a7e5ae11ce1d.json')
+google_credentials = service_account.Credentials.from_service_account_file(KEY_PATH)
+
+# Google Cloud Storage settings
+GS_BUCKET_NAME = 'plant-it-app-bucket'
+GS_PROJECT_ID = 'plant-it-app-384117'
+GS_CREDENTIALS = google_credentials
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
@@ -109,9 +122,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'plant_it_app',
         'USER': 'root',
-        'PASSWORD': 'SantIdOfek',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'PASSWORD': 'SantIdo',
+        'HOST': '34.165.144.249',
     }
 }
 
