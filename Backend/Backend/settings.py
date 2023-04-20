@@ -73,8 +73,11 @@ google_credentials = service_account.Credentials.from_service_account_file(KEY_P
 GS_BUCKET_NAME = 'plant-it-app-bucket'
 GS_PROJECT_ID = 'plant-it-app-384117'
 GS_CREDENTIALS = google_credentials
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+MEDIA_ROOT = '/'
+MEDIA_URL = 'https://storage.googleapis.com/my-plant-it-app-bucket/'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
@@ -93,9 +96,6 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = ['PlantItApp.backends.CustomAuthBackend', 'django.contrib.auth.backends.ModelBackend', ]
 
 ROOT_URLCONF = 'Backend.urls'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
 
 TEMPLATES = [
     {
