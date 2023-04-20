@@ -27,7 +27,11 @@ SECRET_KEY = 'django-insecure-@85w3mvv=dkogfm*3+0xad!v9$5z^_fq5y!5rv_0q7gbp2v9j7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.0.2.2', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
+
+# Use Google Cloud Storage for static files in production
+if os.environ.get('GAE_APPLICATION', None):
+    STATIC_URL = f'https://storage.googleapis.com/%7BGS_BUCKET_NAME%7D/static/'
 
 DISEASES = ['Haunglongbing', 'Scorch', 'Esca', 'Scab', 'Bacterial spot', 'Mosaic virus', 'Mold', 'Blight',
             'Healthy', 'Spider mites', 'Leaf curl virus', 'Rust', 'Target spot', 'Black rot', 'leaf spot',
