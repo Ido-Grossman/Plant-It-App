@@ -4,12 +4,15 @@ import 'package:frontend/logins/login_screen.dart';
 import 'package:frontend/service/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  tz.initializeTimeZones();
   runApp(
     MultiProvider(
       providers: [
