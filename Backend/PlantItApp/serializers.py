@@ -6,12 +6,11 @@ class PhotoSerializer(serializers.Serializer):
     image = serializers.CharField()
 
 
-class UserSerializer(serializers.Serializer):
+class UserRegistrationSerializer(serializers.Serializer):
     email = serializers.EmailField()
     username = serializers.CharField(max_length=100, required=False)
     uid = serializers.CharField(max_length=100, required=False)
-    password = serializers.CharField(max_length=100)
-    profile_image = serializers.ImageField(required=False)
+    password = serializers.CharField(max_length=100, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -19,6 +18,8 @@ class UserSerializer(serializers.Serializer):
             self.fields['username'].required = True
         if self.context.get('require_uid', False):
             self.fields['uid'].required = True
+        if self.context.get('require_password', False):
+            self.fields['password'].required = True
 
     def validate_username(self, value):
         User = get_user_model()
@@ -31,3 +32,9 @@ class UserSerializer(serializers.Serializer):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email already exists.")
         return value
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'email', 'profile_picture']

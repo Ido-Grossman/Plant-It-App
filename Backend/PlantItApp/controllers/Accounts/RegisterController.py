@@ -2,13 +2,13 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from PlantItApp.serializers import UserSerializer
+from PlantItApp.serializers import UserRegistrationSerializer
 
 
 @api_view(['Post'])
 def register(request):
     # Getting the userSerializer and validated the data.
-    serializer = UserSerializer(data=request.data)
+    serializer = UserRegistrationSerializer(data=request.data, context={'require_password': True})
     # If the data is incorrect, returns 400 Bad Request.
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -25,7 +25,7 @@ def register(request):
 @api_view(['Post'])
 def google_register(request):
     # Getting the userSerializer and validated the data.
-    serializer = UserSerializer(data=request.data, context={'require_uid': True})
+    serializer = UserRegistrationSerializer(data=request.data, context={'require_uid': True})
     # If the data is incorrect, returns 400 Bad Request.
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
