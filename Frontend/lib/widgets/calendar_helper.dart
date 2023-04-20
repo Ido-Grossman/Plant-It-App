@@ -34,4 +34,14 @@ class CalendarHelper {
     final eventsResult = await _deviceCalendarPlugin.retrieveEvents(calendarId, retrieveEventsParams);
     return eventsResult.data ?? [];
   }
+
+  Future<bool> deleteEvent(String calendarId, String? eventId) async {
+    try {
+      final deleteResult = await _deviceCalendarPlugin.deleteEvent(calendarId, eventId);
+      return deleteResult.isSuccess && deleteResult.data == true;
+    } catch (e) {
+      print('Error deleting event: $e');
+      return false;
+    }
+  }
 }
