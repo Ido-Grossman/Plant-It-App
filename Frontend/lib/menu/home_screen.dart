@@ -2,9 +2,7 @@ import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'dart:async';
-
 import '../widgets/calendar_helper.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -385,5 +383,4 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
       ),
     );
   }
-
 }
