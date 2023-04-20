@@ -41,6 +41,7 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
           PageTransition(
               child: MainScreen(
                 token: token,
+                email: widget.email!,
               ),
               type: PageTransitionType.bottomToTop));
     } else if (token != null) {

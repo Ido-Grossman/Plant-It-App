@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:frontend/constants.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart' as http;
 
 Future<String> uploadPhoto(String path) async {
@@ -36,7 +37,7 @@ Future<String?> logIn(String email, String password) async {
   try {
     final response = await http
         .post(url, body: {'email': email, 'password': password}).timeout(
-      const Duration(seconds: 10),
+      const Duration(seconds: 20),
     );
     var body = jsonDecode(response.body);
     String token = body['token'];
@@ -110,5 +111,19 @@ Future<int> logOut(String? token) async {
     return response.statusCode;
   } on TimeoutException {
     return -1;
+  }
+}
+
+Future<Map<String, dynamic>> getUserDetails(String? token, String email) async {
+  var url = Uri.parse('${Consts.getApiLink()}users/$email/');
+  try {
+    Map<String, String> headers = {"Authorization": "Token $token"};
+    final response = await http.get(url, headers: headers).timeout(
+      const Duration(seconds: 10),
+    );
+    print(response.statusCode);
+    return jsonDecode(response.body);
+  } on TimeoutException {
+    throw TimeoutException;
   }
 }

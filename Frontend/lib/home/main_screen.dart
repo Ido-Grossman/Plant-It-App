@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,8 +16,10 @@ import 'package:frontend/service/http_service.dart';
 class MainScreen extends StatefulWidget {
   final String? username;
   final String? token;
+  final String email;
 
-  const MainScreen({Key? key, this.username, required this.token})
+  const MainScreen(
+      {Key? key, this.username, required this.token, required this.email})
       : super(key: key);
 
   @override
@@ -24,6 +27,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  late Future<Map<String, dynamic>> responseBody;
   File? image;
   final ImagePicker picker = ImagePicker();
 
@@ -37,6 +41,14 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   List<String> screenTitleList = ['Home', 'My Plants', 'Search', 'Profile'];
+
+  late String profileImg;
+
+  @override
+  void initState() {
+    super.initState();
+    responseBody = getUserDetails(widget.token, widget.email);
+  }
 
   Future takePhoto() async {
     try {
@@ -125,16 +137,6 @@ class _MainScreenState extends State<MainScreen> {
     Color? backgroundColor = currentTheme.brightness == Brightness.light
         ? null
         : Consts.lessBlack.withOpacity(0.5);
-    List<Widget> screens = [
-      HomeScreen(
-        username: widget.username,
-      ),
-      MyPlants(),
-      SearchScreen(),
-      MyProfile(
-        token: widget.token,
-      )
-    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -155,10 +157,38 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: Consts.primaryColor,
         elevation: 0.0,
       ),
-      body: IndexedStack(
-        index: _bottomNavigationIdx,
-        children: screens,
-      ),
+      body: FutureBuilder<Map<String, dynamic>>(
+          future: responseBody,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text('Error getting user details'),
+              );
+            } else {
+              profileImg = snapshot.data!['profile_picture'];
+              List<Widget> screens = [
+                HomeScreen(
+                  username: widget.username,
+                ),
+                MyPlants(),
+                SearchScreen(),
+                MyProfile(
+                  token: widget.token,
+                  username: snapshot.data!['username'],
+                  profileImg: profileImg,
+                  email: widget.email,
+                )
+              ];
+              return IndexedStack(
+                index: _bottomNavigationIdx,
+                children: screens,
+              );
+            }
+          }),
       floatingActionButton: FloatingActionButton(
         heroTag: 'main_fab',
         onPressed: () async {

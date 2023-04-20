@@ -75,6 +75,7 @@ class _ChoosePassScreenState extends State<ChoosePassScreen>
             PageTransition(
                 child: ChooseUsernameScreen(
                   token: token,
+                  email: user!.email!,
                 ),
                 type: PageTransitionType.bottomToTop));
       } else if (statusCode == 404) {

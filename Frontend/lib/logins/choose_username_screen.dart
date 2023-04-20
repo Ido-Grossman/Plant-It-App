@@ -14,8 +14,9 @@ import '../widgets/plant_loading_icon.dart';
 
 class ChooseUsernameScreen extends StatefulWidget {
   final String? token;
+  final String email;
 
-  const ChooseUsernameScreen({Key? key, required this.token}) : super(key: key);
+  const ChooseUsernameScreen({Key? key, required this.token, required this.email}) : super(key: key);
 
   @override
   State<ChooseUsernameScreen> createState() => _ChooseUsernameScreenState();
@@ -69,6 +70,7 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen>
               PageTransition(
                   child: MainScreen(
                     token: widget.token,
+                    email: user!.email!,
                   ),
                   type: PageTransitionType.bottomToTop));
         } else {
@@ -78,6 +80,7 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen>
                   child: MainScreen(
                     username: _usernameTextField,
                     token: widget.token,
+                    email: widget.email,
                   ),
                   type: PageTransitionType.bottomToTop));
         }
