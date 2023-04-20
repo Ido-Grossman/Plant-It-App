@@ -5,12 +5,18 @@ import 'package:flutter/material.dart';
 class Consts {
   // API prefix link
   static String getApiLink() {
-    if (Platform.isAndroid) {
-      return 'http://10.0.2.2:8000/api/';
+    if (!PRODUCTION) {
+      if (Platform.isAndroid) {
+        return 'http://10.0.2.2:8000/api/';
+      } else {
+        return 'http://127.0.0.1:8000/api/';
+      }
     } else {
-      return 'http://127.0.0.1:8000/api/';
+      return 'https://plant-it-app-384117.lm.r.appspot.com/api/';
     }
   }
+
+  static var PRODUCTION = true;
 
   // colors
   static var primaryColor = Color.fromARGB(255, 31, 85, 56);
