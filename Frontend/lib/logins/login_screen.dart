@@ -70,7 +70,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
             context,
             PageTransition(
                 child: MainScreen(
-                  username: _mailTextField,
+                  email: _mailTextField,
                   token: token,
                 ),
                 type: PageTransitionType.bottomToTop));

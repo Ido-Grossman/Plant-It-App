@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:frontend/constants.dart';
+import 'package:frontend/service/http_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -15,8 +16,11 @@ import '../widgets/font_adjusted_text.dart';
 
 class SettingsScreen extends StatefulWidget {
   final String? token;
+  final String email;
+  String profileImg;
+  final Function(String) updateProfileImgCallback;
 
-  const SettingsScreen({super.key, required this.token});
+  SettingsScreen({super.key, required this.token, required this.email, required this.profileImg, required this.updateProfileImgCallback});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -76,7 +80,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           )),
           ListTile(
             title: FontAdjustedText(text: 'Email'),
-            subtitle: FontAdjustedText(text: 'johndoe@email.com'),
+            subtitle: FontAdjustedText(text: widget.email),
             trailing: SizedBox(
               width: 50,
               child: IconButton(
@@ -103,7 +107,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             title: FontAdjustedText(text: 'Profile Picture'),
             leading: CircleAvatar(
-              backgroundImage: AssetImage('assets/default-profile.png'),
+              backgroundImage: NetworkImage(widget.profileImg),
               backgroundColor: Colors.white,
             ),
             trailing: SizedBox(
@@ -112,7 +116,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 icon: Icon(Icons.edit),
                 onPressed: () async {
                   await takePhoto();
-                  var responseDataHttp = await upPhoto(image!.path);
+                  await upPhoto(image!.path);
+                  var response = await getUserDetails(widget.token, widget.email);
+                  setState(() {
+                    widget.profileImg = response['profile_picture'];
+                  });
+                  widget.updateProfileImgCallback(response['profile_picture']);
                   // Edit profile picture
                 },
               ),

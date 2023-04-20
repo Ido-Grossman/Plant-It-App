@@ -82,6 +82,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
             PageTransition(
                 child: ChooseUsernameScreen(
                   token: token,
+                  email: _mailTextField,
                 ),
                 type: PageTransitionType.bottomToTop));
       } else if (statusCode == 400) {

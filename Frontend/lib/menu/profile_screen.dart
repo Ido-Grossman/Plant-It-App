@@ -13,14 +13,26 @@ import '../widgets/font_adjusted_text.dart';
 
 class MyProfile extends StatefulWidget {
   final String? token;
+  final String username;
+  final String profileImg;
+  final String email;
 
-  const MyProfile({Key? key, required this.token}) : super(key: key);
+  const MyProfile({Key? key, required this.token, required this.username, required this.profileImg, required this.email}) : super(key: key);
 
   @override
   State<MyProfile> createState() => _MyProfileState();
 }
 
-class _MyProfileState extends State<MyProfile> {
+class _MyProfileState extends State<MyProfile> with WidgetsBindingObserver {
+  late String profileImgState;
+
+  void updateProfileImg(String newProfileImg) {
+    setState(() {
+      profileImgState = newProfileImg;
+    });
+  }
+
+
   Future<void> _signOut() async {
     int statusCode = await logOut(widget.token);
     if (statusCode == 200) {
@@ -79,6 +91,17 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    profileImgState = widget.profileImg;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
@@ -93,8 +116,8 @@ class _MyProfileState extends State<MyProfile> {
                   height: 120,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: const Image(
-                      image: AssetImage('assets/default-profile.png'),
+                    child: Image(
+                      image: NetworkImage(profileImgState),
                     ),
                   ),
                 ),
@@ -104,11 +127,11 @@ class _MyProfileState extends State<MyProfile> {
               height: 20,
             ),
             Text(
-              'Profile page header',
+              widget.email,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             Text(
-              'Profile page subheader',
+              widget.username,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(
@@ -127,6 +150,9 @@ class _MyProfileState extends State<MyProfile> {
                     PageTransition(
                         child: SettingsScreen(
                           token: widget.token,
+                          email: widget.email,
+                          profileImg: widget.profileImg,
+                          updateProfileImgCallback: updateProfileImg,
                         ),
                         type: PageTransitionType.rightToLeft));
               },
