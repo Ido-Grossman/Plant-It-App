@@ -9,7 +9,6 @@ from django.contrib.auth.hashers import make_password, check_password
 class Plant(models.Model):
     latin = models.CharField(max_length=100)
     family = models.CharField(max_length=150)
-    common = models.CharField(max_length=150)
     category = models.CharField(max_length=40)
     origin = models.CharField(max_length=30)
     climate = models.CharField(max_length=30)
@@ -17,7 +16,6 @@ class Plant(models.Model):
     idealight = models.CharField(max_length=150)
     watering = models.CharField(max_length=300)
     water_duration = models.IntegerField()
-    use = models.CharField(max_length=100)
     mincelsius = models.IntegerField(default=0)
     maxcelsius = models.IntegerField(default=20)
     minfahrenheit = models.IntegerField(default=0)
@@ -31,6 +29,16 @@ class User_Plants(models.Model):
     last_watering = models.DateField(6)
     is_healthy = models.SmallIntegerField(default=1)
     nickname = models.CharField(default=None, null=True, max_length=100)
+
+
+class common(models.Model):
+    common = models.CharField(max_length=50)
+    plant = models.ManyToManyField(Plant)
+
+
+class use(models.Model):
+    use = models.CharField(max_length=50)
+    plant = models.ManyToManyField(Plant)
 
 
 class CustomUserManager(BaseUserManager):
