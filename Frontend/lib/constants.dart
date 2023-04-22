@@ -16,7 +16,7 @@ class Consts {
     }
   }
 
-  static var PRODUCTION = true;
+  static var PRODUCTION = false;
 
   // colors
   static var primaryColor = Color.fromARGB(255, 31, 85, 56);

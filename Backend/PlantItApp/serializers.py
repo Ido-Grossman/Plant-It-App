@@ -1,9 +1,29 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from .models import Plant, common, use
+
+
+class LocalImageField(serializers.ImageField):
+    def to_representation(self, value):
+        path = value.file.name
+        return path
 
 
 class PhotoSerializer(serializers.Serializer):
     image = serializers.CharField()
+
+
+# a serializer for the plant with its common names and uses
+class PlantSerializer(serializers.ModelSerializer):
+    common = serializers.StringRelatedField(many=True, read_only=True)
+    use = serializers.StringRelatedField(many=True, read_only=True)
+    plant_photo = LocalImageField()
+
+    class Meta:
+        model = Plant
+        fields = '__all__'
+
+
 
 
 class UserRegistrationSerializer(serializers.Serializer):
