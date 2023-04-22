@@ -24,6 +24,15 @@ class PlantSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PlantSearchSerializer(serializers.ModelSerializer):
+    common = serializers.StringRelatedField(many=True, read_only=True)
+    plant_photo = LocalImageField()
+
+    class Meta:
+        model = Plant
+        fields = ['id', 'latin', 'common', 'plant_photo', 'common', 'category']
+
+
 
 
 class UserRegistrationSerializer(serializers.Serializer):
