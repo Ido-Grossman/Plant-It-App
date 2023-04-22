@@ -33,12 +33,18 @@ class User_Plants(models.Model):
 
 class common(models.Model):
     common = models.CharField(max_length=50)
-    plant = models.ManyToManyField(Plant)
+    plant = models.ManyToManyField(Plant, related_name='common')
+
+    def __str__(self):
+        return self.common
 
 
 class use(models.Model):
     use = models.CharField(max_length=50)
-    plant = models.ManyToManyField(Plant)
+    plant = models.ManyToManyField(Plant, related_name='use')
+
+    def __str__(self):
+        return self.use
 
 
 class CustomUserManager(BaseUserManager):
