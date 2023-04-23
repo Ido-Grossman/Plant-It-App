@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from PlantItApp.models import Plant
 from PlantItApp.models import UserPlants as UserPlantsModel
-from PlantItApp.serializers import PlantSerializer
+from PlantItApp.serializers import UserPlantsSerializer
 
 
 class UserPlants(APIView):
@@ -22,7 +22,7 @@ class UserPlants(APIView):
         # Get the plants of the user from the UserPlants model.
         plants = user.user_plants.all()
         # Serialize the plants.
-        serializer = PlantSerializer(plants, many=True)
+        serializer = UserPlantsSerializer(plants, many=True)
         # Return the plants.
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
