@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Plant, common, use
+from .models import Plant, UserPlants
 
 
 class LocalImageField(serializers.ImageField):
@@ -33,6 +33,13 @@ class PlantSearchSerializer(serializers.ModelSerializer):
         fields = ['id', 'latin', 'common', 'plant_photo', 'common', 'category']
 
 
+# a serializer for the user's plants.
+class UserPlantsSerializer(serializers.ModelSerializer):
+    plant = PlantSerializer()
+
+    class Meta:
+        model = UserPlants
+        fields = '__all__'
 
 
 class UserRegistrationSerializer(serializers.Serializer):
