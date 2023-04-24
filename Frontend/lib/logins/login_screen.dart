@@ -7,6 +7,7 @@ import 'package:frontend/home/main_screen.dart';
 import 'package:frontend/logins/forgot_password_screen.dart';
 import 'package:frontend/logins/google_login_screen.dart';
 import 'package:frontend/logins/sign_up_screen.dart';
+import 'package:frontend/menu/search_screen.dart';
 import 'package:frontend/widgets/plant_loading_icon.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -234,22 +235,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => PlantDetailsScreen(
-                                    imageUrl:
-                                        'https://st.depositphotos.com/2632165/4026/i/600/depositphotos_40264933-stock-photo-young-plant.jpg',
-                                    plantName: 'Monstera Deliciosa',
-                                    commonNames:
-                                        'Swiss Cheese Plant, Split-leaf Philodendron',
-                                    plantFamily: 'Araceae',
-                                    light: 'Bright indirect light',
-                                    howToWater:
-                                        'Water when the top 1-2 inches of soil are dry',
-                                    howToUse:
-                                        'Indoor houseplant or outdoor in shaded areas',
-                                    temperatureRange:
-                                        '65°F - 85°F (18°C - 29°C)',
-                                    wateringFrequency: 'Every 1-2 weeks',
-                                  ),
+                                  builder: (context) => const SearchScreen()
                                 ),
                               );
                             },

@@ -39,6 +39,9 @@ Future<String?> logIn(String email, String password) async {
         .post(url, body: {'email': email, 'password': password}).timeout(
       const Duration(seconds: 20),
     );
+    if (response.statusCode == 404){
+      return null;
+    }
     var body = jsonDecode(response.body);
     String token = body['token'];
     return token;
