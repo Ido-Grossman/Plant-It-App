@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:frontend/constants.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/Plant.dart';
 
 Future<String> uploadPhoto(String path) async {
   Uri uri = Uri.parse('${Consts.getApiLink()}photo-upload/');
@@ -128,5 +129,18 @@ Future<Map<String, dynamic>> getUserDetails(String? token, String email) async {
     return jsonDecode(response.body);
   } on TimeoutException {
     throw TimeoutException;
+  }
+}
+
+Future<List<Plant>> searchPlants(String query) async {
+  final response = await http.get(Uri.parse('${Consts.getApiLink()}plants/search/$query/'));
+
+  if (response.statusCode == 200) {
+    // Decode the JSON response as a List of dynamic objects
+    List<dynamic> jsonResponse = json.decode(response.body);
+    // Map the List of dynamic objects to a List of Plant instances
+    return jsonResponse.map((plantJson) => Plant.fromJson(plantJson)).toList();
+  } else {
+    throw Exception('Failed to load plants');
   }
 }
