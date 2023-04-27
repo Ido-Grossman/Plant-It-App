@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
+import 'package:frontend/service/http_service.dart';
+
+import '../models/Plant.dart';
 
 // Define your constants and options here.
 List<String> categories = ['Indoor', 'Outdoor', 'Succulents', 'Cacti'];
 List<String> climates = ['Tropical', 'Arid', 'Temperate', 'Mediterranean'];
 List<String> uses = ['Ornamental', 'Medicinal', 'Edible', 'Air-Purifying'];
-RangeValues tempRange = RangeValues(0, 120);
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -24,8 +26,9 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController minTempController = TextEditingController();
   TextEditingController maxTempController = TextEditingController();
 
-  Widget _buildFilterDropdown(
-      String label,
+  List<Plant> _plants = [];
+
+  Widget _buildFilterDropdown(String label,
       List<String> items,
       String? selectedItem,
       void Function(String? newValue) onChanged) {
@@ -34,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -51,10 +54,11 @@ class _SearchScreenState extends State<SearchScreen> {
             child: DropdownButton<String>(
               value: selectedItem,
               items: items
-                  .map((item) => DropdownMenuItem<String>(
-                child: Text(item),
-                value: item,
-              ))
+                  .map((item) =>
+                  DropdownMenuItem<String>(
+                    child: Text(item),
+                    value: item,
+                  ))
                   .toList(),
               onChanged: onChanged,
             ),
@@ -63,7 +67,6 @@ class _SearchScreenState extends State<SearchScreen> {
       ],
     );
   }
-
 
 
   AlertDialog _buildFilterDialog() {
@@ -83,35 +86,37 @@ class _SearchScreenState extends State<SearchScreen> {
             child: ListView(
               shrinkWrap: true,
               children: <Widget>[
-                _buildFilterDropdown('Category', categories, selectedCategory, (newValue) {
+                _buildFilterDropdown(
+                    'Category', categories, selectedCategory, (newValue) {
                   setState(() {
                     selectedCategory = newValue;
                   });
                 }),
-                SizedBox(height: 10),
-                _buildFilterDropdown('Climate', climates, selectedClimate, (newValue) {
+                const SizedBox(height: 10),
+                _buildFilterDropdown(
+                    'Climate', climates, selectedClimate, (newValue) {
                   setState(() {
                     selectedClimate = newValue;
                   });
                 }),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _buildFilterDropdown('Use', uses, selectedUse, (newValue) {
                   setState(() {
                     selectedUse = newValue;
                   });
                 }),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Temperature Range",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -123,26 +128,29 @@ class _SearchScreenState extends State<SearchScreen> {
                               child: TextField(
                                 controller: minTempController,
                                 keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   hintText: "Min",
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 5),
                                   border: OutlineInputBorder(),
                                   focusedBorder: OutlineInputBorder(),
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 5),
-                              child: Text('°C -', style: TextStyle(fontSize: 14)),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Text(
+                                  '°C -', style: TextStyle(fontSize: 14)),
                             ),
                             SizedBox(
                               width: 50,
                               child: TextField(
                                 controller: maxTempController,
                                 keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   hintText: "Max",
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 5),
                                   border: OutlineInputBorder(),
                                   focusedBorder: OutlineInputBorder(),
                                 ),
@@ -180,8 +188,9 @@ class _SearchScreenState extends State<SearchScreen> {
             double? maxTemp = double.tryParse(maxTempController.text);
             if (minTemp != null && maxTemp != null && minTemp >= maxTemp) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Minimum temperature should be lower than maximum.'),
+                const SnackBar(
+                  content: Text(
+                      'Minimum temperature should be lower than maximum.'),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -209,10 +218,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
 
-
-
-  void applyFilters(
-      String? category,
+  void applyFilters(String? category,
       String? climate,
       String? use,
       double? minTemp,
@@ -228,69 +234,102 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                        ),
-                        width: size.width * 0.9,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.search,
-                              color: Colors.black54.withOpacity(.6),
-                            ),
-                            const Expanded(
-                                child: TextField(
-                                  showCursor: false,
-                                  decoration: InputDecoration(
-                                    hintText: "Search for Plants",
-                                    border: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                  ),
-                                )),
-                            Icon(
-                              Icons.mic,
-                              color: Colors.black54.withOpacity(.6),
-                            ),
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                          color: Consts.primaryColor.withOpacity(.1),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                      ),
+                      width: size.width * 0.9,
+                      decoration: BoxDecoration(
+                        color: Consts.primaryColor.withOpacity(.1),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.search,
+                            color: Colors.black54.withOpacity(.6),
+                          ),
+                          Expanded(
+                              child: TextField(
+                                onChanged: (value) {
+                                  searchPlants(value).then((plants) {
+                                    setState(() {
+                                      _plants = plants;
+                                      print(_plants);
+                                    });
+                                  }).catchError((error) {
+                                    print('Error searching plants: $error');
+                                  });
+                                },
+                                showCursor: false,
+                                decoration: const InputDecoration(
+                                  hintText: "Search for Plants",
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                ),
+                              )),
+                          Icon(
+                            Icons.mic,
+                            color: Colors.black54.withOpacity(.6),
+                          ),
+                        ],
                       ),
                     ),
-                    IconButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => _buildFilterDialog(),
-                          );
-                        },
-                        icon: Icon(Icons.filter_list))
-                  ],
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => _buildFilterDialog(),
+                        );
+                      },
+                      icon: Icon(Icons.filter_list))
+                ],
+              ),
+            ),
+            // Wrap ListView.builder with a ConstrainedBox and a Flexible widget
+            Flexible(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: size.height * 0.8),
+                child: ListView.builder(
+                  itemCount: _plants.length,
+                  itemBuilder: (context, index) {
+                    Plant plant = _plants[index];
+                    return ListTile(
+                        leading: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: Image.network(plant.common[0] != '' ? Consts.mediaPrefix + plant.plantPhoto: Icons.error.toString(),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        title: Text(plant.common[0] == '' ? plant.latin : plant.common[0]),
+                    );
+                  },
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+
 
 }

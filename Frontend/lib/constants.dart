@@ -16,7 +16,9 @@ class Consts {
     }
   }
 
-  static var PRODUCTION = false;
+  static String mediaPrefix = 'https://plant-it-app-384117.lm.r.appspot.com/media/';
+
+  static var PRODUCTION = true;
 
   // colors
   static var primaryColor = Color.fromARGB(255, 31, 85, 56);
