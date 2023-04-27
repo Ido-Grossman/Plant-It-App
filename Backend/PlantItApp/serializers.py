@@ -3,12 +3,6 @@ from rest_framework import serializers
 from .models import Plant, UserPlants
 
 
-class LocalImageField(serializers.ImageField):
-    def to_representation(self, value):
-        path = value.file.name
-        return path
-
-
 class PhotoSerializer(serializers.Serializer):
     image = serializers.CharField()
 
@@ -17,7 +11,6 @@ class PhotoSerializer(serializers.Serializer):
 class PlantSerializer(serializers.ModelSerializer):
     common = serializers.StringRelatedField(many=True, read_only=True)
     use = serializers.StringRelatedField(many=True, read_only=True)
-    plant_photo = LocalImageField()
 
     class Meta:
         model = Plant
@@ -26,7 +19,6 @@ class PlantSerializer(serializers.ModelSerializer):
 
 class PlantSearchSerializer(serializers.ModelSerializer):
     common = serializers.StringRelatedField(many=True, read_only=True)
-    plant_photo = LocalImageField()
 
     class Meta:
         model = Plant
