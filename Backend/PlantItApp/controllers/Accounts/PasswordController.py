@@ -25,7 +25,7 @@ def forgot_password(request):
     c = {
         "email": user.email,
         "username": user.username,
-        'domain': 'plant-it-app-384117.lm.r.appspot.com/',
+        'domain': 'plant-it-app-384117.lm.r.appspot.com',
         'site_name': 'Plant-It-App',
         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
         'token': default_token_generator.make_token(user),
