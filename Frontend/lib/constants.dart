@@ -16,8 +16,6 @@ class Consts {
     }
   }
 
-  static String mediaPrefix = 'https://plant-it-app-384117.lm.r.appspot.com/media/';
-
   static var PRODUCTION = false;
 
   // colors
