@@ -25,11 +25,11 @@ def forgot_password(request):
     c = {
         "email": user.email,
         "username": user.username,
-        'domain': 'https://plant-it-app-384117.lm.r.appspot.com/',
+        'domain': 'plant-it-app-384117.lm.r.appspot.com/',
         'site_name': 'Plant-It-App',
         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
         'token': default_token_generator.make_token(user),
-        'protocol': 'http',
+        'protocol': 'https',
     }
     # Renders the email to a string and sends it to the user email.
     message = render_to_string(email_template_name, c)
