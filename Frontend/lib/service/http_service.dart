@@ -66,6 +66,20 @@ Future<int> chooseUsername(String username, String? token) async {
   }
 }
 
+Future<int> setUsername(String username, String? token) async {
+  final url = Uri.parse('${Consts.getApiLink()}accounts/set-username/');
+  try {
+    Map<String, String> headers = {"Authorization": "Token $token"};
+    final response = await http
+        .put(url, headers: headers, body: {'username': username}).timeout(
+      const Duration(seconds: 10),
+    );
+    return response.statusCode;
+  } on TimeoutException {
+    return -1;
+  }
+}
+
 Future<int> setPassword(String password, String? token) async {
   final url = Uri.parse('${Consts.getApiLink()}accounts/set-password/');
   try {

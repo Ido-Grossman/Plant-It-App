@@ -159,7 +159,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: () async {
                 if (newUsername != null && newUsername!.isNotEmpty) {
                   int statusCode =
-                  await chooseUsername(newUsername!, widget.token);
+                  await setUsername(newUsername!, widget.token);
                   if (statusCode == 200) {
                     widget.updateUsernameCallback(newUsername!);
                     Navigator.of(context).pop();
