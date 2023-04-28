@@ -19,11 +19,12 @@ import 'contact_support_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   final String? token;
-  final String email;
+  final String username;
   String profileImg;
   final Function(String) updateProfileImgCallback;
+  final Function(String) updateUsernameCallback;
 
-  SettingsScreen({super.key, required this.token, required this.email, required this.profileImg, required this.updateProfileImgCallback});
+  SettingsScreen({super.key, required this.token, required this.username, required this.profileImg, required this.updateProfileImgCallback, required this.updateUsernameCallback});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -66,6 +67,120 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  Future<void> _showPasswordDialog() async {
+    String? newPassword;
+    String? confirmPassword;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Change Password'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'New password'),
+                  obscureText: true,
+                  onChanged: (value) {
+                    newPassword = value;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Confirm password'),
+                  obscureText: true,
+                  onChanged: (value) {
+                    confirmPassword = value;
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Save'),
+              onPressed: () async {
+                if (newPassword != null &&
+                    newPassword!.isNotEmpty &&
+                    newPassword == confirmPassword) {
+                  int statusCode =
+                  await setPassword(newPassword!, widget.token);
+                  if (statusCode == 200) {
+                    Navigator.of(context).pop();
+                  } else {
+                    // Handle errors
+                  }
+                } else {
+                  // Show error message
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showUsernameDialog() async {
+    String? newUsername;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Change Username'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'New username'),
+                  onChanged: (value) {
+                    newUsername = value;
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Save'),
+              onPressed: () async {
+                if (newUsername != null && newUsername!.isNotEmpty) {
+                  int statusCode =
+                  await chooseUsername(newUsername!, widget.token);
+                  if (statusCode == 200) {
+                    widget.updateUsernameCallback(newUsername!);
+                    Navigator.of(context).pop();
+                  } else if (statusCode == 409) {
+                    // Show error message
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Username already taken. Please try another one."),
+                      duration: Duration(seconds: 3),
+                    ));
+                  } else {
+                    // Handle other errors
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final appTheme = Provider.of<AppTheme>(context);
@@ -82,14 +197,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             text: 'Account Information',
           )),
           ListTile(
-            title: FontAdjustedText(text: 'Email'),
-            subtitle: FontAdjustedText(text: widget.email),
+            title: FontAdjustedText(text: 'Username'),
             trailing: SizedBox(
               width: 50,
               child: IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
-                  // Edit email
+                  _showUsernameDialog();
                 },
               ),
             ),
@@ -120,7 +234,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onPressed: () async {
                   await takePhoto();
                   await upPhoto(image!.path);
-                  var response = await getUserDetails(widget.token, widget.email);
+                  var response = await getUserDetails(widget.token, widget.username);
                   setState(() {
                     widget.profileImg = response['profile_picture'];
                   });
