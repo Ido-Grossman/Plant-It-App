@@ -5,6 +5,7 @@ import 'package:frontend/constants.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/Plant.dart';
+import '../models/PlantDetails.dart';
 
 Future<String> uploadPhoto(String path) async {
   Uri uri = Uri.parse('${Consts.getApiLink()}photo-upload/');
@@ -142,5 +143,15 @@ Future<List<Plant>> searchPlants(String query) async {
     return jsonResponse.map((plantJson) => Plant.fromJson(plantJson)).toList();
   } else {
     throw Exception('Failed to load plants');
+  }
+}
+
+Future<PlantDetails> fetchPlantDetails(int plantId) async {
+  final response = await http.get(Uri.parse('${Consts.getApiLink()}plants/$plantId/'));
+
+  if (response.statusCode == 200) {
+    return PlantDetails.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to load plant details');
   }
 }

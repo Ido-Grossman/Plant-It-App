@@ -18,7 +18,7 @@ class Consts {
 
   static String mediaPrefix = 'https://plant-it-app-384117.lm.r.appspot.com/media/';
 
-  static var PRODUCTION = true;
+  static var PRODUCTION = false;
 
   // colors
   static var primaryColor = Color.fromARGB(255, 31, 85, 56);

@@ -3,6 +3,8 @@ import 'package:frontend/constants.dart';
 import 'package:frontend/service/http_service.dart';
 
 import '../models/Plant.dart';
+import '../models/PlantDetails.dart';
+import '../plants/plant_info.dart';
 
 // Define your constants and options here.
 List<String> categories = ['Indoor', 'Outdoor', 'Succulents', 'Cacti'];
@@ -303,7 +305,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 ],
               ),
             ),
-            // Wrap ListView.builder with a ConstrainedBox and a Flexible widget
             Flexible(
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: size.height * 0.8),
@@ -311,18 +312,57 @@ class _SearchScreenState extends State<SearchScreen> {
                   itemCount: _plants.length,
                   itemBuilder: (context, index) {
                     Plant plant = _plants[index];
-                    return ListTile(
-                        leading: SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: Image.network(plant.common[0] != '' ? Consts.mediaPrefix + plant.plantPhoto: Icons.error.toString(),
-                            fit: BoxFit.cover,
+                    return InkWell(
+                      onTap: () async {
+                        PlantDetails plantDetails;
+                        try {
+                          plantDetails = await fetchPlantDetails(plant.id);
+                        } catch (e) {
+                          // Show an error message or handle the exception
+                          print("Error fetching plant details: $e");
+                          return;
+                        }
+                        // Navigate to the PlantDetailsScreen with the selected plant details
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PlantDetailsScreen(plantDetails: plantDetails,),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        elevation: 4,
+                        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          leading: SizedBox(
+                            width: 80,
+                            height: 100,
+                            child: Image.network(
+                              plant.plantPhoto,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Icon(Icons.error);
+                              },
+                            ),
+                          ),
+                          title: Text(
+                            plant.common[0] == '' ? plant.latin : plant.common[0],
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          subtitle: plant.common[0] == ''
+                              ? null
+                              : Text(
+                            plant.latin,
+                            style: TextStyle(color: Colors.grey[700], fontSize: 14),
                           ),
                         ),
-                        title: Text(plant.common[0] == '' ? plant.latin : plant.common[0]),
+                      ),
                     );
+
                   },
                 ),
+
               ),
             ),
           ],
@@ -330,6 +370,4 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
-
-
 }
