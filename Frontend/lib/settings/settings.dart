@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/service/http_service.dart';
+import 'package:frontend/settings/report_bug_screen.dart';
+import 'package:frontend/settings/tutorial_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +15,7 @@ import 'package:http/http.dart' as http;
 import '../main.dart';
 import '../widgets/plant_loading_icon.dart';
 import '../widgets/font_adjusted_text.dart';
+import 'contact_support_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   final String? token;
@@ -189,27 +192,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           Divider(),
           ListTile(
-            title: FontAdjustedText(text: 'Frequently Asked Questions'),
-            onTap: () {
-              // Access FAQ
-            },
-          ),
-          ListTile(
             title: FontAdjustedText(text: 'Tutorials'),
             onTap: () {
-              // Access video and text tutorials
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TutorialsPage(),
+                ),
+              );
             },
           ),
           ListTile(
             title: FontAdjustedText(text: 'Report a Bug'),
             onTap: () {
-              // Submit a bug report
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ReportBugPage(),
+                ),
+              );
             },
           ),
           ListTile(
             title: FontAdjustedText(text: 'Contact Support'),
             onTap: () {
-              // Access support contact options
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ContactSupportPage(),
+                ),
+              );
             },
           ),
         ],
