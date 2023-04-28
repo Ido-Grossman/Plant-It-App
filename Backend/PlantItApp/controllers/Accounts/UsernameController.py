@@ -31,13 +31,14 @@ def set_username(request):
         # If the user doesn't exist returns 404
         except User.DoesNotExist:
             return Response("User doesn't exist.", status=status.HTTP_404_NOT_FOUND)
-    # Sets the email parameters.
-    subject = "Welcome to Plant-It-App"
-    email_template_name = "registration_email.txt"
-    c = {
-        "username": username,
-    }
-    # Renders the email to a string and sends it to the user email.
-    message = render_to_string(email_template_name, c)
-    send_mail(subject, message, 'idoddii@gmail.com', [email], fail_silently=False)
+    if request.method == 'POST':
+        # Sets the email parameters.
+        subject = "Welcome to Plant-It-App"
+        email_template_name = "registration_email.txt"
+        c = {
+            "username": username,
+        }
+        # Renders the email to a string and sends it to the user email.
+        message = render_to_string(email_template_name, c)
+        send_mail(subject, message, 'idoddii@gmail.com', [email], fail_silently=False)
     return Response(status=status.HTTP_200_OK)
