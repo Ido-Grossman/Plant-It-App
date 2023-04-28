@@ -26,7 +26,7 @@ class TutorialsPage extends StatelessWidget {
               onTap: () async {
                 if (tutorial.link.isEmpty || !Uri.parse(tutorial.link).isAbsolute) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Invalid or empty URL')),
+                    SnackBar(content: Text('Invalid or empty URL please contact support')),
                   );
                 } else {
                     try {
