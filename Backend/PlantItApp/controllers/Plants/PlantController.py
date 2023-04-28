@@ -15,7 +15,7 @@ def get_plant_details(request, plant_id):
 
 
 @api_view(['GET'])
-def search_plants(request, plant_name):
+def search_plants(request, plant_name=None):
     # Get all the optional parameters.
     category = request.GET.get('category')
     climate = request.GET.get('climate')
@@ -23,8 +23,11 @@ def search_plants(request, plant_name):
     celsiusmin = request.GET.get('celsiusmin')
     celsiusmax = request.GET.get('celsiusmax')
     offset = request.GET.get('offset')
-    # Make the initial search by the plant name.
-    plants = Plant.objects.filter(Q(latin__icontains=plant_name) | Q(common__common__icontains=plant_name)).distinct()
+    if plant_name:
+        # Make the initial search by the plant name.
+        plants = Plant.objects.filter(Q(latin__icontains=plant_name) | Q(common__common__icontains=plant_name)).distinct()
+    else:
+        plants = Plant.objects.all()
     # If the plant is not found, returns 404 Not Found.
     if not plants:
         return Response(status=status.HTTP_404_NOT_FOUND)
