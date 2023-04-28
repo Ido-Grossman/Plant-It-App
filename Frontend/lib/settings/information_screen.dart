@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
+import 'package:frontend/settings/privacy_policy_screen.dart';
+import 'package:frontend/settings/terms_of_service_screen.dart';
 
 import '../widgets/font_adjusted_text.dart';
 
@@ -34,13 +36,23 @@ class InformationScreen extends StatelessWidget {
           ListTile(
             title: FontAdjustedText(text: 'Privacy Policy'),
             onTap: () {
-              // Open privacy policy URL
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PrivacyPolicyScreen(),
+                ),
+              );
             },
           ),
           ListTile(
             title: FontAdjustedText(text: 'Terms of Service'),
             onTap: () {
-              // Open terms of service URL
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TermsOfServiceScreen(),
+                ),
+              );
             },
           ),
           Divider(),
