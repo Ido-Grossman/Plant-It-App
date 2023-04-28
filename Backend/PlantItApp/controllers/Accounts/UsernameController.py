@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 
 
-@api_view(['Post'])
+@api_view(['Post', 'Put'])
 @authentication_classes([TokenAuthentication])
 def set_username(request):
     # Gets the parameters from the request.
