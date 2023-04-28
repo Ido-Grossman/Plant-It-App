@@ -19,10 +19,11 @@ class PlantSerializer(serializers.ModelSerializer):
 
 class PlantSearchSerializer(serializers.ModelSerializer):
     common = serializers.StringRelatedField(many=True, read_only=True)
+    use = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Plant
-        fields = ['id', 'latin', 'common', 'plant_photo', 'common', 'category']
+        fields = ['id', 'latin', 'common', 'plant_photo', 'common', 'category', 'use', 'mincelsius', 'maxcelsius', 'climate']
 
 
 # a serializer for the user's plants.
