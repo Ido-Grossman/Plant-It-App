@@ -66,6 +66,20 @@ Future<int> chooseUsername(String username, String? token) async {
   }
 }
 
+Future<int> setPassword(String password, String? token) async {
+  final url = Uri.parse('${Consts.getApiLink()}accounts/set-password/');
+  try {
+    Map<String, String> headers = {"Authorization": "Token $token"};
+    final response = await http
+        .post(url, headers: headers, body: {'password': password}).timeout(
+      const Duration(seconds: 10),
+    );
+    return response.statusCode;
+  } on TimeoutException {
+    return -1;
+  }
+}
+
 Future<String?> logInGoogle(String? email, String uid) async {
   final url = Uri.parse('${Consts.getApiLink()}accounts/google-login/');
   try {

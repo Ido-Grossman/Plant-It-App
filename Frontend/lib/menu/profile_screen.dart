@@ -25,10 +25,17 @@ class MyProfile extends StatefulWidget {
 
 class _MyProfileState extends State<MyProfile> with WidgetsBindingObserver {
   late String profileImgState;
+  late String username;
 
   void updateProfileImg(String newProfileImg) {
     setState(() {
       profileImgState = newProfileImg;
+    });
+  }
+
+  void updateUsername(String newUsername) {
+    setState(() {
+      username = newUsername;
     });
   }
 
@@ -52,6 +59,7 @@ class _MyProfileState extends State<MyProfile> with WidgetsBindingObserver {
   }
 
   Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
+
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // User must tap a button to close the dialog.
@@ -94,6 +102,7 @@ class _MyProfileState extends State<MyProfile> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     profileImgState = widget.profileImg;
+    username = widget.username;
   }
 
   @override
@@ -131,7 +140,7 @@ class _MyProfileState extends State<MyProfile> with WidgetsBindingObserver {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             Text(
-              widget.username,
+              username,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(
@@ -150,9 +159,10 @@ class _MyProfileState extends State<MyProfile> with WidgetsBindingObserver {
                     PageTransition(
                         child: SettingsScreen(
                           token: widget.token,
-                          email: widget.email,
-                          profileImg: widget.profileImg,
+                          username: username,
+                          profileImg: profileImgState,
                           updateProfileImgCallback: updateProfileImg,
+                          updateUsernameCallback: updateUsername,
                         ),
                         type: PageTransitionType.rightToLeft));
               },
