@@ -1,5 +1,5 @@
 {% autoescape off %}
-Dear {username},
+Dear {{username}},
 
 Thank you for registering for Plant-It-App! We are excited to have you join our community of plant enthusiasts and help you take care of your home plants.
 
