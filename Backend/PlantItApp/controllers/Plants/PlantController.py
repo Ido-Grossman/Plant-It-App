@@ -1,5 +1,6 @@
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes
 from rest_framework import status
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -8,6 +9,7 @@ from PlantItApp.models import Plant
 
 
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
 def get_plant_details(request, plant_id):
     plant = get_object_or_404(Plant, id=plant_id)
     serializer = PlantSerializer(plant)
@@ -15,6 +17,7 @@ def get_plant_details(request, plant_id):
 
 
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
 def search_plants(request, plant_name=None):
     # Get all the optional parameters.
     category = request.GET.get('category')
