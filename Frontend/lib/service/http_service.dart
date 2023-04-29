@@ -147,18 +147,35 @@ Future<Map<String, dynamic>> getUserDetails(String? token, String email) async {
   }
 }
 
-Future<List<Plant>> searchPlants(String query, {int offset = 0}) async {
-  final response = await http.get(Uri.parse('${Consts.getApiLink()}plants/search/$query/?offset=$offset'));
+Future<List<Plant>> searchPlants(String query, {int offset = 0, String? climate, String? category, String? use, double? celsiusMin, double? celsiusMax}) async {
+  String queryParams = "?offset=$offset";
+
+  if (climate != null) {
+    queryParams += "&climate=$climate";
+  }
+
+  if (category != null) {
+    queryParams += "&category=$category";
+  }
+
+  if (use != null) {
+    queryParams += "&use=$use";
+  }
+
+  if (celsiusMin != null && celsiusMax != null) {
+    queryParams += "&celsiusmin=$celsiusMin&celsiusmax=$celsiusMax";
+  }
+
+  final response = await http.get(Uri.parse('${Consts.getApiLink()}plants/search/$query/$queryParams'));
 
   if (response.statusCode == 200) {
-    // Decode the JSON response as a List of dynamic objects
     List<dynamic> jsonResponse = json.decode(response.body);
-    // Map the List of dynamic objects to a List of Plant instances
     return jsonResponse.map((plantJson) => Plant.fromJson(plantJson)).toList();
   } else {
     throw Exception('Failed to load plants');
   }
 }
+
 
 Future<PlantDetails> fetchPlantDetails(int plantId) async {
   final response = await http.get(Uri.parse('${Consts.getApiLink()}plants/$plantId/'));
@@ -167,5 +184,38 @@ Future<PlantDetails> fetchPlantDetails(int plantId) async {
     return PlantDetails.fromJson(jsonDecode(response.body));
   } else {
     throw Exception('Failed to load plant details');
+  }
+}
+
+Future<List<String>> fetchClimate() async {
+  final response = await http.get(Uri.parse('${Consts.getApiLink()}plants/climates/'));
+
+  if (response.statusCode == 200) {
+    List<dynamic> jsonResponse = json.decode(response.body);
+    return jsonResponse.map((climate) => climate.toString()).toList();
+  } else {
+    throw Exception('Failed to load climate');
+  }
+}
+
+Future<List<String>> fetchCategories() async{
+  final response = await http.get(Uri.parse('${Consts.getApiLink()}plants/categories/'));
+
+  if (response.statusCode == 200) {
+    List<dynamic> jsonResponse = json.decode(response.body);
+    return jsonResponse.map((category) => category.toString()).toList();
+  } else {
+    throw Exception('Failed to load categories');
+  }
+}
+
+Future<List<String>> fetchUses() async {
+  final response = await http.get(Uri.parse('${Consts.getApiLink()}plants/uses/'));
+
+  if (response.statusCode == 200) {
+    List<dynamic> jsonResponse = json.decode(response.body);
+    return jsonResponse.map((use) => use.toString()).toList();
+  } else {
+    throw Exception('Failed to load uses');
   }
 }
