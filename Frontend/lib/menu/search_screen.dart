@@ -29,6 +29,39 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController maxTempController = TextEditingController();
 
   List<Plant> _plants = [];
+  ScrollController _scrollController = ScrollController();
+  int _offset = 0;
+  String _currentQuery = '';
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMorePlants('');
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent / 2) {
+        fetchMorePlants(_currentQuery);
+      }
+    });
+  }
+
+  Future<void> fetchMorePlants(String query) async {
+    _offset += 1;
+    try {
+      List<Plant> newPlants = await searchPlants(query, offset: _offset);
+      setState(() {
+        _plants.addAll(newPlants);
+      });
+    } catch (e) {
+      print('Error fetching more plants: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   Widget _buildFilterDropdown(String label,
       List<String> items,
@@ -270,11 +303,14 @@ class _SearchScreenState extends State<SearchScreen> {
                           Expanded(
                               child: TextField(
                                 onChanged: (value) {
-                                  searchPlants(value).then((plants) {
+                                  _offset = 0;
+                                  _currentQuery = value;
+                                  searchPlants(value, offset: _offset).then((plants) {
                                     setState(() {
                                       _plants = plants;
                                       print(_plants);
                                     });
+                                    fetchMorePlants(value);
                                   }).catchError((error) {
                                     print('Error searching plants: $error');
                                   });
@@ -361,6 +397,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     );
 
                   },
+                  controller: _scrollController,
                 ),
 
               ),

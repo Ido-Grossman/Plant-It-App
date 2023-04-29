@@ -80,20 +80,6 @@ Future<int> setUsername(String username, String? token) async {
   }
 }
 
-Future<int> setPassword(String password, String? token) async {
-  final url = Uri.parse('${Consts.getApiLink()}accounts/set-password/');
-  try {
-    Map<String, String> headers = {"Authorization": "Token $token"};
-    final response = await http
-        .post(url, headers: headers, body: {'password': password}).timeout(
-      const Duration(seconds: 10),
-    );
-    return response.statusCode;
-  } on TimeoutException {
-    return -1;
-  }
-}
-
 Future<String?> logInGoogle(String? email, String uid) async {
   final url = Uri.parse('${Consts.getApiLink()}accounts/google-login/');
   try {
@@ -161,8 +147,8 @@ Future<Map<String, dynamic>> getUserDetails(String? token, String email) async {
   }
 }
 
-Future<List<Plant>> searchPlants(String query) async {
-  final response = await http.get(Uri.parse('${Consts.getApiLink()}plants/search/$query/'));
+Future<List<Plant>> searchPlants(String query, {int offset = 0}) async {
+  final response = await http.get(Uri.parse('${Consts.getApiLink()}plants/search/$query/?offset=$offset'));
 
   if (response.statusCode == 200) {
     // Decode the JSON response as a List of dynamic objects
