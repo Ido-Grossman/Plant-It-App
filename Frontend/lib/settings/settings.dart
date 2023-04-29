@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/service/http_service.dart';
 import 'package:frontend/settings/report_bug_screen.dart';
@@ -19,12 +20,13 @@ import 'contact_support_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   final String? token;
-  final String username;
+  String username;
   String profileImg;
+  final String email;
   final Function(String) updateProfileImgCallback;
   final Function(String) updateUsernameCallback;
 
-  SettingsScreen({super.key, required this.token, required this.username, required this.profileImg, required this.updateProfileImgCallback, required this.updateUsernameCallback});
+  SettingsScreen({super.key, required this.token, required this.username, required this.profileImg, required this.updateProfileImgCallback, required this.updateUsernameCallback, required this.email});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -75,25 +77,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Change Password'),
+          title: const Text('Are you sure you want to change your password?'),
           content: SingleChildScrollView(
             child: ListBody(
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'New password'),
-                  obscureText: true,
-                  onChanged: (value) {
-                    newPassword = value;
-                  },
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Confirm password'),
-                  obscureText: true,
-                  onChanged: (value) {
-                    confirmPassword = value;
-                  },
-                ),
-              ],
             ),
           ),
           actions: [
@@ -104,22 +90,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
             TextButton(
-              child: Text('Save'),
+              child: Text('Yes'),
               onPressed: () async {
-                if (newPassword != null &&
-                    newPassword!.isNotEmpty &&
-                    newPassword == confirmPassword) {
-                  int statusCode =
-                  await setPassword(newPassword!, widget.token);
+                  int statusCode = await forgotPass(widget.email);
                   if (statusCode == 200) {
+                    Fluttertoast.showToast(
+                      msg: "Check your mail, you received a reset password link.",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.blue,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
                     Navigator.of(context).pop();
                   } else {
-                    // Handle errors
+                    Consts.alertPopup(context, 'Something went wrong. Please try again.');
                   }
-                } else {
-                  // Show error message
                 }
-              },
             ),
           ],
         );
@@ -162,6 +150,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   await setUsername(newUsername!, widget.token);
                   if (statusCode == 200) {
                     widget.updateUsernameCallback(newUsername!);
+                    setState(() {
+                      widget.username = newUsername!;
+                    });
                     Navigator.of(context).pop();
                   } else if (statusCode == 409) {
                     // Show error message
@@ -198,6 +189,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           )),
           ListTile(
             title: FontAdjustedText(text: 'Username'),
+            subtitle: FontAdjustedText(text: widget.username),
             trailing: SizedBox(
               width: 50,
               child: IconButton(
@@ -215,8 +207,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               width: 50,
               child: IconButton(
                 icon: Icon(Icons.edit),
-                onPressed: () {
-                  // Edit password
+                onPressed: () async {
+                  _showPasswordDialog();
                 },
               ),
             ),

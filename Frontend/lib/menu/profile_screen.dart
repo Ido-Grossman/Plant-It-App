@@ -161,6 +161,7 @@ class _MyProfileState extends State<MyProfile> with WidgetsBindingObserver {
                           token: widget.token,
                           username: username,
                           profileImg: profileImgState,
+                          email: widget.email,
                           updateProfileImgCallback: updateProfileImg,
                           updateUsernameCallback: updateUsername,
                         ),
