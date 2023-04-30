@@ -28,6 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   TextEditingController minTempController = TextEditingController();
   TextEditingController maxTempController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   List<Plant> _plants = [];
   ScrollController _scrollController = ScrollController();
@@ -261,8 +262,8 @@ class _SearchScreenState extends State<SearchScreen> {
             if (minTemp != null && maxTemp != null && minTemp >= maxTemp) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content:
-                      Text('Minimum temperature should be lower than maximum.'),
+                  content: Text(
+                      'Minimum temperature should be lower than maximum.'),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -273,6 +274,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 selectedUse,
                 minTemp,
                 maxTemp,
+                searchController.text, // Pass the search query text
               );
               Navigator.of(context).pop();
             }
@@ -285,12 +287,12 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
         ),
+
       ],
     );
   }
 
-  void applyFilters(String? category, String? climate, String? use,
-      double? minTemp, double? maxTemp) {
+  void applyFilters(String? category, String? climate, String? use, double? minTemp, double? maxTemp, String searchText) {
     setState(() {
       selectedCategory = category;
       selectedClimate = climate;
@@ -298,7 +300,14 @@ class _SearchScreenState extends State<SearchScreen> {
       minTemperature = minTemp;
       maxTemperature = maxTemp;
     });
+
+    searchPlants(searchText, category: category, climate: climate, use: use, celsiusMin: minTemp, celsiusMax: maxTemp).then((newPlants) {
+      setState(() {
+        _plants = newPlants;
+      });
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -333,6 +342,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                           Expanded(
                             child: TextField(
+                              controller: searchController,
                               onChanged: (value) {
                                 searchPlants(
                                   value,
