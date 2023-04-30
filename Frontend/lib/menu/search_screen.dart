@@ -5,11 +5,12 @@ import 'package:frontend/service/http_service.dart';
 import '../models/Plant.dart';
 import '../models/PlantDetails.dart';
 import '../plants/plant_info.dart';
+import '../widgets/filter_dialog_popup.dart';
 
 // Define your constants and options here.
-List<String> categories = ['Indoor', 'Outdoor', 'Succulents', 'Cacti'];
-List<String> climates = ['Tropical', 'Arid', 'Temperate', 'Mediterranean'];
-List<String> uses = ['Ornamental', 'Medicinal', 'Edible', 'Air-Purifying'];
+List<String> categories = [''];
+List<String> climates = [''];
+List<String> uses = [''];
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -27,22 +28,39 @@ class _SearchScreenState extends State<SearchScreen> {
 
   TextEditingController minTempController = TextEditingController();
   TextEditingController maxTempController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   List<Plant> _plants = [];
   ScrollController _scrollController = ScrollController();
   int _offset = 0;
   String _currentQuery = '';
 
-
   @override
   void initState() {
     super.initState();
+    fetchAllFilters();
     fetchMorePlants('');
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent / 2) {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent / 2) {
         fetchMorePlants(_currentQuery);
       }
     });
+  }
+
+  Future<void> fetchAllFilters() async {
+    try {
+      List<String> newCategories = await fetchCategories();
+      List<String> newClimates = await fetchClimate();
+      List<String> newUses = await fetchUses();
+      setState(() {
+        categories += newCategories;
+        climates += newClimates;
+        uses += newUses;
+      });
+    } catch (e) {
+      print('Error fetching filters: $e');
+    }
   }
 
   Future<void> fetchMorePlants(String query) async {
@@ -63,10 +81,8 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
-  Widget _buildFilterDropdown(String label,
-      List<String> items,
-      String? selectedItem,
-      void Function(String? newValue) onChanged) {
+  Widget _buildFilterDropdown(String label, List<String> items,
+      String? selectedItem, void Function(String? newValue) onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -89,11 +105,10 @@ class _SearchScreenState extends State<SearchScreen> {
             child: DropdownButton<String>(
               value: selectedItem,
               items: items
-                  .map((item) =>
-                  DropdownMenuItem<String>(
-                    child: Text(item),
-                    value: item,
-                  ))
+                  .map((item) => DropdownMenuItem<String>(
+                        child: Text(item),
+                        value: item,
+                      ))
                   .toList(),
               onChanged: onChanged,
             ),
@@ -103,8 +118,10 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-
   AlertDialog _buildFilterDialog() {
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    GlobalKey<State<StatefulWidget>> contentKey = GlobalKey();
+
     return AlertDialog(
       title: Text(
         'Filter options',
@@ -115,96 +132,117 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       content: StatefulBuilder(
+        key: contentKey,
         builder: (BuildContext context, StateSetter setState) {
           return Container(
             width: double.minPositive,
-            child: ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                _buildFilterDropdown(
-                    'Category', categories, selectedCategory, (newValue) {
-                  setState(() {
-                    selectedCategory = newValue;
-                  });
-                }),
-                const SizedBox(height: 10),
-                _buildFilterDropdown(
-                    'Climate', climates, selectedClimate, (newValue) {
-                  setState(() {
-                    selectedClimate = newValue;
-                  });
-                }),
-                const SizedBox(height: 10),
-                _buildFilterDropdown('Use', uses, selectedUse, (newValue) {
-                  setState(() {
-                    selectedUse = newValue;
-                  });
-                }),
-                const SizedBox(height: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Temperature Range",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 50,
-                              child: TextField(
-                                controller: minTempController,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  hintText: "Min",
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 5),
-                                  border: OutlineInputBorder(),
-                                  focusedBorder: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: Text(
-                                  '°C -', style: TextStyle(fontSize: 14)),
-                            ),
-                            SizedBox(
-                              width: 50,
-                              child: TextField(
-                                controller: maxTempController,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  hintText: "Max",
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 5),
-                                  border: OutlineInputBorder(),
-                                  focusedBorder: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                            Text('°C', style: TextStyle(fontSize: 14)),
-                          ],
+            child: Form(
+              key: formKey,
+              child: ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  _buildFilterDropdown('Category', categories, selectedCategory,
+                      (newValue) {
+                    setState(() {
+                      selectedCategory = newValue;
+                    });
+                  }),
+                  const SizedBox(height: 10),
+                  _buildFilterDropdown('Climate', climates, selectedClimate,
+                      (newValue) {
+                    setState(() {
+                      selectedClimate = newValue;
+                    });
+                  }),
+                  const SizedBox(height: 10),
+                  _buildFilterDropdown('Use', uses, selectedUse, (newValue) {
+                    setState(() {
+                      selectedUse = newValue;
+                    });
+                  }),
+                  const SizedBox(height: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Temperature Range",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                      ),
+                      const SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 50,
+                                child: TextField(
+                                  controller: minTempController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: const InputDecoration(
+                                    hintText: "Min",
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 5),
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                child: Text('°C -',
+                                    style: TextStyle(fontSize: 14)),
+                              ),
+                              SizedBox(
+                                width: 50,
+                                child: TextField(
+                                  controller: maxTempController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: const InputDecoration(
+                                    hintText: "Max",
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 5),
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                              Text('°C', style: TextStyle(fontSize: 14)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
       ),
       actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            contentKey.currentState?.setState(() {
+              selectedCategory = '';
+              selectedClimate = '';
+              selectedUse = '';
+              minTempController.text = '';
+              maxTempController.text = '';
+            });
+          },
+          child: Text(
+            'Reset',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.orange[800],
+            ),
+          ),
+        ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -236,6 +274,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 selectedUse,
                 minTemp,
                 maxTemp,
+                searchController.text, // Pass the search query text
               );
               Navigator.of(context).pop();
             }
@@ -248,16 +287,12 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
         ),
+
       ],
     );
   }
 
-
-  void applyFilters(String? category,
-      String? climate,
-      String? use,
-      double? minTemp,
-      double? maxTemp) {
+  void applyFilters(String? category, String? climate, String? use, double? minTemp, double? maxTemp, String searchText) {
     setState(() {
       selectedCategory = category;
       selectedClimate = climate;
@@ -265,13 +300,18 @@ class _SearchScreenState extends State<SearchScreen> {
       minTemperature = minTemp;
       maxTemperature = maxTemp;
     });
+
+    searchPlants(searchText, category: category, climate: climate, use: use, celsiusMin: minTemp, celsiusMax: maxTemp).then((newPlants) {
+      setState(() {
+        _plants = newPlants;
+      });
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -301,27 +341,35 @@ class _SearchScreenState extends State<SearchScreen> {
                             color: Colors.black54.withOpacity(.6),
                           ),
                           Expanded(
-                              child: TextField(
-                                onChanged: (value) {
-                                  _offset = 0;
-                                  _currentQuery = value;
-                                  searchPlants(value, offset: _offset).then((plants) {
-                                    setState(() {
-                                      _plants = plants;
-                                      print(_plants);
-                                    });
-                                    fetchMorePlants(value);
-                                  }).catchError((error) {
-                                    print('Error searching plants: $error');
+                            child: TextField(
+                              controller: searchController,
+                              onChanged: (value) {
+                                searchPlants(
+                                  value,
+                                  offset: 0,
+                                  // Set the initial offset to 0
+                                  climate: selectedClimate,
+                                  category: selectedCategory,
+                                  use: selectedUse,
+                                  celsiusMin: minTemperature,
+                                  celsiusMax: maxTemperature,
+                                ).then((plants) {
+                                  setState(() {
+                                    _plants = plants;
+                                    print(_plants);
                                   });
-                                },
-                                showCursor: false,
-                                decoration: const InputDecoration(
-                                  hintText: "Search for Plants",
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                ),
-                              )),
+                                }).catchError((error) {
+                                  print('Error searching plants: $error');
+                                });
+                              },
+                              showCursor: false,
+                              decoration: const InputDecoration(
+                                hintText: "Search for Plants",
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                              ),
+                            ),
+                          ),
                           Icon(
                             Icons.mic,
                             color: Colors.black54.withOpacity(.6),
@@ -362,15 +410,19 @@ class _SearchScreenState extends State<SearchScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => PlantDetailsScreen(plantDetails: plantDetails,),
+                            builder: (context) => PlantDetailsScreen(
+                              plantDetails: plantDetails,
+                            ),
                           ),
                         );
                       },
                       child: Card(
                         elevation: 4,
-                        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         child: ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           leading: SizedBox(
                             width: 80,
                             height: 100,
@@ -383,23 +435,25 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                           title: Text(
-                            plant.common[0] == '' ? plant.latin : plant.common[0],
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            plant.common[0] == ''
+                                ? plant.latin
+                                : plant.common[0],
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           subtitle: plant.common[0] == ''
                               ? null
                               : Text(
-                            plant.latin,
-                            style: TextStyle(color: Colors.grey[700], fontSize: 14),
-                          ),
+                                  plant.latin,
+                                  style: TextStyle(
+                                      color: Colors.grey[700], fontSize: 14),
+                                ),
                         ),
                       ),
                     );
-
                   },
                   controller: _scrollController,
                 ),
-
               ),
             ),
           ],
