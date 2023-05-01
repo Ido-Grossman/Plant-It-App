@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Plant, UserPlants
+from .models import Plant, UserPlants, Disease
 
 
 class PhotoSerializer(serializers.Serializer):
@@ -26,9 +26,17 @@ class PlantSearchSerializer(serializers.ModelSerializer):
         fields = ['id', 'latin', 'common', 'plant_photo', 'common', 'category', 'use', 'mincelsius', 'maxcelsius', 'climate']
 
 
+# a serializer for the plant diseases.
+class DiseaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Disease
+        fields = '__all__'
+
+
 # a serializer for the user's plants.
 class UserPlantsSerializer(serializers.ModelSerializer):
     plant = PlantSerializer()
+    disease = DiseaseSerializer()
 
     class Meta:
         model = UserPlants
