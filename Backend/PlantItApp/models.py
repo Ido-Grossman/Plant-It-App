@@ -23,11 +23,19 @@ class Plant(models.Model):
     plant_photo = models.ImageField(upload_to='plant_photos/')
 
 
+class Disease(models.Model):
+    disease = models.CharField(max_length=50)
+    care = models.CharField(max_length=300, null=True)
+
+    def __str__(self):
+        return self.disease
+
+
 class UserPlants(models.Model):
     plant = models.ForeignKey(Plant, on_delete=models.CASCADE, related_name='user_plants')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_plants')
     last_watering = models.DateField(6)
-    is_healthy = models.SmallIntegerField(default=1)
+    disease = models.ForeignKey(Disease, on_delete=models.CASCADE, related_name='user_plants')
     nickname = models.CharField(default=None, null=True, max_length=100)
 
 
