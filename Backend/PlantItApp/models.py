@@ -55,6 +55,21 @@ class Use(models.Model):
         return self.use
 
 
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
+    plant = models.ForeignKey(Plant, on_delete=models.CASCADE, related_name='posts')
+
+
+class Reply(models.Model):
+    content = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='replies')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='replies')
+
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, uid=None, **kwargs):
         if not email:
