@@ -4,6 +4,7 @@ class Plant {
   final List<String> common;
   final String plantPhoto;
   final String category;
+  final String health;
 
   Plant({
     required this.id,
@@ -11,6 +12,7 @@ class Plant {
     required this.common,
     required this.plantPhoto,
     required this.category,
+    required this.health,
   });
 
   factory Plant.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Plant {
       common: List<String>.from(json['common']),
       plantPhoto: json['plant_photo'],
       category: json['category'],
+      health: json['health'],
     );
   }
 }
