@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Plant, UserPlants, Disease
+from .models import Plant, UserPlants, Disease, Post
 
 
 class PhotoSerializer(serializers.Serializer):
@@ -41,6 +41,19 @@ class UserPlantsSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserPlants
         fields = '__all__'
+
+
+class PostSerializer(serializers.ModelSerializer):
+    # Get the username of user_id
+    user = serializers.SerializerMethodField('get_username_from_user_id')
+
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+    def get_username_from_user_id(self, post):
+        username = post.user.username
+        return username
 
 
 class UserRegistrationSerializer(serializers.Serializer):
