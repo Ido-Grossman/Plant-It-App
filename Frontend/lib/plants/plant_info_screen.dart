@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
+import 'package:frontend/models/plant_info.dart';
+import 'package:frontend/service/http_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../models/PlantDetails.dart';
 
 class PlantDetailsScreen extends StatelessWidget {
-  final PlantDetails plantDetails;
+  final PlantInfo plantInfo;
+  final String? token;
+  final String email;
 
-  const PlantDetailsScreen({Key? key, required this.plantDetails})
+  const PlantDetailsScreen(
+      {Key? key,
+      required this.plantInfo,
+      required this.token,
+      required this.email})
       : super(key: key);
 
   @override
@@ -17,11 +25,11 @@ class PlantDetailsScreen extends StatelessWidget {
         ? Consts.primaryColor
         : Consts.greenDark;
 
-    String commonNames = plantDetails.common.join(', ');
-    String howToUse = plantDetails.use.join(', ');
+    String commonNames = plantInfo.common.join(', ');
+    String howToUse = plantInfo.use.join(', ');
     String temperatureRange =
-        '${plantDetails.minCelsius}°C - ${plantDetails.maxCelsius}°C (${plantDetails.minFahrenheit}°F - ${plantDetails.maxFahrenheit}°F)';
-    String wateringFrequency = 'Every ${plantDetails.waterDuration} days';
+        '${plantInfo.minCelsius}°C - ${plantInfo.maxCelsius}°C (${plantInfo.minFahrenheit}°F - ${plantInfo.maxFahrenheit}°F)';
+    String wateringFrequency = 'Every ${plantInfo.waterDuration} days';
 
     return Scaffold(
       appBar: AppBar(
@@ -38,11 +46,11 @@ class PlantDetailsScreen extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.network(plantDetails.plantPhoto, fit: BoxFit.cover),
+              child: Image.network(plantInfo.plantPhoto, fit: BoxFit.cover),
             ),
             SizedBox(height: 16),
             Text(
-              plantDetails.latin,
+              plantInfo.latin,
               style: GoogleFonts.pacifico(fontSize: 28, color: textColor),
             ),
             SizedBox(height: 8),
@@ -52,7 +60,7 @@ class PlantDetailsScreen extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Plant Family: ${plantDetails.family}',
+              'Plant Family: ${plantInfo.family}',
               style: GoogleFonts.lato(fontSize: 18),
             ),
             SizedBox(height: 16),
@@ -62,7 +70,7 @@ class PlantDetailsScreen extends StatelessWidget {
             ),
             SizedBox(height: 4),
             Text(
-              '${plantDetails.toleratedLight} (Tolerated), ${plantDetails.idealLight} (Ideal)',
+              '${plantInfo.toleratedlight} (Tolerated), ${plantInfo.idealight} (Ideal)',
               style: GoogleFonts.lato(fontSize: 18),
             ),
             SizedBox(height: 16),
@@ -72,7 +80,7 @@ class PlantDetailsScreen extends StatelessWidget {
             ),
             SizedBox(height: 4),
             Text(
-              plantDetails.watering,
+              plantInfo.watering,
               style: GoogleFonts.lato(fontSize: 18),
             ),
             SizedBox(height: 16),
@@ -111,18 +119,32 @@ class PlantDetailsScreen extends StatelessWidget {
       floatingActionButton: SizedBox(
         width: 130, // Adjust the width to your preference
         height: 48, // Adjust the height to your preference
-      child: FloatingActionButton.extended(
-        onPressed: () {
-          // Add your logic for adding the plant to the list
-        },
-        backgroundColor: textColor,
-        label: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0),
-          child: Text("Add to List"),
+        child: FloatingActionButton.extended(
+          onPressed: () async {
+            int statusCode =
+                await addPlantToList(email, token!, plantInfo.id);
+            if (statusCode == 201) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Plant added to list'),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Could not add plant to list'),
+                ),
+              );
+            }
+          },
+          backgroundColor: textColor,
+          label: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 0),
+            child: Text("Add to List"),
+          ),
+          icon: const Icon(Icons.add),
         ),
-        icon: const Icon(Icons.add),
       ),
-    ),
     );
   }
 }

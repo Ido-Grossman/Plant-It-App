@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class PlantCard extends StatelessWidget {
@@ -8,6 +6,7 @@ class PlantCard extends StatelessWidget {
   final String healthStatus;
   final VoidCallback onPlantTap;
   final VoidCallback onSickIndicatorTap;
+  final VoidCallback onDeletePressed;
 
   PlantCard({
     super.key,
@@ -16,57 +15,92 @@ class PlantCard extends StatelessWidget {
     required this.healthStatus,
     required this.onPlantTap,
     required this.onSickIndicatorTap,
+    required this.onDeletePressed,
   });
 
   @override
   Widget build(BuildContext context) {
-
-    return InkWell(
-      onTap: onPlantTap,
+    return Container(
       child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Image.network(imageUrl),
-                Positioned(
-                  bottom: 10,
-                  left: 10,
-                  child: InkWell(
-                    onTap: healthStatus == 'Sick' ? onSickIndicatorTap : null,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: healthStatus == 'Healthy' ? Colors.green : Colors.red,
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Container(
+          width: double.infinity,
+          height: 250,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: NetworkImage(imageUrl),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.25),
+                BlendMode.darken,
+              ),
+            ),
+          ),
+          child: Stack(
+            children: [
+              InkWell(
+                onTap: onPlantTap,
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+              ),
+              Positioned(
+                bottom: 15,
+                left: 15,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                      child: Text(
-                        healthStatus,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                    ),
+                    SizedBox(height: 5),
+                    GestureDetector(
+                      onTap: healthStatus == 'Sick' ? onSickIndicatorTap : null,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: healthStatus == 'Healthy'
+                              ? Colors.green
+                              : Colors.red,
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: Text(
+                          healthStatus,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Text(
-                name,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  ],
                 ),
               ),
-            ),
-          ],
+              Positioned(
+                top: 10,
+                right: 10,
+                child: IconButton(
+                  onPressed: onDeletePressed,
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
 }

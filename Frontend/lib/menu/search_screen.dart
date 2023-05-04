@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
+import 'package:frontend/models/plant_info.dart';
 import 'package:frontend/service/http_service.dart';
 
 import '../models/Plant.dart';
 import '../models/PlantDetails.dart';
-import '../plants/plant_info.dart';
+import '../plants/plant_info_screen.dart';
 import '../widgets/filter_dialog_popup.dart';
 
 // Define your constants and options here.
@@ -13,7 +14,9 @@ List<String> climates = [''];
 List<String> uses = [''];
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  final String email;
+  final String? token;
+  const SearchScreen({Key? key, required this.email, required this.token}) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -32,8 +35,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
   List<Plant> _plants = [];
   ScrollController _scrollController = ScrollController();
-  int _offset = 0;
+  int _offset = -1;
   String _currentQuery = '';
+
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -41,8 +46,9 @@ class _SearchScreenState extends State<SearchScreen> {
     fetchAllFilters();
     fetchMorePlants('');
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent / 2) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        // Fetch more plants only if the user has reached the bottom of the list
         fetchMorePlants(_currentQuery);
       }
     });
@@ -63,17 +69,28 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  Future<void> fetchMorePlants(String query) async {
+  Future<void> fetchMorePlants(String query, {bool resetList = false}) async {
     _offset += 1;
     try {
       List<Plant> newPlants = await searchPlants(query, offset: _offset);
-      setState(() {
-        _plants.addAll(newPlants);
-      });
+      if (newPlants.isEmpty) {
+        return;
+      }
+      if (resetList) {
+        setState(() {
+          _plants = newPlants;
+        });
+      } else {
+        setState(() {
+          _plants.addAll(newPlants);
+        });
+      }
     } catch (e) {
       print('Error fetching more plants: $e');
     }
   }
+
+
 
   @override
   void dispose() {
@@ -344,23 +361,9 @@ class _SearchScreenState extends State<SearchScreen> {
                             child: TextField(
                               controller: searchController,
                               onChanged: (value) {
-                                searchPlants(
-                                  value,
-                                  offset: 0,
-                                  // Set the initial offset to 0
-                                  climate: selectedClimate,
-                                  category: selectedCategory,
-                                  use: selectedUse,
-                                  celsiusMin: minTemperature,
-                                  celsiusMax: maxTemperature,
-                                ).then((plants) {
-                                  setState(() {
-                                    _plants = plants;
-                                    print(_plants);
-                                  });
-                                }).catchError((error) {
-                                  print('Error searching plants: $error');
-                                });
+                                _offset = -1; // Reset the offset
+                                _currentQuery = value; // Update the current query
+                                fetchMorePlants(value, resetList: true);
                               },
                               showCursor: false,
                               decoration: const InputDecoration(
@@ -370,6 +373,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                             ),
                           ),
+
+
                           Icon(
                             Icons.mic,
                             color: Colors.black54.withOpacity(.6),
@@ -398,9 +403,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     Plant plant = _plants[index];
                     return InkWell(
                       onTap: () async {
-                        PlantDetails plantDetails;
+                        PlantInfo plantInfo;
                         try {
-                          plantDetails = await fetchPlantDetails(plant.id);
+                          plantInfo = await fetchPlantInfo(plant.id);
                         } catch (e) {
                           // Show an error message or handle the exception
                           print("Error fetching plant details: $e");
@@ -411,7 +416,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => PlantDetailsScreen(
-                              plantDetails: plantDetails,
+                              email: widget.email,
+                              token: widget.token,
+                              plantInfo: plantInfo,
                             ),
                           ),
                         );

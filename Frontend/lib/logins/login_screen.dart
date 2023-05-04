@@ -13,7 +13,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-import '../plants/plant_info.dart';
+import '../plants/plant_info_screen.dart';
 import '../service/http_service.dart';
 import '../service/login_text_field.dart';
 import '../widgets/google_sign_button.dart';
@@ -230,16 +230,6 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                             ])),
                           ),
                         ),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SearchScreen()
-                                ),
-                              );
-                            },
-                            child: Text('plant info')),
                       ],
                     ),
                   ),

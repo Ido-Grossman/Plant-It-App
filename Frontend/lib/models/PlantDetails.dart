@@ -1,4 +1,5 @@
 class PlantDetails {
+  final int idToDelete;
   final int id;
   final List<String> common;
   final List<String> use;
@@ -16,8 +17,13 @@ class PlantDetails {
   final int minFahrenheit;
   final int maxFahrenheit;
   final String plantPhoto;
+  final Map<String, dynamic> disease;
+  final String lastWatering;
+  final String nickname;
+  final int user;
 
   PlantDetails({
+    required this.idToDelete,
     required this.id,
     required this.common,
     required this.use,
@@ -35,27 +41,36 @@ class PlantDetails {
     required this.minFahrenheit,
     required this.maxFahrenheit,
     required this.plantPhoto,
+    required this.disease,
+    required this.lastWatering,
+    required this.nickname,
+    required this.user,
   });
 
   factory PlantDetails.fromJson(Map<String, dynamic> json) {
     return PlantDetails(
-      id: json['id'],
-      common: List<String>.from(json['common']),
-      use: List<String>.from(json['use']),
-      latin: json['latin'],
-      family: json['family'],
-      category: json['category'],
-      origin: json['origin'],
-      climate: json['climate'],
-      toleratedLight: json['toleratedlight'],
-      idealLight: json['idealight'],
-      watering: json['watering'],
-      waterDuration: json['water_duration'],
-      minCelsius: json['mincelsius'],
-      maxCelsius: json['maxcelsius'],
-      minFahrenheit: json['minfahrenheit'],
-      maxFahrenheit: json['maxfahrenheit'],
-      plantPhoto: json['plant_photo'],
+      idToDelete: json['id'],
+      id: json['plant']['id'],
+      common: List<String>.from(json['plant']['common']),
+      use: List<String>.from(json['plant']['use']),
+      latin: json['plant']['latin'],
+      family: json['plant']['family'],
+      category: json['plant']['category'],
+      origin: json['plant']['origin'],
+      climate: json['plant']['climate'],
+      toleratedLight: json['plant']['toleratedlight'],
+      idealLight: json['plant']['idealight'],
+      watering: json['plant']['watering'],
+      waterDuration: json['plant']['water_duration'],
+      minCelsius: json['plant']['mincelsius'],
+      maxCelsius: json['plant']['maxcelsius'],
+      minFahrenheit: json['plant']['minfahrenheit'],
+      maxFahrenheit: json['plant']['maxfahrenheit'],
+      plantPhoto: json['plant']['plant_photo'],
+      disease: json['disease'],
+      lastWatering: json['last_watering'],
+      nickname: json['nickname'],
+      user: json['user'],
     );
   }
 }
