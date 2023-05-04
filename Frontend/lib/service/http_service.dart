@@ -233,12 +233,12 @@ Future<List<PlantDetails>> fetchMyPlants(String email, String? token) async {
   }
 }
 
-Future<int> addPlantToList(String email, String token, int plantId) async {
+Future<int> addPlantToList(String email, String token, int plantId, String nickname) async {
   final url = Uri.parse('${Consts.getApiLink()}users/$email/plants/');
   try {
     Map<String, String> headers = {"Authorization": "Token $token"};
     final response = await http.post(url, headers: headers,
-        body: {'plant_id': plantId.toString()}).timeout(
+        body: {'plant_id': plantId.toString(), 'plant_nickname': nickname}).timeout(
       const Duration(seconds: 10),
     );
     return response.statusCode;
