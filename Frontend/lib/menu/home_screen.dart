@@ -271,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
               height: 48,
             ),
             Text(
-              "When you should water your plants",
+              "When should you water your plants",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(

@@ -9,6 +9,7 @@ import 'package:frontend/menu/home_screen.dart';
 import 'package:frontend/menu/my_plants_screen.dart';
 import 'package:frontend/menu/profile_screen.dart';
 import 'package:frontend/menu/search_screen.dart';
+import 'package:frontend/models/PlantDetails.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:frontend/service/http_service.dart';
@@ -31,6 +32,8 @@ class _MainScreenState extends State<MainScreen> {
   late Future<Map<String, dynamic>> responseBody;
   File? image;
   final ImagePicker picker = ImagePicker();
+  var diseaseName;
+  String? username;
 
   int _bottomNavigationIdx = 0;
   int myPlantIndex = 1;
@@ -43,14 +46,164 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   List<String> screenTitleList = ['Home', 'My Plants', 'Search', 'Profile'];
+  List<String> userPlants = [];
 
   late String profileImg;
+  String? _selectedPlant;
 
   @override
   void initState() {
     super.initState();
     responseBody = getUserDetails(widget.token, widget.email);
   }
+
+  void updateUsername(String newUsername) {
+    setState(() {
+      username = newUsername;
+    });
+  }
+
+  void showCustomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          child: _buildDialogContent(context),
+        );
+      },
+    );
+  }
+
+  Widget _buildDialogContent(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
+    Color accentColor = currentTheme.colorScheme.secondary;
+
+    return SingleChildScrollView(
+      child: StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10.0,
+                  offset: Offset(0.0, 10.0),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                // Display the user's photo
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.file(
+                    image!,
+                    width: double.infinity,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  diseaseName,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: accentColor,
+                  ),
+                ),
+                SizedBox(height: 16),
+                const Text(
+                  'Disease Care',
+                  // Replace with the actual disease care instructions
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 16),
+                // Roll down menu of the user's plants
+                DropdownButton<String>(
+                  value: _selectedPlant,
+                  items: userPlants
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedPlant = newValue;
+                    });
+                  },
+                  hint: const Text('Select a plant'),
+                ),
+                SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Cancel Button
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+
+                    // Save Button
+                    ElevatedButton(
+                      onPressed: () {
+                        // Add your save functionality here
+                        Navigator.of(context).pop();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        child: Text(
+                          'Save',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Consts.primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+
+
 
   Future takePhoto() async {
     try {
@@ -171,10 +324,11 @@ class _MainScreenState extends State<MainScreen> {
                 child: Text('Error getting user details'),
               );
             } else {
+              username ??= snapshot.data!['username'];
               profileImg = snapshot.data!['profile_picture'];
               List<Widget> screens = [
                 HomeScreen(
-                  username: widget.username,
+                  username: username,
                 ),
                 MyPlants(
                   refreshNotifier: _myPlantsRefreshNotifier,
@@ -182,15 +336,18 @@ class _MainScreenState extends State<MainScreen> {
                   email: widget.email,
                   onNavigateAway: () {
                     _myPlantsRefreshNotifier.value = false;
-                  },),
+                  },
+                ),
                 SearchScreen(
                   email: widget.email,
-                  token: widget.token,),
+                  token: widget.token,
+                ),
                 MyProfile(
                   token: widget.token,
                   username: snapshot.data!['username'],
                   profileImg: profileImg,
                   email: widget.email,
+                  updateUsernameCallback: updateUsername,
                 )
               ];
               return IndexedStack(
@@ -208,13 +365,24 @@ class _MainScreenState extends State<MainScreen> {
             if (!mounted) {
               return;
             }
+            List<PlantDetails> newPlants = await fetchMyPlants(widget.email, widget.token);
+            List<String> newPlantsNames = [];
+            for (PlantDetails plant in newPlants) {
+              newPlantsNames.add(plant.nickname);
+            }
+            setState(() {
+              userPlants = newPlantsNames;
+            });
             // show loader
             presentLoader(context, text: 'Sending image...');
             // calling with http
-            var responseDataHttp = await uploadPhoto(image!.path);
+            diseaseName = await uploadPhoto(image!.path);
             // hide loader
             Navigator.of(context).pop();
-            // showing alert dialogs
+            showCustomDialog(context);
+            setState(() {
+              _selectedPlant = null;
+            });
           }
         },
         backgroundColor: Consts.primaryColor,
