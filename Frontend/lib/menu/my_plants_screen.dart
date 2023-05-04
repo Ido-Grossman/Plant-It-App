@@ -1,3 +1,4 @@
+import 'package:frontend/constants.dart';
 import 'package:frontend/service/http_service.dart';
 
 import '../models/PlantDetails.dart';
@@ -61,9 +62,9 @@ class _MyPlantsState extends State<MyPlants>  {
               : GridView.builder(
             padding: const EdgeInsets.all(4),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.7,
-              mainAxisSpacing: 4,
+              crossAxisCount: 1,
+              childAspectRatio: 1.4,
+              mainAxisSpacing: 2,
               crossAxisSpacing: 4,
             ),
             itemCount: plants.length,
@@ -96,8 +97,15 @@ class _MyPlantsState extends State<MyPlants>  {
                 onSickIndicatorTap: () {
                   // Show popup with plant care instructions
                 },
-                onDeletePressed: () {
-                  // Handle delete action
+                onDeletePressed: () async {
+                  int statusCode = await deletePlantFromList(widget.email, widget.token, plants[index].idToDelete);
+                  if (statusCode == 204){
+                    setState(() {
+                      _fetchAndSetPlants();
+                    });
+                  } else {
+                    Consts.alertPopup(context, 'Error Could not delete plant. Please try again.');
+                  }
                 },
               );
             },

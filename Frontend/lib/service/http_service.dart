@@ -246,3 +246,18 @@ Future<int> addPlantToList(String email, String token, int plantId) async {
     throw TimeoutException;
   }
 }
+
+Future<int> deletePlantFromList(String email, String? token, int plantId) async {
+  final url = Uri.parse('${Consts.getApiLink()}users/$email/plants/');
+  try {
+    print('plantId: $plantId');
+    Map<String, String> headers = {"Authorization": "Token $token"};
+    final response = await http.delete(url, headers: headers,
+        body: {'user_plant_id': plantId.toString()}).timeout(
+      const Duration(seconds: 10),
+    );
+    return response.statusCode;
+  } on TimeoutException {
+    throw TimeoutException;
+  }
+}
