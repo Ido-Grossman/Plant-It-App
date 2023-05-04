@@ -21,6 +21,7 @@ class PlantCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       child: Card(
         elevation: 3,
         shape: RoundedRectangleBorder(
@@ -51,14 +52,17 @@ class PlantCard extends StatelessWidget {
               ),
               Positioned(
                 bottom: 15,
-                left: 15,
+                left: 0,
+                right: 0,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       name,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -76,6 +80,7 @@ class PlantCard extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         child: Text(
                           healthStatus,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -99,6 +104,7 @@ class PlantCard extends StatelessWidget {
               ),
             ],
           ),
+
         ),
       ),
     );
