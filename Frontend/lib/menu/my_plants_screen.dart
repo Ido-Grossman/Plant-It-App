@@ -116,7 +116,7 @@ class _MyPlantsState extends State<MyPlants> {
                   itemBuilder: (context, index) {
                     return PlantCard(
                       imageUrl: plants[index].plantPhoto,
-                      name: plants[index].common[0],
+                      name: plants[index].nickname,
                       healthStatus: plants[index].disease['disease'],
                       onPlantTap: () async {
                         PlantInfo plantInfo;
