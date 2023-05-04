@@ -81,7 +81,7 @@ class PlantCard extends StatelessWidget {
                         child: Text(
                           healthStatus,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
@@ -96,7 +96,7 @@ class PlantCard extends StatelessWidget {
                 right: 10,
                 child: IconButton(
                   onPressed: onDeletePressed,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.delete,
                     color: Colors.white,
                   ),

@@ -61,7 +61,7 @@ class _MyPlantsState extends State<MyPlants>  {
           )
               : GridView.builder(
             padding: const EdgeInsets.all(4),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
               childAspectRatio: 1.4,
               mainAxisSpacing: 2,
@@ -71,7 +71,7 @@ class _MyPlantsState extends State<MyPlants>  {
             itemBuilder: (context, index) {
               return PlantCard(
                 imageUrl: plants[index].plantPhoto,
-                name: plants[index].common[0],
+                name: plants[index].nickname,
                 healthStatus: plants[index].disease['disease'],
                 onPlantTap: () async {
                   PlantInfo plantInfo;
