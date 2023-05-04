@@ -17,7 +17,6 @@ Future<String> uploadPhoto(String path) async {
   http.StreamedResponse response = await request.send();
   var responseBytes = await response.stream.toBytes();
   var responseString = utf8.decode(responseBytes);
-  print(responseString);
   return responseString;
 }
 
@@ -140,7 +139,6 @@ Future<Map<String, dynamic>> getUserDetails(String? token, String email) async {
     final response = await http.get(url, headers: headers).timeout(
       const Duration(seconds: 10),
     );
-    print(response.statusCode);
     return jsonDecode(response.body);
   } on TimeoutException {
     throw TimeoutException;

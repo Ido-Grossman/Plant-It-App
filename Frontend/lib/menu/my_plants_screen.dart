@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../models/Plant.dart';
 import '../plants/plant_card_list.dart';
 
+
+final _floatingActionButtonTag = UniqueKey();
 class MyPlants extends StatefulWidget {
   const MyPlants({Key? key}) : super(key: key);
 
@@ -54,6 +56,7 @@ class _MyPlantsState extends State<MyPlants> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: _floatingActionButtonTag,
         onPressed: () {
           // Navigate to the plant addition screen
         },

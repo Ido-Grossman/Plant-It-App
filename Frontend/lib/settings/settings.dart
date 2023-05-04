@@ -36,7 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   File? image;
   final ImagePicker picker = ImagePicker();
 
-  Future<String> upPhoto(String path) async {
+  Future<void> upPhoto(String path) async {
     Uri uri =
         Uri.parse('${Consts.getApiLink()}accounts/upload-profile-picture/');
     http.MultipartRequest request = http.MultipartRequest('PUT', uri);
@@ -49,10 +49,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
 
     http.StreamedResponse response = await request.send();
-    var responseBytes = await response.stream.toBytes();
-    var responseString = utf8.decode(responseBytes);
-    var decodedResponse = jsonDecode(responseString);
-    return decodedResponse['image_url'];
   }
 
   Future takePhoto() async {
@@ -226,9 +222,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onPressed: () async {
                   await takePhoto();
                   await upPhoto(image!.path);
-                  var response = await getUserDetails(widget.token, widget.username);
+                  var response = await getUserDetails(widget.token, widget.email);
                   setState(() {
                     widget.profileImg = response['profile_picture'];
+                    print(widget.profileImg);
                   });
                   widget.updateProfileImgCallback(response['profile_picture']);
                   // Edit profile picture
