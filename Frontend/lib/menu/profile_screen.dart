@@ -16,8 +16,9 @@ class MyProfile extends StatefulWidget {
   final String username;
   final String profileImg;
   final String email;
+  final Function(String) updateUsernameCallback;
 
-  const MyProfile({Key? key, required this.token, required this.username, required this.profileImg, required this.email}) : super(key: key);
+  const MyProfile({Key? key, required this.token, required this.username, required this.profileImg, required this.email, required this.updateUsernameCallback}) : super(key: key);
 
   @override
   State<MyProfile> createState() => _MyProfileState();
@@ -163,7 +164,10 @@ class _MyProfileState extends State<MyProfile> with WidgetsBindingObserver {
                           profileImg: profileImgState,
                           email: widget.email,
                           updateProfileImgCallback: updateProfileImg,
-                          updateUsernameCallback: updateUsername,
+                          updateUsernameCallback: (newUsername) {
+                            widget.updateUsernameCallback(newUsername);
+                            updateUsername(newUsername);
+                          },
                         ),
                         type: PageTransitionType.rightToLeft));
               },

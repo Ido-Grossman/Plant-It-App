@@ -145,8 +145,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   int statusCode =
                   await setUsername(newUsername!, widget.token);
                   if (statusCode == 200) {
-                    widget.updateUsernameCallback(newUsername!);
                     setState(() {
+                      widget.updateUsernameCallback(newUsername!);
                       widget.username = newUsername!;
                     });
                     Navigator.of(context).pop();
