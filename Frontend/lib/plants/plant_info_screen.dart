@@ -121,21 +121,51 @@ class PlantDetailsScreen extends StatelessWidget {
         height: 48, // Adjust the height to your preference
         child: FloatingActionButton.extended(
           onPressed: () async {
-            int statusCode =
-                await addPlantToList(email, token!, plantInfo.id);
-            if (statusCode == 201) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Plant added to list'),
-                ),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Could not add plant to list'),
-                ),
-              );
-            }
+            TextEditingController nicknameController = TextEditingController();
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Enter a nickname for the plant'),
+                  content: TextField(
+                    controller: nicknameController,
+                    decoration: InputDecoration(hintText: 'Nickname'),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        String nickname = nicknameController.text;
+                        if (nickname.isNotEmpty) {
+                          int statusCode =
+                          await addPlantToList(email, token!, plantInfo.id, nickname);
+                          if (statusCode == 201) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Plant added to list'),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Could not add plant to list'),
+                              ),
+                            );
+                          }
+                        }
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Add to List'),
+                    ),
+                  ],
+                );
+              },
+            );
           },
           backgroundColor: textColor,
           label: const Padding(
@@ -145,6 +175,7 @@ class PlantDetailsScreen extends StatelessWidget {
           icon: const Icon(Icons.add),
         ),
       ),
+
     );
   }
 }
