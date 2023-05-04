@@ -27,11 +27,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  ValueNotifier<bool> _myPlantsRefreshNotifier = ValueNotifier<bool>(false);
   late Future<Map<String, dynamic>> responseBody;
   File? image;
   final ImagePicker picker = ImagePicker();
 
   int _bottomNavigationIdx = 0;
+  int myPlantIndex = 1;
 
   List<IconData> screenIconsList = [
     Icons.home,
@@ -174,8 +176,16 @@ class _MainScreenState extends State<MainScreen> {
                 HomeScreen(
                   username: widget.username,
                 ),
-                MyPlants(),
-                SearchScreen(),
+                MyPlants(
+                  refreshNotifier: _myPlantsRefreshNotifier,
+                  token: widget.token,
+                  email: widget.email,
+                  onNavigateAway: () {
+                    _myPlantsRefreshNotifier.value = false;
+                  },),
+                SearchScreen(
+                  email: widget.email,
+                  token: widget.token,),
                 MyProfile(
                   token: widget.token,
                   username: snapshot.data!['username'],
@@ -226,6 +236,9 @@ class _MainScreenState extends State<MainScreen> {
         onTap: (index) {
           setState(() {
             _bottomNavigationIdx = index;
+            if (index == myPlantIndex) {
+              _myPlantsRefreshNotifier.value = !_myPlantsRefreshNotifier.value;
+            }
           });
         },
       ),

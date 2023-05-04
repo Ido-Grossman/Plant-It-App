@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:frontend/constants.dart';
+import 'package:frontend/models/plant_info.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/Plant.dart';
@@ -175,11 +176,11 @@ Future<List<Plant>> searchPlants(String query, {int offset = 0, String? climate,
 }
 
 
-Future<PlantDetails> fetchPlantDetails(int plantId) async {
+Future<PlantInfo> fetchPlantInfo(int plantId) async {
   final response = await http.get(Uri.parse('${Consts.getApiLink()}plants/$plantId/'));
 
   if (response.statusCode == 200) {
-    return PlantDetails.fromJson(jsonDecode(response.body));
+    return PlantInfo.fromJson(jsonDecode(response.body));
   } else {
     throw Exception('Failed to load plant details');
   }
@@ -215,5 +216,33 @@ Future<List<String>> fetchUses() async {
     return jsonResponse.map((use) => use.toString()).toList();
   } else {
     throw Exception('Failed to load uses');
+  }
+}
+
+Future<List<PlantDetails>> fetchMyPlants(String email, String? token) async {
+  final url = Uri.parse('${Consts.getApiLink()}users/$email/plants/');
+  try {
+    Map<String, String> headers = {"Authorization": "Token $token"};
+    final response = await http.get(url, headers: headers).timeout(
+      const Duration(seconds: 10),
+    );
+    List<dynamic> jsonResponse = jsonDecode(response.body);
+    return jsonResponse.map((plantJson) => PlantDetails.fromJson(plantJson)).toList().cast<PlantDetails>();
+  } on TimeoutException {
+    throw TimeoutException;
+  }
+}
+
+Future<int> addPlantToList(String email, String token, int plantId) async {
+  final url = Uri.parse('${Consts.getApiLink()}users/$email/plants/');
+  try {
+    Map<String, String> headers = {"Authorization": "Token $token"};
+    final response = await http.post(url, headers: headers,
+        body: {'plant_id': plantId.toString()}).timeout(
+      const Duration(seconds: 10),
+    );
+    return response.statusCode;
+  } on TimeoutException {
+    throw TimeoutException;
   }
 }
