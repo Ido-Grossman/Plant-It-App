@@ -1,8 +1,8 @@
 from django.urls import path
-from . import PhotoController
+from . import PhotoController, DiseaseController
 
 
 urlpatterns = [
     path('photo-upload/', PhotoController.photo_upload, name='photo_upload'),
-    path('set-disease/', PhotoController.photo_upload, name='set_disease'),
+    path('set-disease/<int:user_plant_id>/', DiseaseController.set_disease, name='set_disease'),
 ]
