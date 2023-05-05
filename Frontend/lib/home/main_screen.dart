@@ -50,6 +50,7 @@ class _MainScreenState extends State<MainScreen> {
 
   late String profileImg;
   String? _selectedPlant;
+  Map<String, PlantDetails> nicknameToPlant = {};
 
   @override
   void initState() {
@@ -80,9 +81,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildDialogContent(BuildContext context) {
-    ThemeData currentTheme = Theme.of(context);
-    Color accentColor = currentTheme.colorScheme.secondary;
-
     return SingleChildScrollView(
       child: StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
@@ -120,7 +118,7 @@ class _MainScreenState extends State<MainScreen> {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: accentColor,
+                    color: Consts.primaryColor,
                   ),
                 ),
                 SizedBox(height: 16),
@@ -130,7 +128,6 @@ class _MainScreenState extends State<MainScreen> {
                   style: TextStyle(fontSize: 16),
                 ),
                 SizedBox(height: 16),
-                // Roll down menu of the user's plants
                 DropdownButton<String>(
                   value: _selectedPlant,
                   items: userPlants
@@ -162,7 +159,7 @@ class _MainScreenState extends State<MainScreen> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: Padding(
+                      child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                         child: Text(
                           'Cancel',
@@ -173,21 +170,35 @@ class _MainScreenState extends State<MainScreen> {
 
                     // Save Button
                     ElevatedButton(
-                      onPressed: () {
-                        // Add your save functionality here
+                      onPressed: () async {
+                        int statusCode = await setDisease(diseaseName, widget.token, nicknameToPlant[_selectedPlant]!.idOfUser);
+                        if (statusCode == 200) {
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Health Status saved successfully'),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Error saving disease, Please try again.'),
+                            ),
+                          );
+                        }
                         Navigator.of(context).pop();
                       },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                        child: Text(
-                          'Save',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Consts.primaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        child: Text(
+                          'Save',
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
@@ -366,9 +377,11 @@ class _MainScreenState extends State<MainScreen> {
               return;
             }
             List<PlantDetails> newPlants = await fetchMyPlants(widget.email, widget.token);
+
             List<String> newPlantsNames = [];
             for (PlantDetails plant in newPlants) {
               newPlantsNames.add(plant.nickname);
+              nicknameToPlant[plant.nickname] = plant;
             }
             setState(() {
               userPlants = newPlantsNames;

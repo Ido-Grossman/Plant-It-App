@@ -67,7 +67,7 @@ class _MyPlantsState extends State<MyPlants> {
               child: const Text('Delete'),
               onPressed: () async {
                 int statusCode = await deletePlantFromList(
-                    widget.email, widget.token, plants[index].idToDelete);
+                    widget.email, widget.token, plants[index].idOfUser);
                 if (statusCode == 204) {
                   setState(() {
                     _fetchAndSetPlants();
