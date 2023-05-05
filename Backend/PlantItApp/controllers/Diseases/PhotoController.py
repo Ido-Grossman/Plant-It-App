@@ -28,5 +28,5 @@ def photo_upload(request):
     _, preds = torch.max(yb, dim=1)
     disease_name = settings.DISEASES[preds[0].item()]
     disease = Disease.objects.get(disease=disease_name)
-    serializer = DiseaseSerializer(data=disease)
-    return Response(serializer, status=status.HTTP_200_OK)
+    serializer = DiseaseSerializer(disease)
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
