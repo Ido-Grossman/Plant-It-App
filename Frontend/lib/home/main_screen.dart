@@ -389,7 +389,7 @@ class _MainScreenState extends State<MainScreen> {
             // show loader
             presentLoader(context, text: 'Sending image...');
             // calling with http
-            diseaseName = await uploadPhoto(image!.path);
+            diseaseName = await uploadPhoto(image!.path, widget.token);
             // hide loader
             Navigator.of(context).pop();
             showCustomDialog(context);
