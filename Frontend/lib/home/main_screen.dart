@@ -32,7 +32,10 @@ class _MainScreenState extends State<MainScreen> {
   late Future<Map<String, dynamic>> responseBody;
   File? image;
   final ImagePicker picker = ImagePicker();
-  var diseaseName;
+  var plantInfo;
+  late String diseaseName;
+  late String plantDiseaseId;
+  late String howToCare;
   String? username;
 
   int _bottomNavigationIdx = 0;
@@ -389,7 +392,10 @@ class _MainScreenState extends State<MainScreen> {
             // show loader
             presentLoader(context, text: 'Sending image...');
             // calling with http
-            diseaseName = await uploadPhoto(image!.path, widget.token);
+            plantInfo = await uploadPhoto(image!.path, widget.token);
+            diseaseName = plantInfo['disease'];
+            plantDiseaseId = plantInfo['id'];
+            howToCare = plantInfo['care'];
             // hide loader
             Navigator.of(context).pop();
             showCustomDialog(context);
