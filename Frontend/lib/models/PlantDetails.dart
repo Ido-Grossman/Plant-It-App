@@ -1,5 +1,5 @@
 class PlantDetails {
-  final int idToDelete;
+  final int idOfUser;
   final int id;
   final List<String> common;
   final List<String> use;
@@ -23,7 +23,7 @@ class PlantDetails {
   final int user;
 
   PlantDetails({
-    required this.idToDelete,
+    required this.idOfUser,
     required this.id,
     required this.common,
     required this.use,
@@ -49,7 +49,7 @@ class PlantDetails {
 
   factory PlantDetails.fromJson(Map<String, dynamic> json) {
     return PlantDetails(
-      idToDelete: json['id'],
+      idOfUser: json['id'],
       id: json['plant']['id'],
       common: List<String>.from(json['plant']['common']),
       use: List<String>.from(json['plant']['use']),
