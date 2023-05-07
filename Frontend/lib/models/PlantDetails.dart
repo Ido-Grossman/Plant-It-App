@@ -1,6 +1,6 @@
 class PlantDetails {
   final int idOfUser;
-  final int id;
+  final int plantId;
   final List<String> common;
   final List<String> use;
   final String latin;
@@ -17,14 +17,16 @@ class PlantDetails {
   final int minFahrenheit;
   final int maxFahrenheit;
   final String plantPhoto;
-  final Map<String, dynamic> disease;
+  final int diseaseId;
+  final String disease;
+  final String care;
   final String lastWatering;
   final String nickname;
   final int user;
 
   PlantDetails({
     required this.idOfUser,
-    required this.id,
+    required this.plantId,
     required this.common,
     required this.use,
     required this.latin,
@@ -41,7 +43,9 @@ class PlantDetails {
     required this.minFahrenheit,
     required this.maxFahrenheit,
     required this.plantPhoto,
+    required this.diseaseId,
     required this.disease,
+    required this.care,
     required this.lastWatering,
     required this.nickname,
     required this.user,
@@ -50,7 +54,7 @@ class PlantDetails {
   factory PlantDetails.fromJson(Map<String, dynamic> json) {
     return PlantDetails(
       idOfUser: json['id'],
-      id: json['plant']['id'],
+      plantId: json['plant']['id'],
       common: List<String>.from(json['plant']['common']),
       use: List<String>.from(json['plant']['use']),
       latin: json['plant']['latin'],
@@ -67,7 +71,9 @@ class PlantDetails {
       minFahrenheit: json['plant']['minfahrenheit'],
       maxFahrenheit: json['plant']['maxfahrenheit'],
       plantPhoto: json['plant']['plant_photo'],
-      disease: json['disease'],
+      diseaseId: json['disease']['id'],
+      disease: json['disease']['disease'],
+      care: json['disease']['care'],
       lastWatering: json['last_watering'],
       nickname: json['nickname'],
       user: json['user'],

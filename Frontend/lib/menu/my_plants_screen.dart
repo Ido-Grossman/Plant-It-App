@@ -4,10 +4,9 @@ import 'package:frontend/service/http_service.dart';
 import '../models/PlantDetails.dart';
 import '../models/plant_info.dart';
 import '../plants/plant_card_list.dart';
+import '../plants/plant_care_page.dart';
 import '../plants/plant_info_screen.dart';
 import 'package:flutter/material.dart';
-
-final _floatingActionButtonTag = UniqueKey();
 
 class MyPlants extends StatefulWidget {
   final VoidCallback onNavigateAway;
@@ -117,11 +116,11 @@ class _MyPlantsState extends State<MyPlants> {
                     return PlantCard(
                       imageUrl: plants[index].plantPhoto,
                       name: plants[index].nickname,
-                      healthStatus: plants[index].disease['disease'],
+                      healthStatus: plants[index].disease,
                       onPlantTap: () async {
                         PlantInfo plantInfo;
                         try {
-                          plantInfo = await fetchPlantInfo(plants[index].id);
+                          plantInfo = await fetchPlantInfo(plants[index].plantId);
                         } catch (e) {
                           // Show an error message or handle the exception
                           print("Error fetching plant details: $e");
@@ -140,7 +139,13 @@ class _MyPlantsState extends State<MyPlants> {
                         );
                       },
                       onSickIndicatorTap: () {
-                        // Show popup with plant care instructions
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PlantCareScreen(plantDetails: plants[index]),
+                          ),
+                        );
+
                       },
                       onDeletePressed: () async {
                         await _showDeleteConfirmationDialog(index);
@@ -148,13 +153,6 @@ class _MyPlantsState extends State<MyPlants> {
                     );
                   },
                 ),
-          floatingActionButton: FloatingActionButton(
-            heroTag: _floatingActionButtonTag,
-            onPressed: () {
-              // Navigate to the plant addition screen
-            },
-            child: Icon(Icons.add),
-          ),
         );
       },
     );
