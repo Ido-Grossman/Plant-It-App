@@ -69,7 +69,7 @@ class PlantCard extends StatelessWidget {
                     ),
                     SizedBox(height: 5),
                     GestureDetector(
-                      onTap: healthStatus == 'Sick' ? onSickIndicatorTap : null,
+                      onTap: healthStatus != 'Healthy' ? onSickIndicatorTap : null,
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
