@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import '../models/Plant.dart';
 import '../models/PlantDetails.dart';
 
-Future<String> uploadPhoto(String path, String? token) async {
+Future<Map<String, dynamic>> uploadPhoto(String path, String? token) async {
   Uri uri = Uri.parse('${Consts.getApiLink()}diseases/photo-upload/');
   Map<String, String> headers = {"Authorization": "Token $token"};
   http.MultipartRequest request = http.MultipartRequest('POST', uri);
@@ -20,7 +20,8 @@ Future<String> uploadPhoto(String path, String? token) async {
   http.StreamedResponse response = await request.send();
   var responseBytes = await response.stream.toBytes();
   var responseString = utf8.decode(responseBytes);
-  return responseString;
+  Map<String, dynamic> parsedJson = jsonDecode(responseString);
+  return parsedJson;
 }
 
 Future<int> signUp(String email, String password) async {
@@ -267,7 +268,7 @@ Future<int> setDisease(String disease, String? token, int plantId) async {
   final url = Uri.parse('${Consts.getApiLink()}diseases/set-disease/$plantId/');
   try {
     Map<String, String> headers = {"Authorization": "Token $token"};
-    final response = await http.delete(url, headers: headers,
+    final response = await http.put(url, headers: headers,
         body: {'disease': disease}).timeout(
       const Duration(seconds: 10),
     );

@@ -33,9 +33,9 @@ class _MainScreenState extends State<MainScreen> {
   File? image;
   final ImagePicker picker = ImagePicker();
   var plantInfo;
-  late String diseaseName;
-  late String plantDiseaseId;
-  late String howToCare;
+  var diseaseName;
+  var plantDiseaseId;
+  var howToCare;
   String? username;
 
   int _bottomNavigationIdx = 0;
@@ -125,8 +125,8 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
                 SizedBox(height: 16),
-                const Text(
-                  'Disease Care',
+                Text(
+                  howToCare,
                   // Replace with the actual disease care instructions
                   style: TextStyle(fontSize: 16),
                 ),
@@ -176,12 +176,14 @@ class _MainScreenState extends State<MainScreen> {
                       onPressed: () async {
                         int statusCode = await setDisease(diseaseName, widget.token, nicknameToPlant[_selectedPlant]!.idOfUser);
                         if (statusCode == 200) {
-                          Navigator.of(context).pop();
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Health Status saved successfully'),
                             ),
                           );
+                          setState(() {
+                            _myPlantsRefreshNotifier.value = true;
+                          });
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
