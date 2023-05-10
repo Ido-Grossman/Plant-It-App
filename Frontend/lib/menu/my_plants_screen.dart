@@ -8,6 +8,8 @@ import '../plants/plant_care_page.dart';
 import '../plants/plant_info_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/calendar_helper.dart';
+
 class MyPlants extends StatefulWidget {
   final VoidCallback onNavigateAway;
   final ValueNotifier<bool> refreshNotifier;
@@ -28,11 +30,19 @@ class MyPlants extends StatefulWidget {
 
 class _MyPlantsState extends State<MyPlants> {
   List<PlantDetails> plants = [];
+  final CalendarHelper _calendarHelper = CalendarHelper();
+  String? _calendarId;
 
   @override
   void initState() {
     super.initState();
     _fetchAndSetPlants();
+    _retrieveDefaultCalendar();
+  }
+
+  Future<void> _retrieveDefaultCalendar() async {
+    final calendars = await _calendarHelper.retrieveCalendars();
+    _calendarId = calendars.firstWhere((calendar) => calendar.isDefault == true).id;
   }
 
   Future<void> _fetchAndSetPlants() async {
@@ -68,6 +78,13 @@ class _MyPlantsState extends State<MyPlants> {
                 int statusCode = await deletePlantFromList(
                     widget.email, widget.token, plants[index].idOfUser);
                 if (statusCode == 204) {
+                  if (_calendarId != null) {
+                    for (String eventId in plants[index].eventIds!) {
+                      await _calendarHelper.deleteEvent(_calendarId!, eventId);
+                    }
+                  }
+
+
                   setState(() {
                     _fetchAndSetPlants();
                   });
@@ -83,6 +100,7 @@ class _MyPlantsState extends State<MyPlants> {
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

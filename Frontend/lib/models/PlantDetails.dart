@@ -23,6 +23,7 @@ class PlantDetails {
   final String lastWatering;
   final String nickname;
   final int user;
+  List<String>? eventIds;
 
   PlantDetails({
     required this.idOfUser,
