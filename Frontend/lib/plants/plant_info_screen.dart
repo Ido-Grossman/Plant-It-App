@@ -5,7 +5,7 @@ import 'package:frontend/service/http_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../forum/forum_main_screen.dart';
-import '../models/PlantDetails.dart';
+import '../models/plant_details.dart';
 
 class PlantDetailsScreen extends StatelessWidget {
   final PlantInfo plantInfo;

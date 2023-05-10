@@ -3,8 +3,8 @@ import 'package:frontend/constants.dart';
 import 'package:frontend/models/plant_info.dart';
 import 'package:frontend/service/http_service.dart';
 
-import '../models/Plant.dart';
-import '../models/PlantDetails.dart';
+import '../models/plant.dart';
+import '../models/plant_details.dart';
 import '../plants/plant_info_screen.dart';
 import '../widgets/filter_dialog_popup.dart';
 

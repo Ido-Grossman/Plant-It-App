@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import the Google Fonts package
-import '../models/PlantDetails.dart';
+import '../models/plant_details.dart';
 
 class PlantCareScreen extends StatefulWidget {
   final PlantDetails plantDetails;
