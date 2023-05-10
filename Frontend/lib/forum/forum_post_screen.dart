@@ -1,21 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
-import 'package:frontend/forum/create_comment_screen.dart';
+import 'package:intl/intl.dart';
 
-import '../models/Comment.dart';
+import '../models/comment.dart';
 import '../models/post.dart';
+import '../service/http_service.dart';
+import 'create_comment_screen.dart';
 
 class PostScreen extends StatefulWidget {
   final Post post;
+  final String? token;
 
-  PostScreen({Key? key, required this.post}) : super(key: key);
+  PostScreen({Key? key, required this.post, this.token}) : super(key: key);
 
   @override
   _PostScreenState createState() => _PostScreenState();
 }
 
 class _PostScreenState extends State<PostScreen> {
-  TextEditingController _commentController = TextEditingController();
+  late Future<List<Comment>> _commentsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _commentsFuture =
+        fetchComments(widget.post.postId, widget.post.plantId, widget.token);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,34 +39,30 @@ class _PostScreenState extends State<PostScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              widget.post.title,
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  backgroundImage:
-                      AssetImage('assets/images/default_avatar.png'),
-                  // Replace with user's profile image
-                  radius: 20,
+                  backgroundImage: NetworkImage(widget.post.profilePic),
+                  radius: 24,
                 ),
                 SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.post.author,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      '${widget.post.date}',
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.post.title,
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Written by ${widget.post.author} - ${DateFormat("y MMM d 'at' hh:mm a").format(widget.post.date.toLocal())}',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -71,33 +77,45 @@ class _PostScreenState extends State<PostScreen> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.post.comments.length,
-              itemBuilder: (context, index) {
-                Comment comment = widget.post.comments[index];
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey[400]!, width: 1),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        comment.content,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        '${comment.author} - ${comment.date}',
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
-                );
+            FutureBuilder<List<Comment>>(
+              future: _commentsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Comment> comments = snapshot.data!;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: comments.length,
+                    itemBuilder: (context, index) {
+                      Comment comment = comments[index];
+                      return Container(
+                        padding: EdgeInsets.all(12),
+                        margin: EdgeInsets.symmetric(vertical: 4),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(comment.content),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                SizedBox(width: 8),
+                                Text(
+                                    'From: ${comment.author} - ${DateFormat("y MMM d 'at' hh:mm a").format(comment.date.toLocal())}'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                }
+
+                return CircularProgressIndicator();
               },
             ),
           ],
@@ -105,13 +123,24 @@ class _PostScreenState extends State<PostScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Consts.primaryColor,
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddCommentScreen(),
+              builder: (context) => AddCommentScreen(
+                post: widget.post,
+                token: widget.token,
+              ),
             ),
           );
+          if (result != null && result) {
+            setState(() {
+              _commentsFuture = fetchComments(
+                  widget.post.postId,
+                  widget.post.plantId,
+                  widget.token); // Refresh comments after adding a new one
+            });
+          }
         },
         child: Icon(Icons.add_comment),
       ),

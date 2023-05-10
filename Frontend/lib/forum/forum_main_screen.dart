@@ -1,25 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
+import 'package:frontend/service/http_service.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../models/post.dart';
 import 'forum_post_create_screen.dart';
 import 'forum_post_screen.dart';
 
 class ForumScreen extends StatefulWidget {
   final int plantId;
+  final String? token;
 
-  ForumScreen({Key? key, required this.plantId}) : super(key: key);
+  ForumScreen({Key? key, required this.plantId, required this.token}) : super(key: key);
 
   @override
   ForumScreenState createState() => ForumScreenState();
 }
 
 class ForumScreenState extends State<ForumScreen> {
-  List<Post> posts = getSamplePosts();
+  List<Post> posts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPosts();
+  }
+
+  Future<void> fetchPosts() async {
+    try {
+      List<Post> fetchedPosts =
+      await getPosts(widget.plantId, widget.token);
+      setState(() {
+        posts = fetchedPosts;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void _handlePostTap(Post post) {
-    // Navigate to the post details screen
-    Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreen(post: post)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreen(post: post, token: widget.token,)));
   }
 
   @override
@@ -46,13 +66,14 @@ class ForumScreenState extends State<ForumScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Consts.primaryColor,
         heroTag: 'createPostButton',
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          bool? refreshPosts = await Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => PostCreationScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => PostCreationScreen(plantId: widget.plantId, token: widget.token)),
           );
+          if (refreshPosts == true) {
+            await fetchPosts();
+          }
         },
         child: Icon(Icons.add),
       ),
@@ -94,7 +115,7 @@ class ForumScreenState extends State<ForumScreen> {
               ),
               SizedBox(height: 4),
               Text(
-                'Published at: ${post.date}',
+                'Published at: ${DateFormat("y MMM d 'at' hh:mm a").format(post.date.toLocal())}',
                 style: GoogleFonts.lato(fontSize: 14),
               ),
             ],
