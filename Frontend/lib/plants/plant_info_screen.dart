@@ -4,6 +4,7 @@ import 'package:frontend/models/plant_info.dart';
 import 'package:frontend/service/http_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../forum/forum_main_screen.dart';
 import '../models/PlantDetails.dart';
 
 class PlantDetailsScreen extends StatelessWidget {
@@ -116,65 +117,89 @@ class PlantDetailsScreen extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: SizedBox(
-        width: 130, // Adjust the width to your preference
-        height: 48, // Adjust the height to your preference
-        child: FloatingActionButton.extended(
-          onPressed: () async {
-            TextEditingController nicknameController = TextEditingController();
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Enter a nickname for the plant'),
-                  content: TextField(
-                    controller: nicknameController,
-                    decoration: InputDecoration(hintText: 'Nickname'),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        String nickname = nicknameController.text;
-                        if (nickname.isNotEmpty) {
-                          int statusCode =
-                          await addPlantToList(email, token!, plantInfo.id, nickname);
-                          if (statusCode == 201) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Plant added to list'),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Could not add plant to list'),
-                              ),
-                            );
-                          }
-                        }
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Add to List'),
-                    ),
-                  ],
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            heroTag: 'forum',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ForumScreen(plantId: plantInfo.id),
+                ),
+              );
+            },
+            backgroundColor: textColor,
+            label: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0),
+              child: Text("To discussions"),
+            ),
+            icon: const Icon(Icons.forum),
+          ),
+          SizedBox(width: 8), // Add some space between the buttons
+          SizedBox(
+            width: 130, // Adjust the width to your preference
+            height: 48, // Adjust the height to your preference
+            child: FloatingActionButton.extended(
+              onPressed: () async {
+                TextEditingController nicknameController = TextEditingController();
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Enter a nickname for the plant'),
+                      content: TextField(
+                        controller: nicknameController,
+                        decoration: InputDecoration(hintText: 'Nickname'),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            String nickname = nicknameController.text;
+                            if (nickname.isNotEmpty) {
+                              int statusCode =
+                              await addPlantToList(email, token!, plantInfo.id, nickname);
+                              if (statusCode == 201) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Plant added to list'),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Could not add plant to list'),
+                                  ),
+                                );
+                              }
+                            }
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Add to List'),
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
-            );
-          },
-          backgroundColor: textColor,
-          label: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 0),
-            child: Text("Add to List"),
+              backgroundColor: textColor,
+              label: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 0),
+                child: Text("Add to List"),
+              ),
+              icon: const Icon(Icons.add),
+            ),
           ),
-          icon: const Icon(Icons.add),
-        ),
+        ],
       ),
+
 
     );
   }
