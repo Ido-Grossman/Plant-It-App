@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/post.dart';
+import 'forum_post_screen.dart';
 
 class ForumScreen extends StatefulWidget {
   final int plantId;
@@ -43,13 +44,15 @@ class ForumScreenState extends State<ForumScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Consts.primaryColor,
+        heroTag: 'createPostButton',
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => PostCreationScreen(),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PostCreationScreen(),
+            ),
+          );
         },
         child: Icon(Icons.add),
       ),
