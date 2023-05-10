@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
+import 'package:frontend/service/http_service.dart';
 
 class PostCreationScreen extends StatefulWidget {
+  final String? token;
+  final int plantId;
+
+  const PostCreationScreen({super.key, required this.token, required this.plantId});
+
   @override
   _PostCreationScreenState createState() => _PostCreationScreenState();
 }
@@ -53,14 +59,14 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Consts.primaryColor,
-        onPressed: () {
+        onPressed: () async {
           // Handle post creation logic
           String title = _titleController.text;
           String description = _descriptionController.text;
           if (title.isNotEmpty && description.isNotEmpty) {
             // Save the post and navigate back to the previous screen
-            print('Post created: $title, $description'); // Replace with your post creation logic
-            Navigator.pop(context);
+            await createPost(widget.plantId, widget.token, title, description);
+            Navigator.pop(context, true);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

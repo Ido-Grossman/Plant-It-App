@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 
+import '../models/post.dart';
+import '../service/http_service.dart';
+
 class AddCommentScreen extends StatefulWidget {
+  final Post post;
+  final String? token;
+
+  const AddCommentScreen({super.key, required this.post, this.token});
+
   @override
   _AddCommentScreenState createState() => _AddCommentScreenState();
 }
@@ -42,15 +50,19 @@ class _AddCommentScreenState extends State<AddCommentScreen> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                // Handle comment creation logic
+              onPressed: () async {
                 String content = _commentController.text;
                 if (content.isNotEmpty) {
-                  // Save the comment and update the UI
-                  print('Comment created: $content'); // Replace with your comment creation logic
+                  await createComment(widget.post.postId, content, widget.post.plantId ,widget.token);
                   _commentController.clear();
+                  Navigator.of(context).pop(true); // Return true to indicate the comment was added successfully
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Please enter a comment'),
+                    ),
+                  );
                 }
-                Navigator.of(context).pop();
               },
               child: Text('Submit Comment'),
               style: ElevatedButton.styleFrom(
