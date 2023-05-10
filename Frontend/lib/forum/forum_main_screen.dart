@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/post.dart';
+import 'forum_post_create_screen.dart';
 import 'forum_post_screen.dart';
 
 class ForumScreen extends StatefulWidget {
@@ -18,8 +19,7 @@ class ForumScreenState extends State<ForumScreen> {
 
   void _handlePostTap(Post post) {
     // Navigate to the post details screen
-    // Navigator.push(context, MaterialPageRoute(builder: (context) => PostDetailsScreen(post: post)));
-    print('Tapped on post: ${post.title}');
+    Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreen(post: post)));
   }
 
   @override

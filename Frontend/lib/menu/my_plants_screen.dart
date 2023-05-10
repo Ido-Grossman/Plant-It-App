@@ -1,7 +1,7 @@
 import 'package:frontend/constants.dart';
 import 'package:frontend/service/http_service.dart';
 
-import '../models/PlantDetails.dart';
+import '../models/plant_details.dart';
 import '../models/plant_info.dart';
 import '../plants/plant_card_list.dart';
 import '../plants/plant_care_page.dart';

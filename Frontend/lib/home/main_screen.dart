@@ -9,7 +9,7 @@ import 'package:frontend/menu/home_screen.dart';
 import 'package:frontend/menu/my_plants_screen.dart';
 import 'package:frontend/menu/profile_screen.dart';
 import 'package:frontend/menu/search_screen.dart';
-import 'package:frontend/models/PlantDetails.dart';
+import 'package:frontend/models/plant_details.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:frontend/service/http_service.dart';

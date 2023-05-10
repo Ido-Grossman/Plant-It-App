@@ -5,8 +5,8 @@ import 'package:frontend/constants.dart';
 import 'package:frontend/models/plant_info.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/Plant.dart';
-import '../models/PlantDetails.dart';
+import '../models/plant.dart';
+import '../models/plant_details.dart';
 
 Future<Map<String, dynamic>> uploadPhoto(String path, String? token) async {
   Uri uri = Uri.parse('${Consts.getApiLink()}diseases/photo-upload/');
