@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
     WidgetsBinding.instance.addObserver(this);
     _loadUpcomingEvents();
     // Refresh events every 30 seconds
-    Timer.periodic(Duration(seconds: 30), (timer) {
+    Timer.periodic(Duration(seconds: 20), (timer) {
       if (!mounted) {
         timer.cancel();
       } else {
@@ -375,11 +375,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddEventDialog,
-        tooltip: 'Add Plant Watering Event',
-        child: Icon(Icons.add),
       ),
     );
   }
