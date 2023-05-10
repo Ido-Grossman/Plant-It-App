@@ -44,17 +44,19 @@ class UserPlantsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'profile_picture']
+
+
 class PostSerializer(serializers.ModelSerializer):
     # Get the username of user_id
-    user = serializers.SerializerMethodField('get_username_from_user_id')
+    user = UserProfileSerializer(read_only=True)
 
     class Meta:
         model = Post
         fields = '__all__'
-
-    def get_username_from_user_id(self, post):
-        username = post.user.username
-        return username
 
 
 # a serializer for replies.
@@ -100,9 +102,3 @@ class UserRegistrationSerializer(serializers.Serializer):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email already exists.")
         return value
-
-
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = get_user_model()
-        fields = ['username', 'profile_picture']
