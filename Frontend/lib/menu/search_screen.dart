@@ -26,8 +26,8 @@ class _SearchScreenState extends State<SearchScreen> {
   String? selectedCategory;
   String? selectedClimate;
   String? selectedUse;
-  double? minTemperature;
-  double? maxTemperature;
+  int? minTemperature;
+  int? maxTemperature;
 
   TextEditingController minTempController = TextEditingController();
   TextEditingController maxTempController = TextEditingController();
@@ -274,8 +274,8 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         TextButton(
           onPressed: () {
-            double? minTemp = double.tryParse(minTempController.text);
-            double? maxTemp = double.tryParse(maxTempController.text);
+            int? minTemp = int.tryParse(minTempController.text);
+            int? maxTemp = int.tryParse(maxTempController.text);
             if (minTemp != null && maxTemp != null && minTemp >= maxTemp) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -309,7 +309,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  void applyFilters(String? category, String? climate, String? use, double? minTemp, double? maxTemp, String searchText) {
+  void applyFilters(String? category, String? climate, String? use, int? minTemp, int? maxTemp, String searchText) {
     setState(() {
       selectedCategory = category;
       selectedClimate = climate;

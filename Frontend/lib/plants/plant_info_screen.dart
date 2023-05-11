@@ -67,6 +67,9 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
       eventStartTime = eventStartTime.add(Duration(days: waterDuration));
     }
     await prefs.setStringList(eventTitle, eventIds);
+    for (String eventId in eventIds) {
+      print('Before $eventId');
+    }
   }
 
 

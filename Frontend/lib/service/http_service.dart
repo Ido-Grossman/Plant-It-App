@@ -151,7 +151,7 @@ Future<Map<String, dynamic>> getUserDetails(String? token, String email) async {
   }
 }
 
-Future<List<Plant>> searchPlants(String query, {int offset = 0, String? climate, String? category, String? use, double? celsiusMin, double? celsiusMax}) async {
+Future<List<Plant>> searchPlants(String query, {int offset = 0, String? climate, String? category, String? use, int? celsiusMin, int? celsiusMax}) async {
   String queryParams = "?offset=$offset";
 
   if (climate != null) {
