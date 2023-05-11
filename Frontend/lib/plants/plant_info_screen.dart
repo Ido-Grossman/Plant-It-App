@@ -3,8 +3,8 @@ import 'package:frontend/constants.dart';
 import 'package:frontend/models/plant_info.dart';
 import 'package:frontend/service/http_service.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/PlantDetails.dart';
 import '../widgets/calendar_helper.dart';
 import '../forum/forum_main_screen.dart';
 
@@ -51,16 +51,22 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
 
     DateTime eventStartTime = DateTime.parse(
         "${startDate.toIso8601String().substring(0, 11)}$reminderTime:00Z");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> eventIds = prefs.getStringList(eventTitle) ?? [];
     while (eventStartTime.isBefore(endDate)) {
       DateTime eventEndTime = eventStartTime.add(Duration(minutes: 30)); // 30 minutes event duration
-      await _calendarHelper.createOrUpdateEvent(
+      String? eventId = await _calendarHelper.createOrUpdateEvent(
         _calendarId!,
-        eventTitle,
+        'Water $eventTitle',
         eventStartTime,
         eventEndTime,
       );
+      if (eventId != null) {
+        eventIds.add(eventId);
+      }
       eventStartTime = eventStartTime.add(Duration(days: waterDuration));
     }
+    await prefs.setStringList(eventTitle, eventIds);
   }
 
 
@@ -267,7 +273,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                                       }
 
                                       await createCalendarEvents(
-                                        'Water $nickname',
+                                        nickname,
                                         reminderTime,
                                         widget.plantInfo.waterDuration,
                                       );
@@ -300,6 +306,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
               ),
               icon: const Icon(Icons.add),
             ),
+          )
         ],
       ),
 

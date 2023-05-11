@@ -1,5 +1,6 @@
 import 'package:frontend/constants.dart';
 import 'package:frontend/service/http_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/plant_details.dart';
 import '../models/plant_info.dart';
@@ -57,6 +58,12 @@ class _MyPlantsState extends State<MyPlants> {
     }
   }
 
+  Future<List<String>> getEventIdsForPlant(String plantNickname) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> eventIds = prefs.getStringList(plantNickname) ?? [];
+    return eventIds;
+  }
+
   Future<void> _showDeleteConfirmationDialog(int index) async {
     return showDialog<void>(
       context: context,
@@ -79,7 +86,8 @@ class _MyPlantsState extends State<MyPlants> {
                     widget.email, widget.token, plants[index].idOfUser);
                 if (statusCode == 204) {
                   if (_calendarId != null) {
-                    for (String eventId in plants[index].eventIds!) {
+                    List<String> eventIds = await getEventIdsForPlant(plants[index].nickname);
+                    for (String eventId in eventIds) {
                       await _calendarHelper.deleteEvent(_calendarId!, eventId);
                     }
                   }
