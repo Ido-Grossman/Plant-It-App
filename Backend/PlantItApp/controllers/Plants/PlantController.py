@@ -49,7 +49,7 @@ def search_plants(request, plant_name=None):
         if use:
             plants = plants.filter(use__use__iexact=use)
         if celsiusmin is not None and celsiusmax is not None:
-            plants = plants.filter(Q(mincelsius__lte=celsiusmax) & Q(maxcelsius__gte=celsiusmin))
+            plants = plants.filter(Q(mincelsius__lte=celsiusmin) & Q(maxcelsius__gte=celsiusmax))
     # get the offset and limit the plants to 10.
     if offset:
         offset = int(offset) * 10
