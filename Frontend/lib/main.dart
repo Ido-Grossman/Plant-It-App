@@ -83,10 +83,10 @@ class _InitialScreenState extends State<InitialScreen> {
 
   Future<void> _checkIntroStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool showIntro = prefs.getBool('showIntro') ?? true;
+    bool showIntro = prefs.getBool('introScreen') ?? true;
 
     if (showIntro) {
-      await prefs.setBool('showIntro', false);
+      await prefs.setBool('introScreen', false);
     }
 
     setState(() {
