@@ -279,6 +279,13 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                                       );
                                     }
 
+                                  } else if (statusCode == 409){
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Nickname is already in list, choose another'),
+                                      ),
+                                    );
+
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
