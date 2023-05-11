@@ -3,20 +3,73 @@ import 'package:frontend/constants.dart';
 import 'package:frontend/models/plant_info.dart';
 import 'package:frontend/service/http_service.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/PlantDetails.dart';
+import '../widgets/calendar_helper.dart';
 import '../forum/forum_main_screen.dart';
 
-class PlantDetailsScreen extends StatelessWidget {
+class PlantDetailsScreen extends StatefulWidget {
   final PlantInfo plantInfo;
   final String? token;
   final String email;
 
-  const PlantDetailsScreen(
+  PlantDetailsScreen(
       {Key? key,
       required this.plantInfo,
       required this.token,
       required this.email})
       : super(key: key);
+
+  @override
+  State<PlantDetailsScreen> createState() => _PlantDetailsScreenState();
+}
+
+class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
+  final CalendarHelper _calendarHelper = CalendarHelper();
+  String? _calendarId;
+  String? selectedReminderTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _retrieveDefaultCalendar();
+  }
+
+  Future<void> _retrieveDefaultCalendar() async {
+    final calendars = await _calendarHelper.retrieveCalendars();
+    _calendarId = calendars.firstWhere((calendar) => calendar.isDefault == true).id;
+  }
+
+  Future<void> createCalendarEvents(
+      String eventTitle,
+      String reminderTime,
+      int waterDuration,
+      ) async {
+    DateTime now = DateTime.now();
+    DateTime startDate = DateTime(now.year, now.month, now.day);
+    DateTime endDate = startDate.add(Duration(days: 90)); // 90 days for 3 months
+
+    DateTime eventStartTime = DateTime.parse(
+        "${startDate.toIso8601String().substring(0, 11)}$reminderTime:00Z");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> eventIds = prefs.getStringList(eventTitle) ?? [];
+    while (eventStartTime.isBefore(endDate)) {
+      DateTime eventEndTime = eventStartTime.add(Duration(minutes: 30)); // 30 minutes event duration
+      String? eventId = await _calendarHelper.createOrUpdateEvent(
+        _calendarId!,
+        'Water $eventTitle',
+        eventStartTime,
+        eventEndTime,
+      );
+      if (eventId != null) {
+        eventIds.add(eventId);
+      }
+      eventStartTime = eventStartTime.add(Duration(days: waterDuration));
+    }
+    await prefs.setStringList(eventTitle, eventIds);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +78,13 @@ class PlantDetailsScreen extends StatelessWidget {
         ? Consts.primaryColor
         : Consts.greenDark;
 
-    String commonNames = plantInfo.common.join(', ');
-    String howToUse = plantInfo.use.join(', ');
+    String commonNames = widget.plantInfo.common.join(', ');
+    String howToUse = widget.plantInfo.use.join(', ');
     String temperatureRange =
-        '${plantInfo.minCelsius}°C - ${plantInfo.maxCelsius}°C (${plantInfo.minFahrenheit}°F - ${plantInfo.maxFahrenheit}°F)';
-    String wateringFrequency = 'Every ${plantInfo.waterDuration} days';
+        '${widget.plantInfo.minCelsius}°C - ${widget.plantInfo.maxCelsius}°C (${widget.plantInfo.minFahrenheit}°F - ${widget.plantInfo.maxFahrenheit}°F)';
+    String wateringFrequency = 'Every ${widget.plantInfo.waterDuration} days';
+
+    String? selectedReminder;
 
     return Scaffold(
       appBar: AppBar(
@@ -46,11 +101,11 @@ class PlantDetailsScreen extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.network(plantInfo.plantPhoto, fit: BoxFit.cover),
+              child: Image.network(widget.plantInfo.plantPhoto, fit: BoxFit.cover),
             ),
             SizedBox(height: 16),
             Text(
-              plantInfo.latin,
+              widget.plantInfo.latin,
               style: GoogleFonts.pacifico(fontSize: 28, color: textColor),
             ),
             SizedBox(height: 8),
@@ -60,7 +115,7 @@ class PlantDetailsScreen extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Plant Family: ${plantInfo.family}',
+              'Plant Family: ${widget.plantInfo.family}',
               style: GoogleFonts.lato(fontSize: 18),
             ),
             SizedBox(height: 16),
@@ -70,7 +125,7 @@ class PlantDetailsScreen extends StatelessWidget {
             ),
             SizedBox(height: 4),
             Text(
-              '${plantInfo.toleratedlight} (Tolerated), ${plantInfo.idealight} (Ideal)',
+              '${widget.plantInfo.toleratedlight} (Tolerated), ${widget.plantInfo.idealight} (Ideal)',
               style: GoogleFonts.lato(fontSize: 18),
             ),
             SizedBox(height: 16),
@@ -80,7 +135,7 @@ class PlantDetailsScreen extends StatelessWidget {
             ),
             SizedBox(height: 4),
             Text(
-              plantInfo.watering,
+              widget.plantInfo.watering,
               style: GoogleFonts.lato(fontSize: 18),
             ),
             SizedBox(height: 16),
@@ -125,7 +180,7 @@ class PlantDetailsScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ForumScreen(plantId: plantInfo.id, token: token),
+                  builder: (context) => ForumScreen(plantId: widget.plantInfo.id, token: widget.token),
                 ),
               );
             },
@@ -146,44 +201,101 @@ class PlantDetailsScreen extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Enter a nickname for the plant'),
-                      content: TextField(
-                        controller: nicknameController,
-                        decoration: InputDecoration(hintText: 'Nickname'),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            String nickname = nicknameController.text;
-                            if (nickname.isNotEmpty) {
-                              int statusCode =
-                              await addPlantToList(email, token!, plantInfo.id, nickname);
-                              if (statusCode == 201) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Plant added to list'),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Could not add plant to list'),
-                                  ),
-                                );
-                              }
-                            }
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Add to List'),
-                        ),
-                      ],
+                    String? selectedReminderTime;
+                    return StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                        return AlertDialog(
+                          title: Text('Enter a nickname for the plant'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextField(
+                                controller: nicknameController,
+                                decoration: InputDecoration(hintText: 'Nickname'),
+                              ),
+                              SizedBox(height: 16),
+                              Text(
+                                'Time for watering reminders:',
+                                style: GoogleFonts.lato(fontSize: 18),
+                              ),
+                              SizedBox(height: 8),
+                              DropdownButton<String>(
+                                value: selectedReminderTime,
+                                hint: Text('Select reminder time'),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedReminderTime = newValue;
+                                  });
+                                },
+                                items: <String>['9 AM', '3 PM', '9 PM', 'No reminders']
+                                    .map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                String nickname = nicknameController.text;
+                                if (nickname.isNotEmpty) {
+                                  int statusCode = await addPlantToList(
+                                      widget.email, widget.token!, widget.plantInfo.id, nickname);
+                                  if (statusCode == 201) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Plant added to list'),
+                                      ),
+                                    );
+
+                                    if (selectedReminderTime != 'No reminders' && selectedReminderTime != null) {
+                                      String reminderTime;
+                                      switch (selectedReminderTime) {
+                                        case '9 AM':
+                                          reminderTime = '09:00';
+                                          break;
+                                        case '3 PM':
+                                          reminderTime = '15:00';
+                                          break;
+                                        case '9 PM':
+                                          reminderTime = '21:00';
+                                          break;
+                                        default:
+                                          reminderTime = '09:00';
+                                      }
+
+                                      await createCalendarEvents(
+                                        nickname,
+                                        reminderTime,
+                                        widget.plantInfo.waterDuration,
+                                      );
+                                    }
+
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Could not add plant to list'),
+                                      ),
+                                    );
+                                  }
+                                }
+                                Navigator.of(context).pop();
+                              },
+
+                              child: Text('Add to List'),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
                 );
@@ -195,11 +307,9 @@ class PlantDetailsScreen extends StatelessWidget {
               ),
               icon: const Icon(Icons.add),
             ),
-          ),
+          )
         ],
       ),
-
-
     );
   }
 }
