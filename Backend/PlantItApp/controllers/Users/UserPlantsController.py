@@ -41,7 +41,10 @@ class UserPlants(APIView):
         disease = Disease.objects.get(disease='Unknown')
         # Add the plant to the user.
         current_date = datetime.today().strftime('%Y-%m-%d')
-
+        # Check if the user already has a plant with this nickname.
+        plant = user.user_plants.filter(nickname=plant_nickname).first()
+        if plant:
+            return Response(status=status.HTTP_409_CONFLICT)
         user.user_plants.create(plant_id=plant_id, nickname=plant_nickname, last_watering=current_date, disease=disease)
         # Return created.
         return Response(status=status.HTTP_201_CREATED)
