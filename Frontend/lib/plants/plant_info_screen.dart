@@ -95,79 +95,82 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.network(widget.plantInfo.plantPhoto, fit: BoxFit.cover),
-            ),
-            SizedBox(height: 16),
-            Text(
-              widget.plantInfo.latin,
-              style: GoogleFonts.pacifico(fontSize: 28, color: textColor),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Common Names: $commonNames',
-              style: GoogleFonts.lato(fontSize: 18),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Plant Family: ${widget.plantInfo.family}',
-              style: GoogleFonts.lato(fontSize: 18),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Light',
-              style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
-            ),
-            SizedBox(height: 4),
-            Text(
-              '${widget.plantInfo.toleratedlight} (Tolerated), ${widget.plantInfo.idealight} (Ideal)',
-              style: GoogleFonts.lato(fontSize: 18),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'How to Water',
-              style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
-            ),
-            SizedBox(height: 4),
-            Text(
-              widget.plantInfo.watering,
-              style: GoogleFonts.lato(fontSize: 18),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'How to Use',
-              style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
-            ),
-            SizedBox(height: 4),
-            Text(
-              howToUse,
-              style: GoogleFonts.lato(fontSize: 18),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Temperature Range',
-              style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
-            ),
-            SizedBox(height: 4),
-            Text(
-              temperatureRange,
-              style: GoogleFonts.lato(fontSize: 18),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Watering Frequency',
-              style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
-            ),
-            SizedBox(height: 4),
-            Text(
-              wateringFrequency,
-              style: GoogleFonts.lato(fontSize: 18),
-            ),
-          ],
+        child: Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 64),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.network(widget.plantInfo.plantPhoto, fit: BoxFit.cover),
+              ),
+              SizedBox(height: 16),
+              Text(
+                widget.plantInfo.latin,
+                style: GoogleFonts.pacifico(fontSize: 28, color: textColor),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Common Names: $commonNames',
+                style: GoogleFonts.lato(fontSize: 18),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Plant Family: ${widget.plantInfo.family}',
+                style: GoogleFonts.lato(fontSize: 18),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Light',
+                style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
+              ),
+              SizedBox(height: 4),
+              Text(
+                '${widget.plantInfo.toleratedlight} (Tolerated), ${widget.plantInfo.idealight} (Ideal)',
+                style: GoogleFonts.lato(fontSize: 18),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'How to Water',
+                style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
+              ),
+              SizedBox(height: 4),
+              Text(
+                widget.plantInfo.watering,
+                style: GoogleFonts.lato(fontSize: 18),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'How to Use',
+                style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
+              ),
+              SizedBox(height: 4),
+              Text(
+                howToUse,
+                style: GoogleFonts.lato(fontSize: 18),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Temperature Range',
+                style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
+              ),
+              SizedBox(height: 4),
+              Text(
+                temperatureRange,
+                style: GoogleFonts.lato(fontSize: 18),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Watering Frequency',
+                style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
+              ),
+              SizedBox(height: 4),
+              Text(
+                wateringFrequency,
+                style: GoogleFonts.lato(fontSize: 18),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: Row(
