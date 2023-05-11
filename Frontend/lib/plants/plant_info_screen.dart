@@ -5,6 +5,7 @@ import 'package:frontend/service/http_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/PlantDetails.dart';
 import '../widgets/calendar_helper.dart';
 import '../forum/forum_main_screen.dart';
 
@@ -309,7 +310,6 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
           )
         ],
       ),
-
     );
   }
 }
