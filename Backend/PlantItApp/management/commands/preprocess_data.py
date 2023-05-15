@@ -52,7 +52,7 @@ class Command(BaseCommand):
         similarity_matrix = cosine_similarity(df_prepared.drop('id', axis=1))
         similarity_df = pd.DataFrame(similarity_matrix, index=df['id'], columns=df['id'])
 
-        path = os.path.join(settings.BASE_DIR, 'similarity_matrix.csv')
+        path = settings.SIMILARITY_PATH
 
         # Save the DataFrame to a CSV file or other storage
         similarity_df.to_csv(path)

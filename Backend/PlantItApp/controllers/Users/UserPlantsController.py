@@ -15,6 +15,9 @@ class UserPlants(APIView):
     authentication_classes = [TokenAuthentication]
 
     def get(self, request, email):
+        # Check if the user is anonymous or if the user is not the same as the email.
+        if request.user.is_anonymous or request.user.email != email:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         # Get the user.
         user_model = get_user_model()
         user = get_object_or_404(user_model, email=email)
@@ -26,7 +29,8 @@ class UserPlants(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, email):
-        if request.user.email != email:
+        # Check if the user is anonymous or if the user is not the same as the email.
+        if request.user.is_anonymous or request.user.email != email:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         # Get the plant id.
         plant_id = request.data.get('plant_id')
@@ -50,7 +54,8 @@ class UserPlants(APIView):
         return Response(status=status.HTTP_201_CREATED)
 
     def delete(self, request, email):
-        if request.user.email != email:
+        # Check if the user is anonymous or if the user is not the same as the email.
+        if request.user.is_anonymous or request.user.email != email:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         # Get the user_plant id.
         user_plant_id = request.data.get('user_plant_id')

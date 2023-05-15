@@ -14,6 +14,7 @@ from pathlib import Path
 from . import Classification
 import os
 from google.oauth2 import service_account
+import pandas as pd
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,13 +34,17 @@ ALLOWED_HOSTS = ['*']
 if os.environ.get('GAE_APPLICATION', None):
     STATIC_URL = f'https://storage.googleapis.com/%7BGS_BUCKET_NAME%7D/static/'
 
+# Diseases ML model
 DISEASES = ['Haunglongbing', 'Scorch', 'Esca', 'Scab', 'Bacterial spot', 'Mosaic virus', 'Mold', 'Blight',
             'Healthy', 'Spider mites', 'Leaf curl virus', 'Rust', 'Target spot', 'Black rot', 'leaf spot',
             'Powdery Miledew']
 MODEL = Classification.ModelClasses.ResNet9(3, len(DISEASES))
 
-# Application definition
+# Similarity ML model
+SIMILARITY_PATH = os.path.join(BASE_DIR, 'similarity_matrix.csv')
+SIMILARITY_DF = pd.read_csv(SIMILARITY_PATH, index_col=0)
 
+# Application definition
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'idoddii@gmail.com'
 EMAIL_HOST_PASSWORD = 'sysyvbobmkjtjzxj'
