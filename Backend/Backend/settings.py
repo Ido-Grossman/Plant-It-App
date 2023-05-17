@@ -40,9 +40,12 @@ DISEASES = ['Haunglongbing', 'Scorch', 'Esca', 'Scab', 'Bacterial spot', 'Mosaic
             'Powdery Miledew']
 MODEL = Classification.ModelClasses.ResNet9(3, len(DISEASES))
 
-# Similarity ML model
+# Recommendation system
 SIMILARITY_PATH = os.path.join(BASE_DIR, 'similarity_matrix.csv')
 SIMILARITY_DF = pd.read_csv(SIMILARITY_PATH, index_col=0)
+TOP_PLANTS_PATH = os.path.join(BASE_DIR, 'top_plants.csv')
+TOP_PLANTS_DF = pd.read_csv(TOP_PLANTS_PATH, index_col=0)
+RECOMMENDATIONS_AMOUNT = 10
 
 # Application definition
 EMAIL_HOST = 'smtp.gmail.com'
