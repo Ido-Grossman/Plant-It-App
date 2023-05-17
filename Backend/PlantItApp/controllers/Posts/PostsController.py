@@ -12,7 +12,7 @@ class Posts(APIView):
 
     def get(self, request, plant_id):
         # give me the 10 most recent posts of this plant
-        posts = Post.objects.filter(plant_id=plant_id).order_by('-date_posted')[:10]
+        posts = Post.objects.filter(plant_id=plant_id).order_by('-date_posted')
         # change the user_id to the username
         serializer = PostSerializer(posts, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
