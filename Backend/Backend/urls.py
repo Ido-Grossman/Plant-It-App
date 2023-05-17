@@ -23,6 +23,4 @@ urlpatterns = [
     path('api/', include('PlantItApp.urls')),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="password_reset_confirm.html"), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name='password_reset_complete'),
-    path('media/profile_pictures/<str:picture_name>/', views.show_user_photo, name='show_plant_photo'),
-    path('media/plant_photos/<str:picture_name>/', views.show_plant_photo, name='show_plant_photo'),
 ]
