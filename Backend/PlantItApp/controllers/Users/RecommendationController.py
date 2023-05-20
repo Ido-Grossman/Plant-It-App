@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
@@ -6,7 +5,7 @@ from rest_framework import status
 from django.conf import settings
 import pandas as pd
 
-from google.cloud import language_v1
+# from google.cloud import language_v1
 # def analyze_sentiment(text):
 #     client = language_v1.LanguageServiceClient()
 #
