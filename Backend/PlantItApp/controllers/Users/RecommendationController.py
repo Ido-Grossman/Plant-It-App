@@ -5,6 +5,7 @@ from rest_framework import status
 from django.conf import settings
 import pandas as pd
 
+"""
 # from google.cloud import language_v1
 # def analyze_sentiment(text):
 #     client = language_v1.LanguageServiceClient()
@@ -49,6 +50,8 @@ import pandas as pd
 #             similarity_scores += adjusted_similarity_score
 #
 #     return similarity_scores
+"""
+
 
 def user_plants_list(user):
     # Fetch the plants for this user
@@ -65,8 +68,6 @@ def get_similarity_scores(user_plants, similarity_df):
         # Add the similarity score of each of the user's plants
         similarity_scores += similarity_df[str(plant)]
     return similarity_scores
-
-
 
 
 @api_view(['GET'])
