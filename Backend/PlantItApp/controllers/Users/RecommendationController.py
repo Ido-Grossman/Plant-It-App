@@ -70,14 +70,7 @@ def get_similarity_scores(user_plants, similarity_df):
     return similarity_scores
 
 
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-def get_recommendation(request, email):
-    # Make sure the user is authenticated and is the same as the one in the request.
-    user = request.user
-    if user.is_anonymous or user.email != email:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-
+def recommendations(user):
     user_plants = user_plants_list(user)
     user_posts = user.posts.all()
 
@@ -98,5 +91,16 @@ def get_recommendation(request, email):
 
         # Set the index to the plant ID.
         recommended_plants = pd.Series(top_plants.index, index=top_plants['id'])
-    return Response(recommended_plants.index[:settings.RECOMMENDATIONS_AMOUNT], status=status.HTTP_200_OK)
+    return recommended_plants.index[:settings.RECOMMENDATIONS_AMOUNT]
+
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+def get_recommendation(request, email):
+    # Make sure the user is authenticated and is the same as the one in the request.
+    user = request.user
+    if user.is_anonymous or user.email != email:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    return Response(recommendations(user), status=status.HTTP_200_OK)
 

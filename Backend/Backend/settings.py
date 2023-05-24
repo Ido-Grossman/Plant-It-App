@@ -81,6 +81,7 @@ google_credentials = service_account.Credentials.from_service_account_file(KEY_P
 GS_BUCKET_NAME = 'plant-it-app-bucket'
 GS_PROJECT_ID = 'plant-it-app-384117'
 GS_CREDENTIALS = google_credentials
+DIALOGFLOW_LANGUAGE_CODE = 'en-US'
 STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
