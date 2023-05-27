@@ -345,6 +345,8 @@ class _MainScreenState extends State<MainScreen> {
               List<Widget> screens = [
                 HomeScreen(
                   username: username,
+                  email: widget.email,
+                  token: widget.token,
                 ),
                 MyPlants(
                   refreshNotifier: _myPlantsRefreshNotifier,

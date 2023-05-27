@@ -341,3 +341,17 @@ Future<List<Post>> getPosts(int plantId, String? token) async {
     throw TimeoutException;
   }
 }
+
+Future<List<PlantDetails>> fetchRecommendations(String email, String? token) async {
+  final url = Uri.parse('${Consts.getApiLink()}users/$email/recommendation/');
+  try {
+    Map<String, String> headers = {"Authorization": "Token $token"};
+    final response = await http.get(url, headers: headers).timeout(
+      const Duration(seconds: 10),
+    );
+    List<dynamic> jsonResponse = jsonDecode(response.body);
+    return jsonResponse.map((plantJson) => PlantDetails.fromJson(plantJson)).toList().cast<PlantDetails>();
+  } on TimeoutException {
+    throw TimeoutException;
+  }
+}

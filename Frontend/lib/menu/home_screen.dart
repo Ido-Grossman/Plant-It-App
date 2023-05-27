@@ -2,12 +2,15 @@ import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
+import '../service/http_service.dart';
 import '../widgets/calendar_helper.dart';
 
 class HomeScreen extends StatefulWidget {
   final String? username;
+  final String email;
+  final String? token;
 
-  const HomeScreen({Key? key, required this.username}) : super(key: key);
+  const HomeScreen({Key? key, required this.username, required this.email, required this.token}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -17,12 +20,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
   CalendarHelper _calendarHelper = CalendarHelper();
   List<Event> _upcomingEvents = [];
   String? _calendarId;
+  List _recommendedPlants = [];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _loadUpcomingEvents();
+    // _fetchRecommendations();
     // Refresh events every 30 seconds
     Timer.periodic(Duration(seconds: 20), (timer) {
       if (!mounted) {
@@ -45,6 +50,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
     if (state == AppLifecycleState.resumed) {
       _loadUpcomingEvents();
     }
+  }
+
+  Future<void> _fetchRecommendations() async {
+    _recommendedPlants = await fetchRecommendations(widget.email, widget.token);
   }
 
   Future<void> _loadUpcomingEvents() async {
@@ -96,129 +105,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
     _loadUpcomingEvents(); // Refresh the events list
   }
 
-  Future<void> _showAddEventDialog() async {
-    TextEditingController _plantNameController = TextEditingController();
-    DateTime? selectedDate;
-    TimeOfDay? selectedTime;
-
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              contentPadding: EdgeInsets.all(24),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              backgroundColor: Color(0xFFF4F4F4),
-              title: const Text(
-                'Set Date and Time',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      controller: _plantNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Plant Name',
-                        labelStyle: TextStyle(color: Colors.green),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ListTile(
-                      title: selectedDate == null
-                          ? Text('Select date')
-                          : Text('Selected date: ${DateFormat.yMd().format(selectedDate!)}'),
-                      trailing: const Icon(Icons.calendar_today, color: Colors.green),
-                      onTap: () async {
-                        final DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime.now().add(Duration(days: 14)),
-                        );
-                        if (pickedDate != null) {
-                          setState(() {
-                            selectedDate = pickedDate;
-                          });
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    ListTile(
-                      title: selectedTime == null
-                          ? Text('Select time')
-                          : Text('Selected time: ${selectedTime!.format(context)}'),
-                      trailing: Icon(Icons.access_time, color: Colors.green),
-                      onTap: () async {
-                        final TimeOfDay? pickedTime = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                        );
-                        if (pickedTime != null) {
-                          setState(() {
-                            selectedTime = pickedTime;
-                          });
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    'Cancel',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    if (selectedDate != null && selectedTime != null && _plantNameController.text.isNotEmpty) {
-                      final DateTime eventDateTime = DateTime(
-                        selectedDate!.year,
-                        selectedDate!.month,
-                        selectedDate!.day,
-                        selectedTime!.hour,
-                        selectedTime!.minute,
-                      );
-                      _addWateringEvent(_plantNameController.text, eventDateTime);
-                      Navigator.of(context).pop();
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Water reminder set successfully!'),
-                          duration: Duration(seconds: 3),
-                        ),
-                      );
-                    }
-                  },
-                  child: Text(
-                    'OK',
-                    style: TextStyle(color: Colors.green),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
 
   Future<void> makeWaterEvents(int frequencyInHours, String plantName) async {
     final hasPermissions = await _calendarHelper.requestPermissions();
