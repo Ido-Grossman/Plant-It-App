@@ -1,9 +1,11 @@
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/plant_info.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import '../service/http_service.dart';
 import '../widgets/calendar_helper.dart';
+import '../plants/plant_info_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final String? username;
@@ -20,14 +22,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
   CalendarHelper _calendarHelper = CalendarHelper();
   List<Event> _upcomingEvents = [];
   String? _calendarId;
-  List _recommendedPlants = [];
+  List<PlantInfo> recommendedPlants = [];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _loadUpcomingEvents();
-    // _fetchRecommendations();
+    _fetchRecommendations();
     // Refresh events every 30 seconds
     Timer.periodic(Duration(seconds: 20), (timer) {
       if (!mounted) {
@@ -49,11 +51,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       _loadUpcomingEvents();
+      _fetchRecommendations();
     }
   }
 
   Future<void> _fetchRecommendations() async {
-    _recommendedPlants = await fetchRecommendations(widget.email, widget.token);
+    final plants = await fetchRecommendations(widget.email, widget.token);
+    setState(() {
+      recommendedPlants = plants;
+    });
   }
 
   Future<void> _loadUpcomingEvents() async {
@@ -75,34 +81,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
         _upcomingEvents = tempUpcomingEvents;
       });
     }
-  }
-
-
-  Future<void> _addWateringEvent(String plantName, DateTime eventDateTime) async {
-    final hasPermissions = await _calendarHelper.requestPermissions();
-    if (!hasPermissions) {
-      return;
-    }
-
-    final calendars = await _calendarHelper.retrieveCalendars();
-    if (calendars.isEmpty) {
-      return;
-    }
-
-    // Select the first calendar by default.
-    String? calendarId;
-    try {
-      calendarId = calendars.elementAt(5).id;
-    } catch (e) {
-      print(e);
-    }
-    calendarId ??= calendars.first.id;
-    final eventTitle = 'Water $plantName';
-    final eventStartTime = eventDateTime;
-    final eventEndTime = eventStartTime.add(Duration(minutes: 30)); // End event 30 minutes after the start time
-
-    final eventId = await _calendarHelper.createOrUpdateEvent(calendarId!, eventTitle, eventStartTime, eventEndTime);
-    _loadUpcomingEvents(); // Refresh the events list
   }
 
 
@@ -154,6 +132,80 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
             ),
             SizedBox(
               height: 48,
+            ),
+            Text(
+              "Recommended plants based on your plants other users",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: _fetchRecommendations,
+                child: ListView.builder(
+                  itemCount: recommendedPlants.length,
+                  itemBuilder: (BuildContext ctx, index) {
+                    return Card(
+                      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PlantDetailsScreen(
+                                email: widget.email,
+                                token: widget.token,
+                                plantInfo: recommendedPlants[index],
+                              ),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: <Widget>[
+                              // Plant image
+                              Container(
+                                width: 60,  // Set as needed
+                                height: 60, // Set as needed
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: NetworkImage(recommendedPlants[index].plantPhoto),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 15),
+                              // Plant info
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(recommendedPlants[index].common[0],
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                                    ),
+                                    Text(recommendedPlants[index].family,
+                                      style: TextStyle(fontSize: 14),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // Icon
+                              Icon(Icons.local_florist, color: Colors.green),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
             ),
             Text(
               "When should you water your plants",

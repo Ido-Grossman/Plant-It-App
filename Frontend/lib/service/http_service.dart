@@ -342,7 +342,7 @@ Future<List<Post>> getPosts(int plantId, String? token) async {
   }
 }
 
-Future<List<PlantDetails>> fetchRecommendations(String email, String? token) async {
+Future<List<PlantInfo>> fetchRecommendations(String email, String? token) async {
   final url = Uri.parse('${Consts.getApiLink()}users/$email/recommendation/');
   try {
     Map<String, String> headers = {"Authorization": "Token $token"};
@@ -350,7 +350,7 @@ Future<List<PlantDetails>> fetchRecommendations(String email, String? token) asy
       const Duration(seconds: 10),
     );
     List<dynamic> jsonResponse = jsonDecode(response.body);
-    return jsonResponse.map((plantJson) => PlantDetails.fromJson(plantJson)).toList().cast<PlantDetails>();
+    return jsonResponse.map((plantJson) => PlantInfo.fromJson(plantJson)).toList().cast<PlantInfo>();
   } on TimeoutException {
     throw TimeoutException;
   }
