@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from google.cloud import dialogflow_v2 as dialogflow
 from google.api_core.exceptions import InvalidArgument
+from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.response import Response
@@ -51,9 +52,12 @@ def get_plant_recommendations(user):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 def assistant(request):
+    if not request.user.is_authenticated:
+        return Response({"answer": "You must be logged in to use this feature."}, status=status.HTTP_401_UNAUTHORIZED)
     # Get the text from the request and send it to Dialogflow.
     text_to_be_analyzed = request.data.get('message')
-
+    if not text_to_be_analyzed:
+        return Response({"answer": "You must send a message to the bot."}, status=status.HTTP_400_BAD_REQUEST)
     session_client = dialogflow.SessionsClient()
     authentication = TokenAuthentication()
     user, token = authentication.authenticate(request)

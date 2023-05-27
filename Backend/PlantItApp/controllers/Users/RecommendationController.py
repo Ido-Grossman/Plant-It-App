@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 import pandas as pd
+from PlantItApp.serializers import PlantSerializer
+from PlantItApp.models import Plant
 
 """
 # from google.cloud import language_v1
@@ -101,6 +103,8 @@ def get_recommendation(request, email):
     user = request.user
     if user.is_anonymous or user.email != email:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-
-    return Response(recommendations(user), status=status.HTTP_200_OK)
+    recommended_plants_id = recommendations(user)
+    recommended_plants = Plant.objects.filter(id__in=recommended_plants_id)
+    serializer = PlantSerializer(recommended_plants, many=True)
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
 
