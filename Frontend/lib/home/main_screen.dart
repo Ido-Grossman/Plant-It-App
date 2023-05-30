@@ -15,6 +15,8 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:frontend/service/http_service.dart';
 
 import '../chat/chat_screen.dart';
+enum PhotoSource { camera, gallery }
+
 
 class MainScreen extends StatefulWidget {
   final String? username;
@@ -49,6 +51,7 @@ class _MainScreenState extends State<MainScreen> {
     Icons.search,
     Icons.person
   ];
+
 
   List<String> screenTitleList = ['Home', 'My Plants', 'Search', 'Profile'];
   List<String> userPlants = [];
@@ -223,19 +226,82 @@ class _MainScreenState extends State<MainScreen> {
 
 
 
-  Future takePhoto() async {
+  Future takePhoto(PhotoSource source) async {
     try {
-      final image = await picker.pickImage(source: ImageSource.camera);
-      File rotatedImg =
-          await FlutterExifRotation.rotateImage(path: image!.path);
-      final imgTmp = File(rotatedImg.path);
-      setState(() {
-        this.image = imgTmp;
-      });
+      final image = await picker.pickImage(
+          source: source == PhotoSource.camera ? ImageSource.camera : ImageSource.gallery);
+
+      if (image != null) {
+        File rotatedImg =
+        await FlutterExifRotation.rotateImage(path: image.path);
+        final imgTmp = File(rotatedImg.path);
+        setState(() {
+          this.image = imgTmp;
+        });
+
+        List<PlantDetails> newPlants = await fetchMyPlants(widget.email, widget.token);
+        List<String> newPlantsNames = [];
+        for (PlantDetails plant in newPlants) {
+          newPlantsNames.add(plant.nickname);
+          nicknameToPlant[plant.nickname] = plant;
+        }
+        setState(() {
+          userPlants = newPlantsNames;
+        });
+
+        presentLoader(context, text: 'Sending image...');
+
+        plantInfo = await uploadPhoto(imgTmp.path, widget.token);
+        diseaseName = plantInfo['disease'];
+        plantDiseaseId = plantInfo['id'];
+        howToCare = plantInfo['care'];
+
+        Navigator.of(context).pop();
+        showCustomDialog(context);
+
+        setState(() {
+          _selectedPlant = null;
+        });
+      }
     } on PlatformException catch (e) {
       print('error taking picture because of $e');
     }
   }
+
+
+
+  Future<void> _showChoiceDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Make a choice!"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                GestureDetector(
+                  child: Text("Gallery"),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    await takePhoto(PhotoSource.gallery);
+                  },
+                ),
+                Padding(padding: EdgeInsets.all(8.0)),
+                GestureDetector(
+                  child: Text("Camera"),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    await takePhoto(PhotoSource.camera);
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
   void presentLoader(BuildContext context,
       {String text = 'Aguarde...',
@@ -390,36 +456,7 @@ class _MainScreenState extends State<MainScreen> {
       floatingActionButton: FloatingActionButton(
         heroTag: 'main_fab',
         onPressed: () async {
-          await takePhoto();
-          if (image != null) {
-            // rotate picture
-            if (!mounted) {
-              return;
-            }
-            List<PlantDetails> newPlants = await fetchMyPlants(widget.email, widget.token);
-
-            List<String> newPlantsNames = [];
-            for (PlantDetails plant in newPlants) {
-              newPlantsNames.add(plant.nickname);
-              nicknameToPlant[plant.nickname] = plant;
-            }
-            setState(() {
-              userPlants = newPlantsNames;
-            });
-            // show loader
-            presentLoader(context, text: 'Sending image...');
-            // calling with http
-            plantInfo = await uploadPhoto(image!.path, widget.token);
-            diseaseName = plantInfo['disease'];
-            plantDiseaseId = plantInfo['id'];
-            howToCare = plantInfo['care'];
-            // hide loader
-            Navigator.of(context).pop();
-            showCustomDialog(context);
-            setState(() {
-              _selectedPlant = null;
-            });
-          }
+          await _showChoiceDialog(context);
         },
         backgroundColor: Consts.primaryColor,
         child: Image.asset(
