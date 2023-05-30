@@ -90,8 +90,9 @@ Future<String?> logInGoogle(String? email, String uid) async {
   try {
     final response =
         await http.post(url, body: {'email': email, 'uid': uid}).timeout(
-      const Duration(seconds: 10),
+      const Duration(seconds: 20),
     );
+    print(response.body);
     var body = jsonDecode(response.body);
     String token = body['token'];
     return token;
@@ -352,6 +353,26 @@ Future<List<PlantInfo>> fetchRecommendations(String email, String? token) async 
     List<dynamic> jsonResponse = jsonDecode(response.body);
     return jsonResponse.map((plantJson) => PlantInfo.fromJson(plantJson)).toList().cast<PlantInfo>();
   } on TimeoutException {
+    throw TimeoutException;
+  }
+}
+
+Future<String> chatBotMsg(String? token, String question) async {
+  final url = Uri.parse('${Consts.getApiLink()}assistant/');
+  try {
+    Map<String, String> headers = {"Authorization": "Token $token"};
+    final response = await http.post(url, headers: headers,
+        body: {'message': question}).timeout(
+      const Duration(seconds: 10),
+    );
+    if (response.statusCode == 200){
+      final answer = jsonDecode(response.body);
+      return answer['answer'];
+    } else {
+      return "Couldn't connect to chat bot";
+    }
+  }
+  on TimeoutException {
     throw TimeoutException;
   }
 }

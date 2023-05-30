@@ -14,6 +14,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:frontend/service/http_service.dart';
 
+import '../chat/chat_screen.dart';
+
 class MainScreen extends StatefulWidget {
   final String? username;
   final String? token;
@@ -325,6 +327,17 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
         ),
+        actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.chat),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) => ChatScreen(token: widget.token,),
+                  fullscreenDialog: true,
+                ));
+              },
+                )
+        ],
         backgroundColor: Consts.primaryColor,
         elevation: 0.0,
       ),
