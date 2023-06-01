@@ -9,21 +9,3 @@ Widget getPlantLoadingIcon(GifController gifController) {
     width: 100,
   );
 }
-
-// class CustomIcon extends StatelessWidget {
-//   final IconData icon;
-//   final double? size;
-//   final Color? color;
-//
-//   const CustomIcon({Key? key, required this.icon, this.size, this.color}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     FontSizeNotifier fontSizeNotifier = Provider.of<FontSizeNotifier>(context);
-//     return Icon(
-//       icon,
-//       size: size ?? fontSizeNotifier.fontSize,
-//       color: color,
-//     );
-//   }
-// }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/models/plant_info.dart';
 import 'package:frontend/service/http_service.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
 import '../models/plant.dart';
 import '../models/plant_details.dart';
@@ -22,7 +24,7 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMixin {
   String? selectedCategory;
   String? selectedClimate;
   String? selectedUse;
@@ -32,6 +34,8 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController minTempController = TextEditingController();
   TextEditingController maxTempController = TextEditingController();
   TextEditingController searchController = TextEditingController();
+  Future<PlantInfo>? plantInfoFuture;
+  late GifController _gifController;
 
   List<Plant> _plants = [];
   ScrollController _scrollController = ScrollController();
@@ -43,6 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
+    _gifController = GifController(vsync: this);
     fetchAllFilters();
     fetchMorePlants('');
     _scrollController.addListener(() {
@@ -375,10 +380,6 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
 
 
-                          Icon(
-                            Icons.mic,
-                            color: Colors.black54.withOpacity(.6),
-                          ),
                         ],
                       ),
                     ),
@@ -402,23 +403,46 @@ class _SearchScreenState extends State<SearchScreen> {
                   itemBuilder: (context, index) {
                     Plant plant = _plants[index];
                     return InkWell(
-                      onTap: () async {
-                        PlantInfo plantInfo;
-                        try {
-                          plantInfo = await fetchPlantInfo(plant.id);
-                        } catch (e) {
-                          // Show an error message or handle the exception
-                          print("Error fetching plant details: $e");
-                          return;
-                        }
-                        // Navigate to the PlantDetailsScreen with the selected plant details
+                      onTap: () {
+                        plantInfoFuture = fetchPlantInfo(plant.id);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => PlantDetailsScreen(
-                              email: widget.email,
-                              token: widget.token,
-                              plantInfo: plantInfo,
+                            builder: (context) => FutureBuilder<PlantInfo>(
+                              future: plantInfoFuture,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return Scaffold(
+                                    body: Center(
+                                      child: Container(
+                                        height: 150.0,
+                                        width: 150.0,
+                                        child: LiquidCircularProgressIndicator(
+                                          value: 0.6, // Defaults to 0.5.
+                                          valueColor: AlwaysStoppedAnimation(Consts.primaryColor), // Defaults to the current Theme's accentColor.
+                                          backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+                                          borderColor: Consts.primaryColor,
+                                          borderWidth: 5.0,
+                                          direction: Axis.vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
+                                          center: Text("Loading..."),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Scaffold(
+                                    body: Center(
+                                      child: Text('Error: ${snapshot.error}'),
+                                    ),
+                                  );
+                                } else {
+                                  return PlantDetailsScreen(
+                                    email: widget.email,
+                                    token: widget.token,
+                                    plantInfo: snapshot.data!,
+                                  );
+                                }
+                              },
                             ),
                           ),
                         );
