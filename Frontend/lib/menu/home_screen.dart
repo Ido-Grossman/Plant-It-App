@@ -147,89 +147,92 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
               height: 16,
             ),
             Expanded(
-              child: FutureBuilder<List<PlantInfo>>(
-                future: futureRecommendedPlants,
-                builder: (BuildContext context, AsyncSnapshot<List<PlantInfo>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: AnimatedBuilder(
-                        animation: _dotController!,
-                        builder: (_, Widget? child) {
-                          String text = 'Suggesting the best plants for you';
-                          final dotCount = (_dotController!.value * 4).floor();
-                          text += '.' * dotCount;
-                          return Text(
-                            text,
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          );
-                        },
-                      ),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    recommendedPlants = snapshot.data!;
-                    return ListView.builder(
-                      itemCount: recommendedPlants.length,
-                      itemBuilder: (BuildContext ctx, index) {
-                        return Card(
-                          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PlantDetailsScreen(
-                                    email: widget.email,
-                                    token: widget.token,
-                                    plantInfo: recommendedPlants[index],
+              child: RefreshIndicator(
+                onRefresh: _fetchRecommendations,
+                child: FutureBuilder<List<PlantInfo>>(
+                  future: futureRecommendedPlants,
+                  builder: (BuildContext context, AsyncSnapshot<List<PlantInfo>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: AnimatedBuilder(
+                          animation: _dotController!,
+                          builder: (_, Widget? child) {
+                            String text = 'Suggesting the best plants for you';
+                            final dotCount = (_dotController!.value * 4).floor();
+                            text += '.' * dotCount;
+                            return Text(
+                              text,
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            );
+                          },
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      recommendedPlants = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: recommendedPlants.length,
+                        itemBuilder: (BuildContext ctx, index) {
+                          return Card(
+                            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PlantDetailsScreen(
+                                      email: widget.email,
+                                      token: widget.token,
+                                      plantInfo: recommendedPlants[index],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: <Widget>[
-                                  // Plant image
-                                  Container(
-                                    width: 60,  // Set as needed
-                                    height: 60, // Set as needed
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                        image: NetworkImage(recommendedPlants[index].plantPhoto),
-                                        fit: BoxFit.cover,
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    // Plant image
+                                    Container(
+                                      width: 60,  // Set as needed
+                                      height: 60, // Set as needed
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          image: NetworkImage(recommendedPlants[index].plantPhoto),
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(width: 15),
-                                  // Plant info
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(recommendedPlants[index].common[0],
-                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-                                        ),
-                                        Text(recommendedPlants[index].family,
-                                          style: TextStyle(fontSize: 14),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
+                                    SizedBox(width: 15),
+                                    // Plant info
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(recommendedPlants[index].common[0],
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                                          ),
+                                          Text(recommendedPlants[index].family,
+                                            style: TextStyle(fontSize: 14),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  // Icon
-                                  Icon(Icons.local_florist, color: Colors.green),
-                                ],
+                                    // Icon
+                                    Icon(Icons.local_florist, color: Colors.green),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    );
-                  }
-                },
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
               ),
             ),
             SizedBox(
