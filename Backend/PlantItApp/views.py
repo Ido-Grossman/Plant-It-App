@@ -44,8 +44,13 @@ def get_plant_recommendations(user):
     recommendation = RecommendationController.recommendations(user)
     size = len(recommendation)
     ans = [f"Here are some plants that you might like: \n"]
+
     for i in range(size):
-        ans.append(f"{i + 1}. {Plant.objects.get(id=recommendation[i]).latin}.\n")
+        plant = Plant.objects.get(id=recommendation[i])
+        common_names = plant.common.all()
+        common_names = [name.common for name in common_names]
+        common_names = ', '.join(common_names)
+        ans.append(f"{i + 1}. {common_names}.\n")
     return ''.join(ans)
 
 
@@ -82,6 +87,11 @@ def assistant(request):
     except:
         if intent == 'GetPlantRecommendations':
             answer = get_plant_recommendations(user)
+        elif intent == 'GetPlantRecommendations - custom':
+            number = int(response.query_result.parameters['number'])
+            recommendation = RecommendationController.recommendations(user)
+            plant = Plant.objects.get(id=recommendation[number])
+            answer = getPlantDetails(plant.latin)
         else:
             answer = response.query_result.fulfillment_text
     return Response({"answer": answer})
