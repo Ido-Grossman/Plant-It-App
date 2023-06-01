@@ -1,5 +1,6 @@
 import 'package:frontend/constants.dart';
 import 'package:frontend/service/http_service.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/plant_details.dart';
@@ -144,14 +145,42 @@ class _MyPlantsState extends State<MyPlants> {
                       name: plants[index].nickname,
                       healthStatus: plants[index].disease,
                       onPlantTap: () async {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Scaffold(
+                              body: Center(
+                                child: Container(
+                                  height: 150.0,
+                                  width: 150.0,
+                                  child: LiquidCircularProgressIndicator(
+                                    value: 0.6, // Defaults to 0.5.
+                                    valueColor: AlwaysStoppedAnimation(Consts.primaryColor), // Defaults to the current Theme's accentColor.
+                                    backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+                                    borderColor: Consts.primaryColor,
+                                    borderWidth: 5.0,
+                                    direction: Axis.vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
+                                    center: Text("Loading..."),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          barrierDismissible: false,
+                        );
+
                         PlantInfo plantInfo;
                         try {
                           plantInfo = await fetchPlantInfo(plants[index].plantId);
                         } catch (e) {
                           // Show an error message or handle the exception
+                          Navigator.of(context).pop(); // Close the dialog
                           print("Error fetching plant details: $e");
                           return;
                         }
+
+                        Navigator.of(context).pop(); // Close the dialog
+
                         // Navigate to the PlantDetailsScreen with the selected plant details
                         Navigator.push(
                           context,
