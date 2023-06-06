@@ -35,9 +35,8 @@ if os.environ.get('GAE_APPLICATION', None):
     STATIC_URL = f'https://storage.googleapis.com/%7BGS_BUCKET_NAME%7D/static/'
 
 # Diseases ML model
-DISEASES = ['Haunglongbing', 'Scorch', 'Esca', 'Scab', 'Bacterial spot', 'Mosaic virus', 'Mold', 'Blight',
-            'Healthy', 'Spider mites', 'Leaf curl virus', 'Rust', 'Target spot', 'Black rot', 'leaf spot',
-            'Powdery Miledew']
+DISEASES = ['Bacterial spot', 'Black rot', 'Blight', 'Esca', 'Haunglongbing', 'Healthy', 'Leaf curl virus', 'Mold',
+            'Mosaic virus', 'Powdery Miledew', 'Rust', 'Scab', 'Scorch', 'Spider mites', 'Target spot', 'leaf spot']
 MODEL = Classification.ModelClasses.ResNet9(3, len(DISEASES))
 
 # Recommendation system
