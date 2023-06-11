@@ -33,8 +33,32 @@ class AppTheme extends ChangeNotifier {
     _themeData = _themeData.brightness == Brightness.light
         ? ThemeData.dark()
         : ThemeData.light();
+
+    // Persist theme preference
+    _saveThemePreference(_themeData.brightness == Brightness.dark);
+
     notifyListeners();
   }
+
+  _saveThemePreference(bool isDarkMode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', isDarkMode);
+  }
+
+  Future<bool> loadThemePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isDarkMode') ?? false; // Use light theme by default
+  }
+
+  void setTheme(ThemeData theme) {
+    _themeData = theme;
+
+    // Persist theme preference
+    _saveThemePreference(theme.brightness == Brightness.dark);
+
+    notifyListeners();
+  }
+
 }
 
 
@@ -69,6 +93,26 @@ class _InitialScreenState extends State<InitialScreen> {
     super.initState();
     _checkIntroStatus();
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    loadTheme();
+  }
+
+  void loadTheme() async {
+    Future.microtask(() async {
+      final appTheme = Provider.of<AppTheme>(context, listen: false);
+      final isDarkMode = await appTheme.loadThemePreference();
+      if (isDarkMode) {
+        appTheme.setTheme(ThemeData.dark());
+      } else {
+        appTheme.setTheme(ThemeData.light());
+      }
+    });
+  }
+
+
 
   Future<void> _checkIntroStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
