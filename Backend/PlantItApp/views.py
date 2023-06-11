@@ -32,6 +32,7 @@ def getWateringSchedule(plant_name, user):
         # Create a list of strings to be returned to the user.
         ans = [f"You need to water {plant_name} ", f"every {plant.water_duration} days."]
         user_plant = user.user_plants.filter(plant_id=plant.id).first()
+        # If the user has the plant, add the last watering date to the response.
         if user_plant:
             ans.append(f" You last watered {plant_name} on {user_plant.last_watering}.")
         return ''.join(ans)
@@ -41,13 +42,15 @@ def getWateringSchedule(plant_name, user):
 
 
 def get_plant_recommendations(user):
+    # Get the plant recommendations for the user.
     recommendation = RecommendationController.recommendations(user)
     size = len(recommendation)
     ans = [f"Here are some plants that you might like: \n"]
-
+    # Create a list of strings to be returned to the user.
     for i in range(size):
         plant = Plant.objects.get(id=recommendation[i])
         common_names = plant.common.all()
+        # Get the common names of the plant.
         common_names = [name.common for name in common_names]
         common_names = ', '.join(common_names)
         ans.append(f"{i + 1}. {common_names}.\n")
@@ -61,30 +64,37 @@ def assistant(request):
         return Response({"answer": "You must be logged in to use this feature."}, status=status.HTTP_401_UNAUTHORIZED)
     # Get the text from the request and send it to Dialogflow.
     text_to_be_analyzed = request.data.get('message')
+    #
     if not text_to_be_analyzed:
         return Response({"answer": "You must send a message to the bot."}, status=status.HTTP_400_BAD_REQUEST)
+    # Create a session client and get the session path.
     session_client = dialogflow.SessionsClient()
     authentication = TokenAuthentication()
     user, token = authentication.authenticate(request)
     session = session_client.session_path(settings.GS_PROJECT_ID, token)
-
+    # Create a text input object and send it to Dialogflow.
     text_input = dialogflow.types.TextInput(text=text_to_be_analyzed, language_code=settings.DIALOGFLOW_LANGUAGE_CODE)
     query_input = dialogflow.types.QueryInput(text=text_input)
-
+    # Get the response from Dialogflow.
     try:
         response = session_client.detect_intent(session=session, query_input=query_input)
     except InvalidArgument:
-        raise
+        return Response({"answer": "I'm sorry, but I couldn't understand that."}, status=status.HTTP_400_BAD_REQUEST)
+    # Get the intent from the response.
     intent = response.query_result.intent.display_name
     answer = None
+    # Get the user from the database.
     user = get_user_model().objects.get(email=user.email)
     try:
+        # Get the plant name from the response.
         plant_name = response.query_result.parameters['plant']
+        # Get the answer from the appropriate function.
         if intent == 'GetPlantDetails':
             answer = getPlantDetails(plant_name)
         elif intent == 'GetWateringSchedule':
             answer = getWateringSchedule(plant_name, user)
     except:
+        # If the plant name is not in the response, get the answer from the intent and activate the right function.
         if intent == 'GetPlantRecommendations':
             answer = get_plant_recommendations(user)
         elif intent == 'GetPlantRecommendations - custom':
@@ -94,4 +104,5 @@ def assistant(request):
             answer = getPlantDetails(plant.latin)
         else:
             answer = response.query_result.fulfillment_text
+    # Return the answer to the user.
     return Response({"answer": answer})

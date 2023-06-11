@@ -19,14 +19,18 @@ def photo_upload(request):
     image_file = request.FILES.get('file')
     if not image_file:
         return Response('No image file uploaded', status=status.HTTP_400_BAD_REQUEST)
-    # Assuming you want to save the image in a 'media' folder
+    # Load the image and resize it to 256x256 pixels.
     img = Image.open(image_file)
     img = img.resize((256, 256))
+    # Transform the image into a tensor.
     transform = transforms.ToTensor()
     img = transform(img)
+    # Get the prediction from the model.
     yb = settings.MODEL(torch.unsqueeze(img, 0))
     _, preds = torch.max(yb, dim=1)
+    # Get the disease name from the settings file.
     disease_name = settings.DISEASES[preds[0].item()]
     disease = Disease.objects.get(disease=disease_name)
+    # Return the disease data.
     serializer = DiseaseSerializer(disease)
     return Response(data=serializer.data, status=status.HTTP_200_OK)

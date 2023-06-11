@@ -19,3 +19,4 @@ __pycache__/
 /setup.cfg
 # Ignore .idea directory
 .idea/
+venv/

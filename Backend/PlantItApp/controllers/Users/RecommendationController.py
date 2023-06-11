@@ -7,53 +7,6 @@ import pandas as pd
 from PlantItApp.serializers import PlantSerializer
 from PlantItApp.models import Plant
 
-"""
-# from google.cloud import language_v1
-# def analyze_sentiment(text):
-#     client = language_v1.LanguageServiceClient()
-#
-#     # The text to analyze
-#     document = language_v1.Document(content=text, type_=language_v1.Document.Type.PLAIN_TEXT)
-#
-#     # Detects the sentiment of the text
-#     sentiment = client.analyze_sentiment(request={'document': document}).document_sentiment
-#
-#     return sentiment.score
-
-
-# def generate_sentiment_dictionary(user_posts):
-#     # Initialize a dictionary to hold the sum of sentiment scores
-#     sentiment_scores = {}
-#     for post in user_posts:
-#         # Add the sentiment score of each of the user's posts to the correct plant.
-#         if post.plant.id not in sentiment_scores:
-#             sentiment_scores[post.plant.id] = analyze_sentiment(post.content)
-#         else:
-#             sentiment_scores[post.plant.id] += analyze_sentiment(post.content)
-#     return sentiment_scores
-
-
-# def update_similarity_by_sentiment(user_posts, similarity_scores, similarity_df):
-#     # Get the sentiment scores for each plant.
-#     sentiment_dictionary = generate_sentiment_dictionary(user_posts)
-#
-#     for plant, sentiment_score in sentiment_dictionary.items():
-#         # Add the sentiment score to the similarity score.
-#         plant_similarities = similarity_df[str(plant)]
-#
-#         # Add the sentiment score to the similarity score.
-#         adjusted_similarity_score = plant_similarities * abs(sentiment_score)
-#
-#         # If the sentiment score is negative, subtract the similarity score.
-#         # otherwise, add the similarity score.
-#         if sentiment_score < 0:
-#             similarity_scores -= adjusted_similarity_score
-#         else:
-#             similarity_scores += adjusted_similarity_score
-#
-#     return similarity_scores
-"""
-
 
 def user_plants_list(user):
     # Fetch the plants for this user
@@ -103,8 +56,10 @@ def get_recommendation(request, email):
     user = request.user
     if user.is_anonymous or user.email != email:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+    # Get the recommendations for this user
     recommended_plants_id = recommendations(user)
     recommended_plants = Plant.objects.filter(id__in=recommended_plants_id)
+    # Change the user_id to the username
     serializer = PlantSerializer(recommended_plants, many=True)
     return Response(data=serializer.data, status=status.HTTP_200_OK)
 

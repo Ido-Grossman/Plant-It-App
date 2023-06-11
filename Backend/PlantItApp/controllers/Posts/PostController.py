@@ -36,9 +36,11 @@ def post_replies(request, plant_id, post_id):
         title = request.data.get('title')
         if not content or not title:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        # update the post
         post.content = content
         post.title = title
         post.save()
+        # return the updated post
         serializer = PostSerializer(post)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
     else:

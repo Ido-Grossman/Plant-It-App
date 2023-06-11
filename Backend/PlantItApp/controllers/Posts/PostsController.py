@@ -23,6 +23,7 @@ class Posts(APIView):
         title = request.data.get('title')
         if not content or not title:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        # create the post
         post = Post.objects.create(plant_id=plant_id, content=content, title=title, user=request.user)
         serializer = PostSerializer(post)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
