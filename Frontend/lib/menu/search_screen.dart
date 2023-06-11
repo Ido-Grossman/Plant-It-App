@@ -466,19 +466,27 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
                             ),
                           ),
                           title: Text(
-                            plant.common[0] == ''
-                                ? plant.latin
-                                : plant.common[0],
+                            plant.common[0] == '' ? plant.latin : plant.common[0],
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                           subtitle: plant.common[0] == ''
                               ? null
                               : Text(
-                                  plant.latin,
-                                  style: TextStyle(
-                                      color: Colors.grey[700], fontSize: 14),
-                                ),
+                            plant.latin,
+                            style: TextStyle(
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.grey[400] // choose a color suitable for dark theme
+                                  : Colors.grey[700],
+                              fontSize: 14,
+                            ),
+                          ),
+
                         ),
                       ),
                     );

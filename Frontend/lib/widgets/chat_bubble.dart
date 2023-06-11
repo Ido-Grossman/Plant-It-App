@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/constants.dart';
 
 enum ChatBubbleType { sent, received }
 
@@ -28,9 +29,17 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = type == ChatBubbleType.received ? Colors.blue[100] : Colors.grey[200];
+    Color? bgColor;
+    Color textColor;
+    if (Theme.of(context).brightness == Brightness.dark) {
+      bgColor = type == ChatBubbleType.received ? Consts.primaryColor : Colors.grey[800]!; // change to any color you want
+      textColor = Colors.white;
+    } else {
+      bgColor = type == ChatBubbleType.received ? Consts.primaryColor : Colors.grey[200]!;
+      textColor = Colors.black;
+    }
+
     final align = type == ChatBubbleType.received ? CrossAxisAlignment.start : CrossAxisAlignment.end;
-    final icon = type == ChatBubbleType.received ? Icons.account_circle : Icons.account_circle;
 
     return Column(
       crossAxisAlignment: align,
@@ -45,10 +54,19 @@ class ChatBubble extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(message),
+              Text(
+                message,
+                style: TextStyle(color: textColor),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Text(time, style: TextStyle(fontSize: 10)),
+                child: Text(
+                  time,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: textColor,
+                  ),
+                ),
               ),
             ],
           ),
