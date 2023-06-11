@@ -18,7 +18,6 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppTheme()),
-        ChangeNotifierProvider(create: (_) => FontSizeNotifier()),
       ],
       child: const MyApp(),
     ),
@@ -38,16 +37,6 @@ class AppTheme extends ChangeNotifier {
   }
 }
 
-class FontSizeNotifier extends ChangeNotifier {
-  double _fontSize = 16.0;
-
-  double get fontSize => _fontSize;
-
-  void updateFontSize(double newSize) {
-    _fontSize = newSize;
-    notifyListeners();
-  }
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

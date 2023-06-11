@@ -3,8 +3,6 @@ import 'package:frontend/constants.dart';
 import 'package:frontend/settings/privacy_policy_screen.dart';
 import 'package:frontend/settings/terms_of_service_screen.dart';
 
-import '../widgets/font_adjusted_text.dart';
-
 class InformationScreen extends StatelessWidget {
   final String appVersion = '1.0.0';
   final String buildNumber = '100';
@@ -12,7 +10,7 @@ class InformationScreen extends StatelessWidget {
   final String privacyPolicyURL = 'https://yourcompany.com/privacy-policy';
   final String termsOfServiceURL = 'https://yourcompany.com/terms-of-service';
 
-  const InformationScreen({super.key});
+  const InformationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +23,16 @@ class InformationScreen extends StatelessWidget {
         padding: EdgeInsets.all(16),
         children: [
           ListTile(
-            title: FontAdjustedText(text: 'App Version'),
-            subtitle: FontAdjustedText(text: appVersion),
+            title: Text('App Version', style: TextStyle(fontSize: 16)),
+            subtitle: Text(appVersion, style: TextStyle(fontSize: 14)),
           ),
           ListTile(
-            title: FontAdjustedText(text: 'Build Number'),
-            subtitle: FontAdjustedText(text: buildNumber),
+            title: Text('Build Number', style: TextStyle(fontSize: 16)),
+            subtitle: Text(buildNumber, style: TextStyle(fontSize: 14)),
           ),
           Divider(),
           ListTile(
-            title: FontAdjustedText(text: 'Privacy Policy'),
+            title: Text('Privacy Policy', style: TextStyle(fontSize: 16)),
             onTap: () {
               Navigator.push(
                 context,
@@ -45,7 +43,7 @@ class InformationScreen extends StatelessWidget {
             },
           ),
           ListTile(
-            title: FontAdjustedText(text: 'Terms of Service'),
+            title: Text('Terms of Service', style: TextStyle(fontSize: 16)),
             onTap: () {
               Navigator.push(
                 context,

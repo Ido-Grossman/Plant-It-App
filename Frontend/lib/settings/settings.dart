@@ -14,8 +14,6 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 import '../main.dart';
-import '../widgets/plant_loading_icon.dart';
-import '../widgets/font_adjusted_text.dart';
 import 'contact_support_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -171,7 +169,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final appTheme = Provider.of<AppTheme>(context);
-    FontSizeNotifier fontSizeNotifier = Provider.of<FontSizeNotifier>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -180,12 +177,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         children: [
           ListTile(
-              title: FontAdjustedText(
-            text: 'Account Information',
-          )),
+              title: Text(
+                'Account Information',
+                style: TextStyle(fontSize: 16),
+              )),
           ListTile(
-            title: FontAdjustedText(text: 'Username'),
-            subtitle: FontAdjustedText(text: widget.username),
+            title: Text('Username', style: TextStyle(fontSize: 16)),
+            subtitle: Text(widget.username, style: TextStyle(fontSize: 14)),
             trailing: SizedBox(
               width: 50,
               child: IconButton(
@@ -197,8 +195,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           ListTile(
-            title: FontAdjustedText(text: 'Password'),
-            subtitle: FontAdjustedText(text: '**********'),
+            title: Text('Password', style: TextStyle(fontSize: 16)),
+            subtitle: Text('**********', style: TextStyle(fontSize: 14)),
             trailing: SizedBox(
               width: 50,
               child: IconButton(
@@ -210,7 +208,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           ListTile(
-            title: FontAdjustedText(text: 'Profile Picture'),
+            title: Text('Profile Picture', style: TextStyle(fontSize: 16)),
             leading: CircleAvatar(
               backgroundImage: NetworkImage(widget.profileImg),
               backgroundColor: Colors.white,
@@ -234,39 +232,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           Divider(),
-          ListTile(title: FontAdjustedText(text: 'Notifications Preferences')),
+          ListTile(title: Text('Display Settings', style: TextStyle(fontSize: 16))),
           ListTile(
-            title: FontAdjustedText(text: 'Preferred Notification Times'),
-            subtitle: FontAdjustedText(
-                text:
-                    'Watering: 9:00 AM, Plant Health: 12:00 PM, New Plant Suggestions: 6:00 PM'),
-            trailing: SizedBox(
-              width: 50,
-              child: IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  // Edit preferred notification times
-                },
-              ),
-            ),
-          ),
-          ListTile(
-            title: FontAdjustedText(text: 'Location Settings'),
-            subtitle: FontAdjustedText(text: 'Use GPS: On, Zip Code: 12345'),
-            trailing: SizedBox(
-              width: 50,
-              child: IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  // Edit location settings
-                },
-              ),
-            ),
-          ),
-          Divider(),
-          ListTile(title: FontAdjustedText(text: 'Display Settings')),
-          ListTile(
-            title: FontAdjustedText(text: 'Theme'),
+            title: Text('Dark Theme', style: TextStyle(fontSize: 16)),
             trailing: SizedBox(
               width: 80,
               child: Switch(
@@ -279,23 +247,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
           ),
-          ListTile(
-            title: FontAdjustedText(text: 'Font Size'),
-            trailing: SizedBox(
-              width: 150,
-              child: Slider(
-                min: 12,
-                max: 24,
-                value: fontSizeNotifier.fontSize,
-                onChanged: (double value) {
-                  fontSizeNotifier.updateFontSize(value);
-                },
-              ),
-            ),
-          ),
           Divider(),
           ListTile(
-            title: FontAdjustedText(text: 'Tutorials'),
+            title: Text('Tutorials', style: TextStyle(fontSize: 16)),
             onTap: () {
               Navigator.push(
                 context,
@@ -306,7 +260,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           ListTile(
-            title: FontAdjustedText(text: 'Report a Bug'),
+            title: Text('Report a Bug', style: TextStyle(fontSize: 16)),
             onTap: () {
               Navigator.push(
                 context,
@@ -317,7 +271,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           ListTile(
-            title: FontAdjustedText(text: 'Contact Support'),
+            title: Text('Contact Support', style: TextStyle(fontSize: 16)),
             onTap: () {
               Navigator.push(
                 context,
@@ -331,4 +285,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
+
 }

@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import '../logins/login_screen.dart';
 import '../service/google_sign_in.dart';
-import '../widgets/font_adjusted_text.dart';
 
 class MyProfile extends StatefulWidget {
   final String? token;
@@ -241,23 +240,24 @@ class ProfileMenuOption extends StatelessWidget {
             color: settingColor,
           ),
         ),
-        title: FontAdjustedText(
-          text: title,
+        title: Text(
+          title,
           style: const TextStyle(fontSize: 18).apply(color: textColor),
         ),
         trailing: endIcon
             ? Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: settingColor.withOpacity(0.1),
-                ),
-                child: Icon(
-                  LineAwesomeIcons.angle_right,
-                  color: settingColor,
-                ),
-              )
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            color: settingColor.withOpacity(0.1),
+          ),
+          child: Icon(
+            LineAwesomeIcons.angle_right,
+            color: settingColor,
+          ),
+        )
             : null);
   }
 }
+
