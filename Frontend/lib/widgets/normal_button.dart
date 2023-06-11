@@ -26,7 +26,7 @@ class NormalButton extends StatelessWidget {
         margin: const EdgeInsets.all(5.0),
         decoration: BoxDecoration(
           color: isEnabled ? Consts.primaryColor : Colors.grey,
-          borderRadius: BorderRadius.circular(30), // Add rounded corners
+          borderRadius: BorderRadius.circular(30),
         ),
         child: Center(
           child: Text(

@@ -7,13 +7,11 @@ import 'package:frontend/home/main_screen.dart';
 import 'package:frontend/logins/forgot_password_screen.dart';
 import 'package:frontend/logins/google_login_screen.dart';
 import 'package:frontend/logins/sign_up_screen.dart';
-import 'package:frontend/menu/search_screen.dart';
 import 'package:frontend/widgets/plant_loading_icon.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-import '../plants/plant_info_screen.dart';
 import '../service/http_service.dart';
 import '../service/login_text_field.dart';
 import '../widgets/google_sign_button.dart';

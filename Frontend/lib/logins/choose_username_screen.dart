@@ -32,12 +32,12 @@ class _ChooseUsernameScreenState extends State<ChooseUsernameScreen>
   @override
   void initState() {
     super.initState();
-    _gifController = GifController(vsync: this); // Add this line
+    _gifController = GifController(vsync: this);
   }
 
   @override
   void dispose() {
-    _gifController.dispose(); // Add this line
+    _gifController.dispose();
     super.dispose();
   }
 

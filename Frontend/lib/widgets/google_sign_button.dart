@@ -20,11 +20,10 @@ class GoogleSignButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Consts.primaryColor,
-          // Set the background color to green
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30), // Add rounded corners
+            borderRadius: BorderRadius.circular(30),
           ),
-          padding: const EdgeInsets.all(14), // Set padding for the button
+          padding: const EdgeInsets.all(14),
         ),
         onPressed: () {
           final provider =
@@ -45,11 +44,10 @@ class GoogleSignButton extends StatelessWidget {
               ),
               child: Image.network(
                 'https://developers.google.com/identity/images/g-logo.png',
-                height: 20.0, // Set the Google logo size
+                height: 20.0,
               ),
             ),
             const SizedBox(width: 8),
-            // Add some space between the logo and the text
             const Text(
               'Sign in with Google',
               style: TextStyle(

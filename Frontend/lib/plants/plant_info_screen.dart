@@ -196,10 +196,10 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
             ),
             icon: const Icon(Icons.forum),
           ),
-          SizedBox(width: 8), // Add some space between the buttons
+          SizedBox(width: 8),
           SizedBox(
-            width: 130, // Adjust the width to your preference
-            height: 48, // Adjust the height to your preference
+            width: 130,
+            height: 48,
             child: FloatingActionButton.extended(
               onPressed: () async {
                 TextEditingController nicknameController = TextEditingController();

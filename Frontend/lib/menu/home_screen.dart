@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
       vsync: this,
       duration: Duration(seconds: 1),
     )..repeat();  // start the animation
-    // Refresh events every 30 seconds
+    // Refresh events every 20 seconds
     Timer.periodic(Duration(seconds: 20), (timer) {
       if (!mounted) {
         timer.cancel();
@@ -195,8 +195,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Ti
                                   children: <Widget>[
                                     // Plant image
                                     Container(
-                                      width: 60,  // Set as needed
-                                      height: 60, // Set as needed
+                                      width: 60,
+                                      height: 60,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         image: DecorationImage(

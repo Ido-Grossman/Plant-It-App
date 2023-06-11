@@ -42,7 +42,6 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
   int _offset = -1;
   String _currentQuery = '';
 
-  bool _isLoading = false;
 
   @override
   void initState() {
@@ -296,7 +295,7 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
                 selectedUse,
                 minTemp,
                 maxTemp,
-                searchController.text, // Pass the search query text
+                searchController.text,
               );
               Navigator.of(context).pop();
             }
@@ -418,12 +417,12 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
                                         height: 150.0,
                                         width: 150.0,
                                         child: LiquidCircularProgressIndicator(
-                                          value: 0.6, // Defaults to 0.5.
-                                          valueColor: AlwaysStoppedAnimation(Consts.primaryColor), // Defaults to the current Theme's accentColor.
-                                          backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+                                          value: 0.6,
+                                          valueColor: AlwaysStoppedAnimation(Consts.primaryColor),
+                                          backgroundColor: Colors.white,
                                           borderColor: Consts.primaryColor,
                                           borderWidth: 5.0,
-                                          direction: Axis.vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
+                                          direction: Axis.vertical,
                                           center: Text("Loading..."),
                                         ),
                                       ),
@@ -481,7 +480,7 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
                             plant.latin,
                             style: TextStyle(
                               color: Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.grey[400] // choose a color suitable for dark theme
+                                  ? Colors.grey[400]
                                   : Colors.grey[700],
                               fontSize: 14,
                             ),

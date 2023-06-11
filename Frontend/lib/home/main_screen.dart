@@ -304,7 +304,7 @@ class _MainScreenState extends State<MainScreen> {
 
 
   void presentLoader(BuildContext context,
-      {String text = 'Aguarde...',
+      {String text = 'Sending...',
       bool barrierDismissible = false,
       bool willPop = true}) {
     showDialog(

@@ -154,12 +154,12 @@ class _MyPlantsState extends State<MyPlants> {
                                   height: 150.0,
                                   width: 150.0,
                                   child: LiquidCircularProgressIndicator(
-                                    value: 0.6, // Defaults to 0.5.
-                                    valueColor: AlwaysStoppedAnimation(Consts.primaryColor), // Defaults to the current Theme's accentColor.
-                                    backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+                                    value: 0.6,
+                                    valueColor: AlwaysStoppedAnimation(Consts.primaryColor),
+                                    backgroundColor: Colors.white,
                                     borderColor: Consts.primaryColor,
                                     borderWidth: 5.0,
-                                    direction: Axis.vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
+                                    direction: Axis.vertical,
                                     center: Text("Loading..."),
                                   ),
                                 ),
@@ -173,15 +173,13 @@ class _MyPlantsState extends State<MyPlants> {
                         try {
                           plantInfo = await fetchPlantInfo(plants[index].plantId);
                         } catch (e) {
-                          // Show an error message or handle the exception
                           Navigator.of(context).pop(); // Close the dialog
                           print("Error fetching plant details: $e");
                           return;
                         }
 
-                        Navigator.of(context).pop(); // Close the dialog
+                        Navigator.of(context).pop();
 
-                        // Navigate to the PlantDetailsScreen with the selected plant details
                         Navigator.push(
                           context,
                           MaterialPageRoute(

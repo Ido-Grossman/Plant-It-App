@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -64,8 +63,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _showPasswordDialog() async {
-    String? newPassword;
-    String? confirmPassword;
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -155,7 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       duration: Duration(seconds: 3),
                     ));
                   } else {
-                    // Handle other errors
+                    Consts.alertPopup(context, 'Something went wrong. Please try again.');
                   }
                 }
               },
@@ -239,10 +236,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               width: 80,
               child: Switch(
                 value: appTheme.themeData.brightness == Brightness.dark,
-                // Update the switch value based on the theme brightness
                 onChanged: (bool value) {
                   appTheme
-                      .toggleTheme(); // Make sure to call the function with parentheses
+                      .toggleTheme();
                 },
               ),
             ),
