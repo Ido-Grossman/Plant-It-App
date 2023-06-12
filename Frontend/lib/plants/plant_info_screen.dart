@@ -8,6 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/calendar_helper.dart';
 import '../forum/forum_main_screen.dart';
 
+const String nineAm = '09:00';
+const String threePm = '15:00';
+const String ninePm = '21:00';
+const String noReminders = 'No reminders';
+
 class PlantDetailsScreen extends StatefulWidget {
   final PlantInfo plantInfo;
   final String? token;
@@ -67,9 +72,6 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
       eventStartTime = eventStartTime.add(Duration(days: waterDuration));
     }
     await prefs.setStringList(eventTitle, eventIds);
-    for (String eventId in eventIds) {
-      print('Before $eventId');
-    }
   }
 
 
@@ -86,7 +88,6 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
         '${widget.plantInfo.minCelsius}°C - ${widget.plantInfo.maxCelsius}°C (${widget.plantInfo.minFahrenheit}°F - ${widget.plantInfo.maxFahrenheit}°F)';
     String wateringFrequency = 'Every ${widget.plantInfo.waterDuration} days';
 
-    String? selectedReminder;
 
     return Scaffold(
       appBar: AppBar(
@@ -232,7 +233,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                                     selectedReminderTime = newValue;
                                   });
                                 },
-                                items: <String>['9 AM', '3 PM', '9 PM', 'No reminders']
+                                items: <String>[nineAm, threePm, ninePm, noReminders]
                                     .map<DropdownMenuItem<String>>((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
@@ -262,20 +263,20 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                                       ),
                                     );
 
-                                    if (selectedReminderTime != 'No reminders' && selectedReminderTime != null) {
+                                    if (selectedReminderTime != noReminders && selectedReminderTime != null) {
                                       String reminderTime;
                                       switch (selectedReminderTime) {
-                                        case '9 AM':
-                                          reminderTime = '09:00';
+                                        case nineAm:
+                                          reminderTime = nineAm;
                                           break;
-                                        case '3 PM':
-                                          reminderTime = '15:00';
+                                        case threePm:
+                                          reminderTime = threePm;
                                           break;
-                                        case '9 PM':
-                                          reminderTime = '21:00';
+                                        case ninePm:
+                                          reminderTime = ninePm;
                                           break;
                                         default:
-                                          reminderTime = '09:00';
+                                          reminderTime = nineAm;
                                       }
 
                                       await createCalendarEvents(
@@ -291,7 +292,6 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                                         content: Text('Nickname is already in list, choose another'),
                                       ),
                                     );
-
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
