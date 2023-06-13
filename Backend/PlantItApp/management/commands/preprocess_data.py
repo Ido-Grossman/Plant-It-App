@@ -20,7 +20,7 @@ class Command(BaseCommand):
             Prefetch('use', queryset=Use.objects.all(), to_attr='plant_uses')
         )
 
-        # Create a DataFrame with 'id', 'latin', 'category', 'climate', 'family'
+        # Create a DataFrame with 'id', 'category', 'climate', 'family'
         plant_df = pd.DataFrame.from_records(plants.values('id', 'category', 'climate', 'family'))
 
         # Create a DataFrame with 'id' and 'use' (as a list of uses per plant)
