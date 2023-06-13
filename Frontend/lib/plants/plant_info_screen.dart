@@ -74,6 +74,20 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
     await prefs.setStringList(eventTitle, eventIds);
   }
 
+  Widget buildTitleText(String title, Color color) {
+    return Text(
+      title,
+      style: GoogleFonts.robotoSlab(fontSize: 22, color: color),
+    );
+  }
+
+  Widget buildBodyText(String body) {
+    return Text(
+      body,
+      style: GoogleFonts.lato(fontSize: 18),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -114,65 +128,29 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                 style: GoogleFonts.pacifico(fontSize: 28, color: textColor),
               ),
               SizedBox(height: 8),
-              Text(
-                'Common Names: $commonNames',
-                style: GoogleFonts.lato(fontSize: 18),
-              ),
+              buildBodyText('Common Names: $commonNames'),
               SizedBox(height: 8),
-              Text(
-                'Plant Family: ${widget.plantInfo.family}',
-                style: GoogleFonts.lato(fontSize: 18),
-              ),
+              buildBodyText('Plant Family: ${widget.plantInfo.family}'),
               SizedBox(height: 16),
-              Text(
-                'Light',
-                style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
-              ),
+              buildTitleText('Light', textColor),
               SizedBox(height: 4),
-              Text(
-                '${widget.plantInfo.toleratedlight} (Tolerated), ${widget.plantInfo.idealight} (Ideal)',
-                style: GoogleFonts.lato(fontSize: 18),
-              ),
+              buildBodyText('${widget.plantInfo.toleratedlight} (Tolerated), ${widget.plantInfo.idealight} (Ideal)'),
               SizedBox(height: 16),
-              Text(
-                'How to Water',
-                style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
-              ),
+              buildTitleText('How to Water', textColor),
               SizedBox(height: 4),
-              Text(
-                widget.plantInfo.watering,
-                style: GoogleFonts.lato(fontSize: 18),
-              ),
+              buildBodyText(widget.plantInfo.watering),
               SizedBox(height: 16),
-              Text(
-                'How to Use',
-                style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
-              ),
+              buildTitleText('How to Use', textColor),
               SizedBox(height: 4),
-              Text(
-                howToUse,
-                style: GoogleFonts.lato(fontSize: 18),
-              ),
+              buildBodyText(howToUse),
               SizedBox(height: 16),
-              Text(
-                'Temperature Range',
-                style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
-              ),
+              buildTitleText('Temperature Range', textColor),
               SizedBox(height: 4),
-              Text(
-                temperatureRange,
-                style: GoogleFonts.lato(fontSize: 18),
-              ),
+              buildBodyText(temperatureRange),
               SizedBox(height: 16),
-              Text(
-                'Watering Frequency',
-                style: GoogleFonts.robotoSlab(fontSize: 22, color: textColor),
-              ),
+              buildTitleText('Watering Frequency', textColor),
               SizedBox(height: 4),
-              Text(
-                wateringFrequency,
-                style: GoogleFonts.lato(fontSize: 18),
-              ),
+              buildBodyText(wateringFrequency),
             ],
           ),
         ),
