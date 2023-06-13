@@ -89,13 +89,21 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildDialogContent(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
+    Color backgroundColor = currentTheme.brightness == Brightness.light
+        ? Colors.white
+        : Colors.grey[850]!; //you can choose a different color for dark mode
+    Color textColor = currentTheme.brightness == Brightness.light
+        ? Colors.black
+        : Colors.white;
+
     return SingleChildScrollView(
       child: StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
           return Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: backgroundColor,
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(16),
               boxShadow: const [
@@ -133,7 +141,7 @@ class _MainScreenState extends State<MainScreen> {
                 Text(
                   howToCare,
                   // Replace with the actual disease care instructions
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16, color: textColor),
                 ),
                 SizedBox(height: 16),
                 DropdownButton<String>(
@@ -252,6 +260,7 @@ class _MainScreenState extends State<MainScreen> {
         presentLoader(context, text: 'Sending image...');
 
         plantInfo = await uploadPhoto(imgTmp.path, widget.token);
+        print(plantInfo);
         diseaseName = plantInfo['disease'];
         plantDiseaseId = plantInfo['id'];
         howToCare = plantInfo['care'];
