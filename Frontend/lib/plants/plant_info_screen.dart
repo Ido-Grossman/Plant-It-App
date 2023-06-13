@@ -180,6 +180,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
             width: 130,
             height: 48,
             child: FloatingActionButton.extended(
+              heroTag: 'add-plant',
               onPressed: () async {
                 TextEditingController nicknameController = TextEditingController();
                 showDialog(
